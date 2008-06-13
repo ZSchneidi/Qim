@@ -37,6 +37,7 @@ public:
     FileSupport(ConfigHandler *config_handler);
 
     bool isSupported(QString filetype);
+    bool isFileSupported(QString filename);
 
 
 

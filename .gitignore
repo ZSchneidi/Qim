@@ -2,6 +2,8 @@
 # Ignore any file named foo.txt.
 
 #foo.txt
+doc/html
+doc/latex
 Qim-build-desktop/
 debug/
 release/

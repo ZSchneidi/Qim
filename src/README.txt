@@ -1,3 +1,6 @@
+/*! \mainpage Main Project page
+
+
 Basic Information for Qim Image viewer
 ---------------------------------------
 
@@ -58,3 +61,5 @@ QtXmlPatterns4.dll
 
 To find more missing libraries use the "dependencywalker"
 your can find it on http://www.dependencywalker.com/ it's a really helpful tool.
+
+*/

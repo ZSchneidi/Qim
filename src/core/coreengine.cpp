@@ -2,9 +2,6 @@
 #include "globaldefinitions.h"
 
 
-/*
- *The core engine is the major class which operates with all handler classes.
- */
 CoreEngine::CoreEngine(QWidget *parent) :
         QMainWindow(parent)
 {
@@ -21,6 +18,9 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
     /*extension objects instantiation*/
     this->main_local = new QLocale;
+
+    /** the CustomDialogBox is an object which provides the dialog for machine -> user communication*/
+    this->dialog_box = new CustomDialogBox();
 
     /*this is the config handling class it is important that the confighandler is
      *instatiated before proceed with other classes which use the config handler
@@ -58,11 +58,11 @@ CoreEngine::CoreEngine(QWidget *parent) :
     /*define visual options of the main window*/
     this->setUpMainWindow();
 
-    //CustomDialogBox *diabox = new CustomDialogBox(this);
-    CustomDialogBox::showDialogBox("Test dialog","This message is just for testing!");
+
 }
 
-/*define the apearance options of the MainWindow which contains all
+/**
+ *define the apearance options of the MainWindow which contains all
  *visual informations like qml layer and so on
  */
 void CoreEngine::setUpMainWindow()
@@ -107,7 +107,8 @@ void CoreEngine::setUpMainWindow()
     this->show();
 }
 
-/*setUpQml will be called when an image was loaded and is used to define the data model for the qml view
+/**
+ *setUpQml will be called when an image was loaded and is used to define the data model for the qml view
  *the imageDataModel contains the processed informations about all found images
  *the qmlInterface is designed to share data and signals between QML and C++ logic
  *these propertys are available in QML via the proterty system
@@ -137,14 +138,15 @@ void CoreEngine::setUpQml()
 
 }
 
-/*This is the main open process to load images. When loading an image
+/**
+ *This is the main open process to load images. When loading an image
  *the folder which contains the image will be parsed to load a list of
  *all images in this folder except all unsupported files
  */
 void CoreEngine::open()
 {
     QString file = QFileDialog::getOpenFileName(this,tr("open file"),QDir::currentPath());
-    if(!file.isEmpty())
+    if(!file.isEmpty() && this->image_handler->isFileSupported(file))
     {
         this->image_handler->loadImage(file);
         /*this updates the index of the currently selected image to synchronize it
@@ -160,17 +162,20 @@ void CoreEngine::open()
         /*the file information has to be updated before scaling or manipulate the image otherwise */
         if (this->image_handler->getCurImage().isNull())
         {
-            QMessageBox::information(this, tr("Qim - error report"),
-                                    tr("Can't convert to QImage."));
+            this->dialog_box->showDialogBox(tr("Qim - error report"),tr("Can't convert to QImage."));
             return;
         }
         this->updateMainTitle(this->image_handler->getTitleStr());
         return;
     }
-    QMessageBox::information(this, tr("Qim - error report"),
-                             tr("Can't load file!"));
+    this->dialog_box->showDialogBox(tr("Qim - error report"),tr("No File selected"));
 }
 
+/**
+ * Is an overloaded function of open()
+ * Was desiged to open the file defined by filepath
+ * @param filepath defines the file you want to open
+ */
 void CoreEngine::open(QString filepath)
 {
     if(!filepath.isEmpty())
@@ -182,19 +187,22 @@ void CoreEngine::open(QString filepath)
         this->setUpQml();
         if (this->image_handler->getCurImage().isNull())
         {
-            QMessageBox::information(this, tr("Qim - error report"),
-                                     tr("Can't convert to QImage."));
+            this->dialog_box->showDialogBox(tr("Qim - error report"),tr("Can't convert to QImage."));
             return;
         }
         this->updateMainTitle(image_handler->getTitleStr());
 
         return;
     }
-    QMessageBox::information(this, tr("Qim - error report"),
-                             tr("Can't load file!"));
+    this->dialog_box->showDialogBox(tr("Qim - error report"),tr("No File selected"));
 }
 
-/*sends an updated title string to the qml layer*/
+/**
+ * designed to change to application title
+ * the new title string will be forwarded to the QmlInterface::setNewTitle()
+ *
+ * @param titlestr defines the new title
+ */
 void CoreEngine::updateMainTitle(QString titlestr)
 {
     QString newtitle = this->default_title;
@@ -204,19 +212,21 @@ void CoreEngine::updateMainTitle(QString titlestr)
     this->qml_interface->setNewTitle(newtitle.append(titlestr));
 }
 
-/*this method is designed to build the configuration dialog for qim*/
+/**this method is designed to build the configuration dialog for qim*/
 void CoreEngine::openConfig()
 {
     this->config_dialog->show();
     //this->config_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
 }
 
+/** this slot is called on a mouse wheel event and prompt QmlInterface::emitZoom() with QmlInterface::IN to increase the image size*/
 void CoreEngine::zoomIn()
 {
     //image_viewport->zoomIn(scale_factor_x,scale_factor_y);
     this->qml_interface->emitZoom(QmlInterface::IN);
 }
 
+/** this slot is called on a mouse wheel event and prompt QmlInterface::emitZoom() with QmlInterface::OUT to decrease the image size*/
 void CoreEngine::zoomOut()
 {
     //image_viewport->zoomOut(scale_factor_x,scale_factor_y);
@@ -224,6 +234,7 @@ void CoreEngine::zoomOut()
 
 }
 
+/** this method is used to display the FileInfoHandler dialog*/
 void CoreEngine::showInfo()
 {
     if(!this->file_info_handler->isVisible())
@@ -232,6 +243,7 @@ void CoreEngine::showInfo()
     }
 }
 
+/** this method is used to close the FileInfoHandler dialog*/
 void CoreEngine::closeInfo()
 {
     if(this->file_info_handler->isVisible())
@@ -240,6 +252,11 @@ void CoreEngine::closeInfo()
     }
 }
 
+/**
+  * this method is called on mous wheel event and navigates through the
+  * ImageHandler::file_info_list on calling ImageHandler::loadNextImage()
+  *
+  */
 void CoreEngine::navigateForward()
 {
     if(this->image_handler->isSetDir)
@@ -254,6 +271,11 @@ void CoreEngine::navigateForward()
     }
 }
 
+/**
+  * this method is called on mous wheel event and navigates through the
+  * ImageHandler::file_info_list on calling ImageHandler::loadPrevImage()
+  *
+  */
 void CoreEngine::navigateBackward()
 {
     if(this->image_handler->isSetDir)
@@ -268,7 +290,7 @@ void CoreEngine::navigateBackward()
     }
 }
 
-
+/** this method was designed to switch on and off the FullScreen mode of the application*/
 void CoreEngine::toggleFullScreen()
 {
     if(this->isFullScreen())
@@ -280,6 +302,7 @@ void CoreEngine::toggleFullScreen()
         this->showFullScreen();
 }
 
+/** this method was designed to switch on and off the Maximized mode of the application*/
 void CoreEngine::toggleMaxWindow()
 {
     if(this->isMaximized())
@@ -293,11 +316,13 @@ void CoreEngine::toggleMaxWindow()
     }
 }
 
+/** currently no implemented*/
 void CoreEngine::about()
 {
 
 }
 
+/** builds all Actions for the menu is only used when the ui is not implemented in qml*/
 void CoreEngine::buildActions()
 {
     /*this creates the action in the menubar
@@ -328,6 +353,7 @@ void CoreEngine::buildActions()
     this->connect(this->close_fullsreen, SIGNAL(triggered()), this, SLOT(showNormal()));
 }
 
+/** builds the none qml menus*/
 void CoreEngine::buildMenu()
 {
     this->fileMenu = new QMenu(tr("&File"),this);
@@ -346,6 +372,7 @@ void CoreEngine::buildMenu()
     this->menuBar()->addMenu(this->helpMenu);
 }
 
+/** the dragEnterEvent() is called whenever the user enters the application window with a file in drag mode*/
 void CoreEngine::dragEnterEvent(QDragEnterEvent *event)
 {
     /*the dragEnterEvent is also needed to implement the Drag&Drop feature*/
@@ -362,6 +389,7 @@ void CoreEngine::dragMoveEvent(QDragMoveEvent *event)
 }
 */
 
+/** this event is called when the user drops the file over the application window*/
 void CoreEngine::dropEvent(QDropEvent *event)
 {
     /*the dropEvent is emitted whenever a file is dropped by the user over the main widget*/
@@ -388,6 +416,7 @@ void CoreEngine::dropEvent(QDropEvent *event)
     }
 }
 
+/** the wheelEvent is called on mous wheel actions*/
 void CoreEngine::wheelEvent(QWheelEvent *event)
 {
     if (!event->modifiers())
@@ -421,7 +450,8 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
     this->qml_interface->setNewSize(event->size());
 }
 */
-/*if anything is left to do befor closing the application do it here*/
+
+/** if anything is left to do befor closing the application do it here*/
 void CoreEngine::closeEvent(QCloseEvent *event)
 {
     this->config_handler->setDefWindowSize(this->size());
@@ -464,13 +494,15 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 }
 */
 
+/** this method can be used to open a file from the main() function it only converts the file parameter to QString*/
 void CoreEngine::openFromArgument(char *file)
 {
     QString filepath = (QString)file;
     this->open(filepath);
 }
 
-/*synchronize the qml index in the coreengine and the image_handler
+/**
+ *synchronize the qml index in the coreengine and the image_handler
  *the qml_interface updates the index by itself
  */
 void CoreEngine::setQmlIndex(int index)
@@ -479,8 +511,10 @@ void CoreEngine::setQmlIndex(int index)
     this->image_handler->setCurFileIndex(index);
 }
 
+/** this method is called from the qml ui layer to forward several actions in the application core
+ * @param action is a CoreEngine::CoreAction which defines the action that will be called
+ */
 
-//OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG,MAXIMIZE
 void CoreEngine::callCoreAction(CoreAction action)
 {
     switch(action)
@@ -500,6 +534,7 @@ void CoreEngine::callCoreAction(CoreAction action)
     }
 }
 
+/** currently not implemented*/
 bool CoreEngine::showErrorDialog(const QString msg)
 {
     qDebug() << "error: " << msg;

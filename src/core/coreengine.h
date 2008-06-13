@@ -40,21 +40,30 @@ class ConfigDialog;
 
 /*CoreEngine -> ThemeManager interface see below*/
 
-/*core engine class*/
+/**
+ * The core engine is the major class which operates with all handler classes.
+ *
+ * The core engine is designed to control the entire application
+ * the core set up the ui and combines the config handler classes with the
+ * ui layer classes and define the major logical structure.
+ */
 class CoreEngine : public QMainWindow
 {
     Q_OBJECT
+private:
 
-    /*object list of image data informations to provide them via */
+    /**object list of image data informations to provide them via */
     QList<QObject *> imageDataModelList;
-    /*qml declaritive view is used to display qml based visual layer*/
+    /**qml declaritive view is used to display qml based visual layer*/
     QDeclarativeView *visual_qml_view;
-    /*context for the QDeclarative environment*/
+    /**context for the QDeclarative environment*/
     QDeclarativeContext *context;
 
 
     /*extension objects*/
     QLocale *main_local;
+
+    CustomDialogBox *dialog_box;
 
     ConfigDialog *config_dialog;
     ConfigHandler *config_handler;
@@ -67,10 +76,10 @@ class CoreEngine : public QMainWindow
     qreal scale_factor_x;
     qreal scale_factor_y;
 
-    /*the default_title string is the default application window title*/
+    /**the default_title string is the default application window title*/
     QString default_title;
 
-    /*index of the currently selected picture in the qml list*/
+    /**index of the currently selected picture in the qml list*/
     int curr_qml_index;
 
     /*QActions and QMenus*/
@@ -90,11 +99,11 @@ class CoreEngine : public QMainWindow
     /*build Actions and Menu is obsolete when using qml only*/
     void buildActions();
     void buildMenu();
-    /*set the Window title to titlestr which is now delegated to qml Titlebar*/
+    /**set the Window title to titlestr which is now delegated to qml Titlebar*/
     void updateMainTitle(QString titlestr);
-    /*used to define the MainWindow apearance*/
+    /**used to define the MainWindow apearance*/
     void setUpMainWindow();
-    /*used to define the QML environment*/
+    /**used to define the QML environment*/
     void setUpQml();
 
     /*the dragEnterEvent will be emit whenever the mouse cursor enters the application window*/

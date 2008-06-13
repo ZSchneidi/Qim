@@ -22,8 +22,7 @@ QmlInterface::CoreAction QmlInterface::coreAction() const
     return this->CoreAction;
 }*/
 
-/*this method is designed to send action signals to the core engine*/
-//void QmlInterface::sendCoreAction(CoreAction action)
+/** this method is designed to send action signals to the core engine*/
 void QmlInterface::sendCoreAction(int action)
 {
     /*for definition of coreAction take a look at the enum definition in the qmlinterface header*/
@@ -45,7 +44,8 @@ void QmlInterface::sendCoreAction(int action)
                 break;
     }
 }
-/*this method is a major part of the new QML based UI concept
+/**
+ *this method is a major part of the new QML based UI concept
  *by default Qim loads the QimMainUILayer.qml which is basically
  *the new version of an MainWindow implemented in QML in this file
  *is a loader which can dynamically load different Components or sources
@@ -79,7 +79,7 @@ void QmlInterface::changeActiveLayer(QmlLayer path)
     emit this->activeLayerChanged(*this->active_layer);
 }
 
-/*this method is called when changing the image index in the qml environment*/
+/** this method is called when changing the image index in the qml environment*/
 void QmlInterface::setCurrIndex(const int &index)
 {
     if(index != this->core->currQmlIndex())
@@ -137,7 +137,7 @@ void QmlInterface::resetSizeCursor()
     this->main_size_cursor->setX(0);
     this->main_size_cursor->setY(0);
 }
-/*called when the mainWindow is changing its size to forward the size to the
+/** called when the mainWindow is changing its size to forward the size to the
  *qml visual layer
  */
 void QmlInterface::setNewSize(const QSize size)
@@ -152,14 +152,15 @@ void QmlInterface::setNewTitle(const QString title)
     emit this->mainTitleChanged(title);
 }
 
-/*used to synchronize the index of the currently selected file with the qml environment*/
+/** used to synchronize the index of the currently selected file with the qml environment*/
 void QmlInterface::updateQmlIndex(const int index)
 {
     this->curr_index = index;
     emit this->indexChanged();
 }
 
-/*after initializing the qml mainView with a new image source the size of the image has
+/**
+ *after initializing the qml mainView with a new image source the size of the image has
  *to be determined
  *in the case that the actual image size is bigger that the current Window size the image
  *has to be scaled down to a smaller size, so that it fits the view

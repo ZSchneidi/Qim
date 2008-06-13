@@ -80,7 +80,7 @@ void ConfigDialog::initConfig()
     this->ui->theme_combo_box->setCurrentIndex(this->ui->theme_combo_box->findText(this->config_handler->mainTheme(),Qt::MatchFixedString));
 
     /*set the supported file string into the line edit widget*/
-    this->ui->supp_file_edit->setText(this->config_handler->supFileFormatStr());
+    this->ui->file_blacklist_edit->setText(this->config_handler->FileFormatBlacklistStr());
     /*set the background opacity slider to the config value*/
     this->ui->background_opacity->setValue(this->config_handler->mainBackgroundOpacity());
     this->ui->opacity_value->setText(QString::number(this->config_handler->mainBackgroundOpacity()));
@@ -140,7 +140,7 @@ void ConfigDialog::on_supp_file_edit_textEdited(QString txt)
 {
     if(this->init_config_done)
     {
-        this->temp_config_map->insert(SUPP_FILE_FORMAT_SWITCH,txt);
+        this->temp_config_map->insert(FILE_FORMAT_BLACKLIST_SWITCH,txt);
     }
 }
 

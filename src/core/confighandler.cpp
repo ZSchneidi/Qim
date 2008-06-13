@@ -8,7 +8,8 @@
 
 
 
-/*The ConfigHandler operates with a config file which name is defined
+/**
+ *The ConfigHandler operates with a config file which name is defined
  *in the globaldefinition.h to swith features on or off the handler
  *is parsing the config file and provides information about the config
  *swithes to the config dialog and the hole application
@@ -59,13 +60,11 @@ ConfigHandler::ConfigHandler(CoreEngine *core) : QObject()
             this->restoreConfig();
             this->config_file->close();
         }
-        /*if the config file can't be opened just to restore default config for runtime
-         *
+        /**if the config file can't be opened just to restore default config for runtime
          */
         else
         {
             this->restoreConfig();
-            //qDebug() << "cant open config file";
         }
     }
 }
@@ -167,8 +166,8 @@ void ConfigHandler::restoreConfig()
         this->config_map->insert(FULLSCREEN_SWITCH,this->getStrFromBool(DEFAULT_START_FULL));
     if(this->config_map->find(MAXIMIZED_SWITCH) == this->config_map->end())
         this->config_map->insert(MAXIMIZED_SWITCH,this->getStrFromBool(DEFAULT_START_MAX));
-    if(this->config_map->find(SUPP_FILE_FORMAT_SWITCH) == this->config_map->end())
-        this->config_map->insert(SUPP_FILE_FORMAT_SWITCH,DEFAULT_SUPP_FORMAT);
+    if(this->config_map->find(FILE_FORMAT_BLACKLIST_SWITCH) == this->config_map->end())
+        this->config_map->insert(FILE_FORMAT_BLACKLIST_SWITCH,DEFAULT_BLACKLIST_FORMAT);
     if(this->config_map->find(ADVANCED_UI_SWITCH) == this->config_map->end())
         this->config_map->insert(ADVANCED_UI_SWITCH,this->getStrFromBool(DEFAULT_ADVANCED_UI));
 }
@@ -190,7 +189,7 @@ void ConfigHandler::transactNewConfig(QMap<QString, QString> *temp_config_map)
                 emit this->backgroundOpacityChanged(value.toDouble());
             if(key == BACKGROUND_COLOR_SWITCH)
                 emit this->backgroundColorChanged(value);
-            if(key == SUPP_FILE_FORMAT_SWITCH)
+            if(key == FILE_FORMAT_BLACKLIST_SWITCH)
                 emit this->supportedFormatsChanged(value);
 
             //qDebug() << "write to config " << key << ":" << value;
@@ -559,17 +558,17 @@ void ConfigHandler::setMainLanguage(const QString main_lang)
 }
 
 /*supported files getter and setter*/
-QString ConfigHandler::supFileFormatStr()
+QString ConfigHandler::FileFormatBlacklistStr()
 {
-    if(this->switchExists(SUPP_FILE_FORMAT_SWITCH))
-        return this->getStringFromValue(SUPP_FILE_FORMAT_SWITCH);
+    if(this->switchExists(FILE_FORMAT_BLACKLIST_SWITCH))
+        return this->getStringFromValue(FILE_FORMAT_BLACKLIST_SWITCH);
     else
-        return DEFAULT_SUPP_FORMAT;
+        return DEFAULT_BLACKLIST_FORMAT;
 }
 
 void ConfigHandler::setSupportedFormats(const QString supp_format)
 {
-    this->config_map->insert(SUPP_FILE_FORMAT_SWITCH,supp_format);
+    this->config_map->insert(FILE_FORMAT_BLACKLIST_SWITCH,supp_format);
 }
 
 /*advanced ui getter and setter*/

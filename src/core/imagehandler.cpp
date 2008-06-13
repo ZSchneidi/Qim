@@ -21,7 +21,7 @@ ImageHandler::ImageHandler(CoreEngine *core)
     this->file_support_handler = new FileSupport(this->core->getConfigHandler());
 }
 
-/*
+/**
  *initialize the cur_image QImage with the file which was
  *load via open() or drag&drop
  */
@@ -39,7 +39,7 @@ void ImageHandler::loadImage(const QString cur_file_path)
     this->title_str = cur_file_path;
 }
 
-/*
+/**
  *initialize the cur_image with the
  *next possible image in the QFileInfoList
  *returns false if there is is no other image in the list
@@ -66,7 +66,7 @@ bool ImageHandler::loadNextImage()
     return false;
 }
 
-/*
+/**
  *initialize the cur_image with the
  *previous image in the QFileInfoList if the first image isn't load
  *returns false if there is is no other image in the list
@@ -93,14 +93,14 @@ bool ImageHandler::loadPrevImage()
     return false;
 }
 
-/*Scales the cur_image to the size of with and height*/
+/** Scales the cur_image to the size of with and height*/
 void ImageHandler::scaleImage(int width, int height)
 {
     /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
     //*this->cur_image = this->cur_image->scaled(width,height,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 }
 
-/*
+/**
  *initially load the directory to cur_img_folder whenever an image was load the first time
  *if the cur_img_folder is already set or if something went wrong the method return false
  */
@@ -110,7 +110,7 @@ bool ImageHandler::loadImageFolder(QString path)
     return true;
 }
 
-/*
+/**
  *to obtain the path of the folder which contains the loaded image
  *this method isolates the image file name from the absolute path
  *whath remains is the path to the folder
@@ -124,7 +124,7 @@ void ImageHandler::parseFolderPath(QString cur_file_path)
     /*set the path to the directory which contains the currently loaded image*/
     this->cur_folder_path = cur_file_path.remove(this->cur_file_name);
 }
-/*
+/**
  *in this step the list of QFileInfos will be cleaned from unnecessary data
  *all not supported files and subdirectories will be ereased from the list
  */
@@ -160,7 +160,7 @@ void ImageHandler::initFileList(QFileInfoList &list)
     this->initFileIterator(list);
 }
 
-/*
+/**
  *initialize the interator for the first and the last image in the file list
  *this is needed in a later state to determine whether the current iterator
  *is pointing on the first or the last file in the list
@@ -186,7 +186,7 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
     this->last_file_iterator = --temp_it;
 }
 
-/*
+/**
  *returns an iterator to the position of a File in the file list
  *this information is used to check where the current iterator points on
  *to check if the user can load a previous or a next image
@@ -225,7 +225,7 @@ QFileInfoList::Iterator ImageHandler::getFileListPosOfIndex(const int index, QFi
 
 }
 
-/*
+/**
  *returns a QString which contains the absolute path to the file (list entry)
  *on which the iterator points
  */
@@ -239,7 +239,7 @@ QString ImageHandler::getFilePathFromList(const QFileInfoList::Iterator position
     return (*temp_it).filePath();
 }
 
-/*
+/**
  *the ImageDataModel is used by the qml engine the picture list on the visual layer
  *needs a model from which the list gets the data that should be shown
  *this data model contains all information the list needs to operate with the images
@@ -283,9 +283,16 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
     //temp_img.~QImage();
 }
 
-/*used to synchronize the index of the currently selected image file called by the CoreEngine::setQmlIndex(int index)*/
+/** used to synchronize the index of the currently selected image file called by the CoreEngine::setQmlIndex(int index)*/
 void ImageHandler::setCurFileIndex(int index)
 {
     this->cur_file_index = index;
     this->cur_file_iterator = this->getFileListPosOfIndex(index,this->file_info_list);
 }
+
+bool ImageHandler::isFileSupported(QString filename)
+{
+    return this->file_support_handler->isFileSupported(filename);
+}
+
+

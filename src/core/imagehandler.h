@@ -124,6 +124,9 @@ public:
     inline const QPixmap& getPosImagePix() const { return *pos_image_pix; }
     inline const int getCurFileIndex() const { return cur_file_index; }
 
+    /*redirected method calls*/
+    bool isFileSupported(QString filename);
+
 };
 
 

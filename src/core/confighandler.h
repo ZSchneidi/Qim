@@ -54,7 +54,7 @@ public:
     QString mainLanguage();
     QString mainTheme();
     QString mainBackgroundColor();
-    QString supFileFormatStr();
+    QString FileFormatBlacklistStr();
     QSize defWindowSize();
     int mainBackgroundOpacity();
     bool startMaximized();

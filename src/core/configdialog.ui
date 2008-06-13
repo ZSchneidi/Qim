@@ -166,7 +166,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Supported file formats:</string>
+         <string>file formats blacklist:</string>
         </property>
        </widget>
       </item>
@@ -184,7 +184,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="supp_file_edit"/>
+       <widget class="QLineEdit" name="file_blacklist_edit"/>
       </item>
      </layout>
     </widget>
