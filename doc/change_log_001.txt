@@ -1,0 +1,19 @@
+02.06.2010
+--------
+<JS> 
+set up first app secification in doc/basic-specs.txt
+set up doc/developer-diary.txt
+set up doc/soruce_code_format.txt
+set up basic project strukture
+</JS>
+05.06.2010
+--------
+<JS>
+implement imagehandler object
+implement thememanager object
+</JS>
+08.06.2010
+--------
+<JS>
+implement translation test english->german
+</JS>

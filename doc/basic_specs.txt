@@ -1,0 +1,71 @@
+Basic Specification of the Qt based ImageViewer Qim (Qt Image Viewer)
+
+Structure:
+
+	- Introduction
+	- Overview
+	- Design aspects
+	- Licence
+	
+==============================================
+
+ - Introduction
+
+Qim - Qt ImageViewer is a lightweight image viewer based on Nokia's Qt - C++ Framework.
+The viewer is also written in C++. In later states it arises an interface for building
+plug-ins in other languages like Python maybe Java.
+
+==============================================
+
+ - Overview
+
+The main software is designed for image representation only. What we aim at with this
+tool is to appropriate a simple, fast and lightweight alternative for image representation
+and in later states also image manipulation.
+
+Qim should be able to handle the most important image formats maybe formats like .psd 
+and raw for easy and fast access to the image information. If it's possible a layer engine
+that handles the different layers of a psd file. Furthermore Qim should also be able to 
+get access to EXIF data.
+
+==============================================
+
+ - Design aspects
+ 
+Qim is a modular designed application which contains the main "ViewerCore" engine, a "Plug-in Manager"
+engine and the "Theme Manager" engine.
+
+ViewerCore 		- This is the basic engine which handles all image information, represents the image on screen,
+				  implements a directory handler for navigation through all images of the currently selected 
+				  directory and provides zooming features, printing options as well as drag and drop.
+				  
+				- The directory and imagedata handling is currently part of the ImageHandler object.
+			 
+Plug-in Manager - The plug-in manager provides an interface between the Core and the plug-ins.
+				  The manager gets several features that realize the control of all valid plug-ins.
+				  This part will be defined in a later state of development.
+
+Theme Manager 	- The theme manager is responsible for the look and feel of Qim. Themes can be realized 
+				  by style sheets. Therefore we will set up an default CSS theme file, which can be 
+				  modified for different looks. 
+				  The second part in the theme management is a more advanced GUI descriptor. With this
+				  interface it is possible to chance the entire graphics interface.
+				  The second part will also be defined in a later state of development.
+
+
+==============================================
+
+ - Qt itself is used in the LGPL v2.1
+ 
+ !!Important!!
+ Qim should be published under the LGPL or GPL. Which one has to be determined.
+
+
+
+
+
+
+
+
+
+

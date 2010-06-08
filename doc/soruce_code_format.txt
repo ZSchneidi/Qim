@@ -1,0 +1,53 @@
+Please keep discipline when modify or add new code.
+Here you can see the format conditions.
+
+
+==========================
+/*header.h*/
+
+ok:
+named namespaces
+typedefs
+template declaration
+template definition
+function declaration
+inline function definition
+data declaration
+const definition
+enums
+name declaration						- class ownClass
+includes
+makros
+directives for conditional translation 	- #ifdef 
+comments
+
+not ok:
+regular function definition
+data definition
+aggregate definition					- int tbl[]= {1,2,3};
+unnamed namespaces
+exported template definition
+
+==========================
+/*interface_impl.h*/
+
+For implementation interfaces you can also use an impl.h header 
+but this isn't a constraint.
+
+
+==========================
+/*source.cpp*/
+
+code layout:
+
+/*regular comment*/
+class myClass
+{
+public:
+    myFunction();
+	/*to comment out*/
+	//foobar();
+};
+
+
+
