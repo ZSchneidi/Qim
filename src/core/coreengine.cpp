@@ -26,12 +26,14 @@ CoreEngine::CoreEngine(QWidget *parent) :
     image_label->setAlignment(Qt::AlignCenter);
     image_label->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
     image_label->setText(tr("no picture loaded"));
+
     image_area = new QScrollArea;
     image_area->setWidget(image_label);
     image_area->setAlignment(Qt::AlignCenter);
 
     setAcceptDrops(true);
     setCentralWidget(image_area);
+
     showMaximized();
 
     buildActions();

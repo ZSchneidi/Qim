@@ -2,7 +2,10 @@
 #define IMAGEHANDLER_H
 
 #include<QImage>
-
+#include <QImage>
+#include <QDir>
+#include <QString>
+#include <QFileInfoList>
 
 /*
 The image handler provides all functions needed to store
@@ -12,6 +15,10 @@ class ImageHandler
 {
 
 private:
+    QString filepath;
+    QString cur_folder_path;
+    QString cur_file_name;
+
     QImage *pre_image;
     QImage *cur_image;
     QImage *pos_image;
@@ -24,14 +31,22 @@ private:
     bool isSetCurImage;
     bool isSetPosImage;
 
+    QDir cur_img_folder;
+
+    QFileInfoList file_info_list;
+    QFileInfoList::Iterator file_iterator;
+
+    void setPreImage();
+    void setPostImage();
+    void loadImageFolder(QString path);
+    void parseFolderPath(QString filepath);
+    void initFileList();
 
 public:
 
     ImageHandler();
 
-    void setPreImage();
     void setCurrImage(QString filepath);
-    void setPostImage();
     void scaleImage(int width, int height);
 
     /*to get read-only access to private QImage objects use: */

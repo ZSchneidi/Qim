@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainviewer.ui'
 **
-** Created: Wed 2. Jun 19:49:02 2010
+** Created: Thu 10. Jun 18:09:36 2010
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -26,9 +26,9 @@ QT_BEGIN_NAMESPACE
 class Ui_MainViewer
 {
 public:
+    QWidget *centralWidget;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
-    QWidget *centralWidget;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainViewer)
@@ -36,15 +36,17 @@ public:
         if (MainViewer->objectName().isEmpty())
             MainViewer->setObjectName(QString::fromUtf8("MainViewer"));
         MainViewer->resize(600, 400);
-        menuBar = new QMenuBar(MainViewer);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        MainViewer->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainViewer);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        MainViewer->addToolBar(mainToolBar);
+        MainViewer->setStyleSheet(QString::fromUtf8("background:qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(59, 59, 59, 180), stop:1 rgba(102, 102, 102, 0));"));
         centralWidget = new QWidget(MainViewer);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainViewer->setCentralWidget(centralWidget);
+        menuBar = new QMenuBar(MainViewer);
+        menuBar->setObjectName(QString::fromUtf8("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 600, 21));
+        MainViewer->setMenuBar(menuBar);
+        mainToolBar = new QToolBar(MainViewer);
+        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
+        MainViewer->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainViewer);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainViewer->setStatusBar(statusBar);
