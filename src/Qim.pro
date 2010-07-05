@@ -7,11 +7,13 @@ SOURCES += main.cpp \
     core/coreengine.cpp \
     manager/pluginmmanager.cpp \
     manager/thememanager.cpp \
-    core/imagehandler.cpp
+    core/imagehandler.cpp \
+    core/filesupport.cpp
 HEADERS += core/coreengine.h \
     manager/pluginmmanager.h \
     manager/thememanager.h \
-    core/imagehandler.h
+    core/imagehandler.h \
+    core/filesupport.h
 FORMS += mainviewer.ui
 
 TRANSLATIONS = theme/language/qim_lang_de_DE.ts

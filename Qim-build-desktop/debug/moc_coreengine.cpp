@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'coreengine.h'
 **
-** Created: Thu 10. Jun 18:51:12 2010
+** Created: Tue 29. Jun 20:15:29 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_CoreEngine[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -34,12 +34,15 @@ static const uint qt_meta_data_CoreEngine[] = {
       12,   11,   11,   11, 0x08,
       19,   11,   11,   11, 0x08,
       28,   11,   11,   11, 0x08,
+      38,   11,   11,   11, 0x08,
+      56,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CoreEngine[] = {
     "CoreEngine\0\0open()\0zoomIn()\0zoomOut()\0"
+    "navigateForward()\0navigateBackward()\0"
 };
 
 const QMetaObject CoreEngine::staticMetaObject = {
@@ -74,9 +77,11 @@ int CoreEngine::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 0: open(); break;
         case 1: zoomIn(); break;
         case 2: zoomOut(); break;
+        case 3: navigateForward(); break;
+        case 4: navigateBackward(); break;
         default: ;
         }
-        _id -= 3;
+        _id -= 5;
     }
     return _id;
 }

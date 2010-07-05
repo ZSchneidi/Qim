@@ -49,9 +49,9 @@ void CoreEngine::open()
     QString file = QFileDialog::getOpenFileName(this,tr("open file"),QDir::currentPath());
     if(!file.isEmpty())
         {
-        image_handler->setCurrImage(file);
+        image_handler->loadImage(file);
         //QImage image(file);
-        if (image_handler->CurImage().isNull())
+        if (image_handler->getCurImage().isNull())
             {
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
@@ -59,7 +59,7 @@ void CoreEngine::open()
             }
 
         image_handler->scaleImage((width()),(height()-40));
-        image_label->setPixmap(QPixmap::fromImage(image_handler->CurImage()));
+        image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         image_label->adjustSize();
         return;
         }
@@ -71,16 +71,15 @@ void CoreEngine::open(QString filepath)
 {
     if(!filepath.isEmpty())
         {
-        image_handler->setCurrImage(filepath);
-        if (image_handler->CurImage().isNull())
+        image_handler->loadImage(filepath);
+        if (image_handler->getCurImage().isNull())
             {
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
             return;
             }
         image_handler->scaleImage((width()),(height()-40));
-
-        image_label->setPixmap(QPixmap::fromImage(image_handler->CurImage()));
+        image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         image_label->adjustSize();
         return;
         }
@@ -90,12 +89,55 @@ void CoreEngine::open(QString filepath)
 
 void CoreEngine::zoomIn()
 {
+    qDebug() << "zoom In";
 
 }
 
 void CoreEngine::zoomOut()
 {
 
+    qDebug() << "zoom Out";
+}
+
+void CoreEngine::navigateForward()
+{
+    if(image_handler->isSetDir)
+    {
+        if(image_handler->loadNextImage())
+        {
+            image_handler->scaleImage((width()),(height()-40));
+            image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            image_label->adjustSize();
+            qWarning() << "next Image was load !" << image_handler->getCurImage().width();
+        }
+        else
+            QMessageBox::warning(this,tr("loading error"), tr("no more images found in this directory!"));
+    }
+    else
+    {
+        QMessageBox::warning(this,tr("directory error"),tr("no directory handler set!"));
+    }
+
+}
+
+void CoreEngine::navigateBackward()
+{
+    if(image_handler->isSetDir)
+    {
+        if(image_handler->loadPrevImage())
+        {
+            image_handler->scaleImage((width()),(height()-40));
+            image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            image_label->adjustSize();
+            qWarning() << "next Image was load !" << image_handler->getCurImage().width();
+        }
+        else
+            QMessageBox::warning(this,tr("loading error"), tr("reached first image in directory!"));
+    }
+    else
+    {
+        QMessageBox::warning(this,tr("directory error"),tr("no directory handler set!"));
+    }
 }
 
 void CoreEngine::buildActions()
@@ -170,25 +212,28 @@ void CoreEngine::openFromArgument(char *file)
 void CoreEngine::wheelEvent(QWheelEvent *event)
 {
     if (!event->modifiers())
+    {
+        if (event->delta() > 0 )
         {
-    if (event->delta() < 0 )
-        qDebug() << "navigate forward";
-    else if (event->delta() > 0)
-        qDebug() << "navigate backward";
+            navigateForward();
         }
+
+        else if (event->delta() < 0)
+        {
+            navigateBackward();
+        }
+    }
     else if (event->modifiers() == Qt::ControlModifier)
+    {
+        if (event->delta() > 0 )
         {
-        if (event->delta() < 0 )
-            {
-            qDebug() << "zoom Out";
             zoomIn();
-            }
-        else if (event->delta() > 0)
-            {
-            qDebug() << "zoom In";
-            zoomOut();
-            }
         }
+        else if (event->delta() < 0)
+        {
+            zoomOut();
+        }
+    }
 }
 
 CoreEngine::~CoreEngine()

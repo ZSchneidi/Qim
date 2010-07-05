@@ -37,6 +37,8 @@ private slots:
     void open();
     void zoomIn();
     void zoomOut();
+    void navigateForward();
+    void navigateBackward();
 
 public:
 

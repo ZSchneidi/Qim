@@ -17,3 +17,11 @@ implement thememanager object
 <JS>
 implement translation test english->german
 </JS>
+
+02.07.2010
+--------
+<JS>
+implement directory & filehandling
+implement FileSupport class 
+valid file filter for QFileInfoList
+</JS>
