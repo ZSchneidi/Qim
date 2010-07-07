@@ -4,12 +4,11 @@
 
 ThemeManager::ThemeManager(CoreEngine *parent)
 {
-
     core = parent;
 
     core->image_label->setStyleSheet("background: transparent; color: white;");
     core->image_area->setStyleSheet("background: rgb(103, 103, 103);");
-    core->image_view->setStyleSheet("background: rgb(103, 103, 103);");
+    core->image_viewport->setStyleSheet("background: rgb(103, 103, 103);");
 }
 
 void ThemeManager::setLableStyle()

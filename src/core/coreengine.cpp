@@ -1,30 +1,18 @@
 #include "coreengine.h"
 
-#include <QFileDialog>
-#include <QDebug>
-#include <QMimeData>
-#include <QUrl>
-#include <QEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QWheelEvent>
-#include <QMessageBox>
-#include <QPixmap>
-#include <QtGui>
-
 #include "imagehandler.h"
 #include "fileinfohandler.h"
 #include "manager/thememanager.h"
 #include "manager/pluginmmanager.h"
+#include "core/viewport.h"
 
-/*The Core Engine is declared in namespace Core*/
 
 CoreEngine::CoreEngine(QWidget *parent) : 
     QMainWindow(parent)
 {
     default_title = "Qim";
 
-
+    /*implementation of the QScrollArea with Label*/
     image_label = new QLabel;
     image_label->setAlignment(Qt::AlignCenter);
     image_label->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
@@ -34,32 +22,28 @@ CoreEngine::CoreEngine(QWidget *parent) :
     image_area->setWidget(image_label);
     image_area->setAlignment(Qt::AlignCenter);
 
-
+    /*the zooming feature scales the image by the scale factor*/
     scale_factor_x = 0.1;
     scale_factor_y = 0.1;
 
-    image_scene = new QGraphicsScene;
-    image_scene->addText(tr("no picture loaded"));
-    image_view = new QGraphicsView;
-    image_view->setScene(image_scene);
-    image_view->setDragMode(QGraphicsView::ScrollHandDrag);
-    image_view->show();
-
-    setCentralWidget(image_view);
-
     setAcceptDrops(true);
-    //setCentralWidget(image_area);
 
     showMaximized();
 
     buildActions();
     buildMenu();
 
+    /*initialize the viewport which prints the image data*/
+    image_viewport = new ViewPort;
+    setCentralWidget(image_viewport);
+    image_viewport->show();
+
+    /*initialize the image handler object which provides the image and directory data*/
     image_handler = new ImageHandler;
+    /*initialize the styling manager*/
     theme_manager = new ThemeManager(this);
+    /*initialize the info handler object which contains all kinds of information about the shown image*/
     file_info_handler = new FileInfoHandler(this);
-    /*to define how the file info dialog behaves you can use the WindowFlags*/
-    file_info_handler->setWindowFlags(Qt::Dialog);
 
 }
 
@@ -80,8 +64,7 @@ void CoreEngine::open()
         image_handler->scaleImage((width()),(height()-40));
         //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         //image_label->adjustSize();
-        image_scene->clear();
-        image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+        image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         updateMainTitle(image_handler->getTitleStr());
 
         return;
@@ -106,8 +89,7 @@ void CoreEngine::open(QString filepath)
         image_handler->scaleImage((width()),(height()-40));
         //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         //image_label->adjustSize();
-        image_scene->clear();
-        image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+        image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         updateMainTitle(image_handler->getTitleStr());
         return;
         }
@@ -125,12 +107,12 @@ void CoreEngine::updateMainTitle(QString titlestr)
 
 void CoreEngine::zoomIn()
 {
-    image_view->scale((1.0+scale_factor_x),(1.0+scale_factor_y));
+    image_viewport->zoomIn(scale_factor_x,scale_factor_y);
 }
 
 void CoreEngine::zoomOut()
 {
-    image_view->scale((1.0-scale_factor_x),(1.0-scale_factor_y));
+    image_viewport->zoomOut(scale_factor_x,scale_factor_y);
 }
 
 void CoreEngine::showInfo()
@@ -160,8 +142,7 @@ void CoreEngine::navigateForward()
             image_handler->scaleImage((width()),(height()-40));
             //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
             //image_label->adjustSize();
-            image_scene->clear();
-            image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
             updateMainTitle(image_handler->getTitleStr());
         }
     }
@@ -178,8 +159,7 @@ void CoreEngine::navigateBackward()
             image_handler->scaleImage((width()),(height()-40));
             //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
             //image_label->adjustSize();
-            image_scene->clear();
-            image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
             updateMainTitle(image_handler->getTitleStr());
         }
     }
@@ -197,7 +177,6 @@ void CoreEngine::buildActions()
     exit_action = new QAction(tr("&Exit"),this);
     exit_action->setShortcut(QKeySequence::Quit);
     connect(exit_action, SIGNAL(triggered()), this, SLOT(close()));
-
 
     show_file_info = new QAction(tr("&Show Info"),this);
     connect(show_file_info, SIGNAL(triggered()), this, SLOT(showInfo()));
@@ -235,10 +214,14 @@ void CoreEngine::dragEnterEvent(QDragEnterEvent *event)
                   md->hasUrls() || md->hasText()))
         event->acceptProposedAction();
 }
-
+/*
+void CoreEngine::dragMoveEvent(QDragMoveEvent *event)
+{
+    qDebug() << "drag move event occur";
+}
+*/
 void CoreEngine::dropEvent(QDropEvent *event)
 {
-    qDebug() << "drop occur";
     /*the dropEvent is emitted whenever a file is dropped by the user over the main widget*/
     if( event && event->mimeData())
         {
@@ -262,12 +245,12 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
 {
     if (!event->modifiers())
     {
-        if (event->delta() > 0 )
+        if (event->delta() < 0 )
         {
             navigateForward();
         }
 
-        else if (event->delta() < 0)
+        else if (event->delta() > 0)
         {
             navigateBackward();
         }

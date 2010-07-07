@@ -32,6 +32,10 @@ FileInfoHandler::FileInfoHandler(QWidget *parent) :
     ui->fileinfotable->setItem(7,1,file_type_value);
     ui->fileinfotable->setItem(8,1,file_lchange_value);
 
+
+    /*to define how the file info dialog behaves you can use the WindowFlags*/
+    setWindowFlags(Qt::Dialog);
+
 }
 
 void FileInfoHandler::updateFileInfo(const QFileInfo &file_info, const QImage &image)
