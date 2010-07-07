@@ -8,12 +8,15 @@ SOURCES += main.cpp \
     manager/pluginmmanager.cpp \
     manager/thememanager.cpp \
     core/imagehandler.cpp \
-    core/filesupport.cpp
+    core/filesupport.cpp \
+    core/fileinfohandler.cpp
 HEADERS += core/coreengine.h \
     manager/pluginmmanager.h \
     manager/thememanager.h \
     core/imagehandler.h \
-    core/filesupport.h
-FORMS += mainviewer.ui
+    core/filesupport.h \
+    core/fileinfohandler.h
+FORMS += mainviewer.ui \
+    core/fileinfohandler.ui
 
 TRANSLATIONS = theme/language/qim_lang_de_DE.ts

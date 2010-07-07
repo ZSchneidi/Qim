@@ -13,6 +13,7 @@
 #include <QtGui>
 
 #include "imagehandler.h"
+#include "fileinfohandler.h"
 #include "manager/thememanager.h"
 #include "manager/pluginmmanager.h"
 
@@ -21,6 +22,8 @@
 CoreEngine::CoreEngine(QWidget *parent) : 
     QMainWindow(parent)
 {
+    default_title = "Qim";
+
 
     image_label = new QLabel;
     image_label->setAlignment(Qt::AlignCenter);
@@ -31,8 +34,21 @@ CoreEngine::CoreEngine(QWidget *parent) :
     image_area->setWidget(image_label);
     image_area->setAlignment(Qt::AlignCenter);
 
+
+    scale_factor_x = 0.1;
+    scale_factor_y = 0.1;
+
+    image_scene = new QGraphicsScene;
+    image_scene->addText(tr("no picture loaded"));
+    image_view = new QGraphicsView;
+    image_view->setScene(image_scene);
+    image_view->setDragMode(QGraphicsView::ScrollHandDrag);
+    image_view->show();
+
+    setCentralWidget(image_view);
+
     setAcceptDrops(true);
-    setCentralWidget(image_area);
+    //setCentralWidget(image_area);
 
     showMaximized();
 
@@ -41,6 +57,9 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
     image_handler = new ImageHandler;
     theme_manager = new ThemeManager(this);
+    file_info_handler = new FileInfoHandler(this);
+    /*to define how the file info dialog behaves you can use the WindowFlags*/
+    file_info_handler->setWindowFlags(Qt::Dialog);
 
 }
 
@@ -50,17 +69,21 @@ void CoreEngine::open()
     if(!file.isEmpty())
         {
         image_handler->loadImage(file);
-        //QImage image(file);
+        /*the file information has to be updated before scaling or manipulate the image otherwise */
+        file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
         if (image_handler->getCurImage().isNull())
             {
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
             return;
             }
-
         image_handler->scaleImage((width()),(height()-40));
-        image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-        image_label->adjustSize();
+        //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+        //image_label->adjustSize();
+        image_scene->clear();
+        image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+        updateMainTitle(image_handler->getTitleStr());
+
         return;
         }
     QMessageBox::information(this, tr("Qim - error report"),
@@ -72,6 +95,8 @@ void CoreEngine::open(QString filepath)
     if(!filepath.isEmpty())
         {
         image_handler->loadImage(filepath);
+        /*the file information has to be updated before scaling or manipulate the image otherwise */
+        file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
         if (image_handler->getCurImage().isNull())
             {
             QMessageBox::information(this, tr("Qim - error report"),
@@ -79,24 +104,49 @@ void CoreEngine::open(QString filepath)
             return;
             }
         image_handler->scaleImage((width()),(height()-40));
-        image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-        image_label->adjustSize();
+        //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+        //image_label->adjustSize();
+        image_scene->clear();
+        image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+        updateMainTitle(image_handler->getTitleStr());
         return;
         }
     QMessageBox::information(this, tr("Qim - error report"),
                              tr("Can't load file!"));
 }
 
+void CoreEngine::updateMainTitle(QString titlestr)
+{
+    QString newtitle = default_title;
+    newtitle.append(" - ");
+    setWindowTitle(newtitle.append(titlestr));
+
+}
+
 void CoreEngine::zoomIn()
 {
-    qDebug() << "zoom In";
-
+    image_view->scale((1.0+scale_factor_x),(1.0+scale_factor_y));
 }
 
 void CoreEngine::zoomOut()
 {
+    image_view->scale((1.0-scale_factor_x),(1.0-scale_factor_y));
+}
 
-    qDebug() << "zoom Out";
+void CoreEngine::showInfo()
+{
+    if(!file_info_handler->isVisible())
+    {
+        file_info_handler->show();
+    }
+}
+
+void CoreEngine::closeInfo()
+{
+    if(file_info_handler->isVisible())
+    {
+        file_info_handler->close();
+    }
 }
 
 void CoreEngine::navigateForward()
@@ -105,19 +155,16 @@ void CoreEngine::navigateForward()
     {
         if(image_handler->loadNextImage())
         {
+            /*the file information has to be updated before scaling or manipulate the image otherwise */
+            file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
             image_handler->scaleImage((width()),(height()-40));
-            image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-            image_label->adjustSize();
-            qWarning() << "next Image was load !" << image_handler->getCurImage().width();
+            //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            //image_label->adjustSize();
+            image_scene->clear();
+            image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            updateMainTitle(image_handler->getTitleStr());
         }
-        else
-            QMessageBox::warning(this,tr("loading error"), tr("no more images found in this directory!"));
     }
-    else
-    {
-        QMessageBox::warning(this,tr("directory error"),tr("no directory handler set!"));
-    }
-
 }
 
 void CoreEngine::navigateBackward()
@@ -126,17 +173,15 @@ void CoreEngine::navigateBackward()
     {
         if(image_handler->loadPrevImage())
         {
+            /*the file information has to be updated before scaling or manipulate the image otherwise */
+            file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
             image_handler->scaleImage((width()),(height()-40));
-            image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-            image_label->adjustSize();
-            qWarning() << "next Image was load !" << image_handler->getCurImage().width();
+            //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            //image_label->adjustSize();
+            image_scene->clear();
+            image_scene->addPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+            updateMainTitle(image_handler->getTitleStr());
         }
-        else
-            QMessageBox::warning(this,tr("loading error"), tr("reached first image in directory!"));
-    }
-    else
-    {
-        QMessageBox::warning(this,tr("directory error"),tr("no directory handler set!"));
     }
 }
 
@@ -153,6 +198,13 @@ void CoreEngine::buildActions()
     exit_action->setShortcut(QKeySequence::Quit);
     connect(exit_action, SIGNAL(triggered()), this, SLOT(close()));
 
+
+    show_file_info = new QAction(tr("&Show Info"),this);
+    connect(show_file_info, SIGNAL(triggered()), this, SLOT(showInfo()));
+
+    close_file_info = new QAction(tr("&Close Info"),this);
+    connect(close_file_info, SIGNAL(triggered()), this, SLOT(closeInfo()));
+
     /*the aboutQT() function is a build in dialog*/
     about_qt_qction = new QAction(tr("About &Qt"), this);
     connect(about_qt_qction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
@@ -166,14 +218,27 @@ void CoreEngine::buildMenu()
     fileMenu->addAction(exit_action);
 
     helpMenu = new QMenu(tr("&Help"),this);
+    helpMenu->addAction(show_file_info);
     helpMenu->addAction(about_qt_qction);
+
+    contextMenu = new QMenu;
 
     menuBar()->addMenu(fileMenu);
     menuBar()->addMenu(helpMenu);
 }
 
+void CoreEngine::dragEnterEvent(QDragEnterEvent *event)
+{
+    /*the dragEnterEvent is also needed to implement the Drag&Drop feature*/
+    const QMimeData* md = event->mimeData();
+    if( event && (md->hasImage() ||
+                  md->hasUrls() || md->hasText()))
+        event->acceptProposedAction();
+}
+
 void CoreEngine::dropEvent(QDropEvent *event)
 {
+    qDebug() << "drop occur";
     /*the dropEvent is emitted whenever a file is dropped by the user over the main widget*/
     if( event && event->mimeData())
         {
@@ -191,22 +256,6 @@ void CoreEngine::dropEvent(QDropEvent *event)
             open(filepath);
             }
         }
-}
-
-void CoreEngine::dragEnterEvent(QDragEnterEvent *event)
-{
-    /*the dragEnterEvent is also needed to implement the Drag&Drop feature*/
-    qDebug() << "enter draging";
-    const QMimeData* md = event->mimeData();
-    if( event && (md->hasImage() ||
-                  md->hasUrls() || md->hasText()))
-        event->acceptProposedAction();
-}
-
-void CoreEngine::openFromArgument(char *file)
-{
-    QString filepath = (QString)file;
-    open(filepath);
 }
 
 void CoreEngine::wheelEvent(QWheelEvent *event)
@@ -235,6 +284,39 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
         }
     }
 }
+
+void CoreEngine::closeEvent(QCloseEvent *event)
+{
+    file_info_handler->close();
+}
+
+/*
+ *the contextMenuEvent is called by systemdependent contextMenu actions
+ */
+void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
+{
+    /*set the position of the context menu to the current position*/
+    contextMenu->move(event->x(),event->y());
+    /*for now the contextMenu will be cleared before adding all needed actions*/
+    contextMenu->clear();
+    if(file_info_handler->isVisible())
+    {
+        contextMenu->addAction(close_file_info);
+    }
+    else
+    {
+        contextMenu->addAction(show_file_info);
+    }
+    contextMenu->show();
+}
+
+void CoreEngine::openFromArgument(char *file)
+{
+    QString filepath = (QString)file;
+    open(filepath);
+}
+
+
 
 CoreEngine::~CoreEngine()
 {

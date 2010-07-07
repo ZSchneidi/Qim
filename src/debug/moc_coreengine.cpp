@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'coreengine.h'
 **
-** Created: Wed 30. Jun 17:35:12 2010
+** Created: Wed 7. Jul 13:22:43 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_CoreEngine[] = {
        4,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,14 +35,17 @@ static const uint qt_meta_data_CoreEngine[] = {
       19,   11,   11,   11, 0x08,
       28,   11,   11,   11, 0x08,
       38,   11,   11,   11, 0x08,
-      56,   11,   11,   11, 0x08,
+      49,   11,   11,   11, 0x08,
+      61,   11,   11,   11, 0x08,
+      79,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_CoreEngine[] = {
     "CoreEngine\0\0open()\0zoomIn()\0zoomOut()\0"
-    "navigateForward()\0navigateBackward()\0"
+    "showInfo()\0closeInfo()\0navigateForward()\0"
+    "navigateBackward()\0"
 };
 
 const QMetaObject CoreEngine::staticMetaObject = {
@@ -77,11 +80,13 @@ int CoreEngine::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 0: open(); break;
         case 1: zoomIn(); break;
         case 2: zoomOut(); break;
-        case 3: navigateForward(); break;
-        case 4: navigateBackward(); break;
+        case 3: showInfo(); break;
+        case 4: closeInfo(); break;
+        case 5: navigateForward(); break;
+        case 6: navigateBackward(); break;
         default: ;
         }
-        _id -= 5;
+        _id -= 7;
     }
     return _id;
 }

@@ -28,8 +28,10 @@ private:
     QString cur_file_name;
     /*provides the path to the the loaded image file*/
     QString cur_file_path;
+    /*this string is used by the updateMainTitle() function from coreengine*/
+    QString title_str;
 
-    QFile *cur_image_file;
+    QFileInfo cur_image_file;
 
     QImage *pre_image;
     QImage *cur_image;
@@ -94,14 +96,17 @@ public:
     void scaleImage(int width, int height);
 
     /*getter*/
+    /*returns a string with the path of the current file for the main title*/
+    inline const QString& getTitleStr() const {return title_str; }
+    inline const QFileInfo& getCurImageFileInfo() const {return (*cur_file_iterator);}
 
     /*to get read-only access to private QImage objects use: */
-    inline const QImage& getPreImage() const { return *pre_image; };
-    inline const QImage& getCurImage() const { return *cur_image; };
-    inline const QImage& getPosImage() const { return *pos_image; };
-    inline const QPixmap& getPreImagePix() const { return *pre_image_pix; };
-    inline const QPixmap& getCurImagePix() const { return *cur_image_pix; };
-    inline const QPixmap& getPosImagePix() const { return *pos_image_pix; };
+    inline const QImage& getPreImage() const { return *pre_image; }
+    inline const QImage& getCurImage() const { return *cur_image; }
+    inline const QImage& getPosImage() const { return *pos_image; }
+    inline const QPixmap& getPreImagePix() const { return *pre_image_pix; }
+    inline const QPixmap& getCurImagePix() const { return *cur_image_pix; }
+    inline const QPixmap& getPosImagePix() const { return *pos_image_pix; }
 
 };
 

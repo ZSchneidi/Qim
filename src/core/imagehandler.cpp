@@ -44,7 +44,8 @@ void ImageHandler::loadImage(const QString cur_file_path)
     dir_load = loadImageFolder(cur_folder_path);
     initFileList(file_info_list);
     cur_file_iterator = getFileListPosOf(cur_file_name, file_info_list);
-
+    /*store the path in the title_str*/
+    title_str = cur_file_path;
 }
 
 void ImageHandler::setPostImage()
@@ -65,11 +66,11 @@ bool ImageHandler::loadNextImage()
     {
         cur_file_index++;
         /*get the path of the next file in the list*/
-        cur_file_name = getFilePathFromList(++cur_file_iterator,file_info_list);
-        qDebug() << "new file: " << cur_file_name;
+        cur_file_path = getFilePathFromList(++cur_file_iterator,file_info_list);
         if((*cur_file_iterator).isFile())
         {
-            *cur_image = QImage(cur_file_name);
+            *cur_image = QImage(cur_file_path);
+            title_str = cur_file_path;
         }
     }
     else
@@ -92,10 +93,11 @@ bool ImageHandler::loadPrevImage()
     {
         cur_file_index--;
         /*get the path of the next file in the list*/
-        cur_file_name = getFilePathFromList(--cur_file_iterator,file_info_list);
+        cur_file_path = getFilePathFromList(--cur_file_iterator,file_info_list);
         if((*cur_file_iterator).isFile())
         {
-            *cur_image = QImage(cur_file_name);
+            *cur_image = QImage(cur_file_path);
+            title_str = cur_file_path;
         }
     }
     else
@@ -153,7 +155,13 @@ void ImageHandler::initFileList(QFileInfoList &list)
         }
         else
         {
-            if(!file_support_handler->isSupported((*temp_it).completeSuffix()))
+            /*
+             *check whether the file type suffix is supported
+             *problems can occur if the path contains more than one "." in the path
+             *this must be solved by parsing the suffix
+             */
+            bool check = file_support_handler->isSupported((*temp_it).suffix());
+            if(!check)
             {
                 temp_it = list.erase(temp_it);
                 if(temp_it == list.end())
@@ -176,7 +184,6 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
 
     while(temp_it != list.end())
     {
-        qDebug() << "file- " << (*temp_it).fileName();
         if( (*temp_it).isFile() )
         {
             if(!is_set_first)
