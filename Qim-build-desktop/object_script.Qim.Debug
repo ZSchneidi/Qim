@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\coreengine.o
+./debug\pluginmmanager.o
+./debug\thememanager.o
+./debug\imagehandler.o
+./debug\filesupport.o
+./debug\fileinfohandler.o
+./debug\viewport.o
+./debug\moc_coreengine.o
+./debug\moc_fileinfohandler.o
+);
