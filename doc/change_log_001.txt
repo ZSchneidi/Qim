@@ -50,4 +50,18 @@ implement of zooming features
 	- viewport class (some issue with mem leak)
 </JS>
 
+09.08.2010
+--------
+<JS>
+migration from widget based UI to QML based UI
+	- implementation in /visuallayer .qml files
+	- new QmlInterface for data exchange between C++ core and Qml UI
+	- Image data is provided via QML and stored in a QList data model
 
+some issues with drag+drop and navigation, this should be fixed in the
+communication between core and qml UI
+
+the new qml UI needs more memory especially in consequence of using the listview 
+with pictures, this could be fixed by scaling the thumbnails in the list
+	
+</JS>
