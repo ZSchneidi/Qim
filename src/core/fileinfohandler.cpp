@@ -47,8 +47,26 @@ void FileInfoHandler::updateFileInfo(const QFileInfo &file_info, const QImage &i
     setXdpiValue(image.dotsPerMeterX());
     setYdpiValue(image.dotsPerMeterY());
     setSizeValue(file_info.size());
+    setSizeString(file_info.size());
     setTypeValue(file_info.suffix());
     setLChangeValue(file_info.lastModified());
+
+    writeToTable();
+
+}
+
+void FileInfoHandler::writeToTable()
+{
+    setItemValue(0,1,file_info.name);
+    setItemValue(1,1,QString::number(file_info.width));
+    setItemValue(2,1,QString::number(file_info.height));
+    setItemValue(3,1,QString::number(file_info.depth));
+    setItemValue(4,1,QString::number(file_info.xdpi));
+    setItemValue(5,1,QString::number(file_info.ydpi));
+    setItemValue(6,1,file_info.size_str);
+    setItemValue(7,1,file_info.type);
+    setItemValue(8,1,file_info.lchange.toString());
+
 }
 
 void FileInfoHandler::setItemValue(int row, int column, QString text)
@@ -56,50 +74,6 @@ void FileInfoHandler::setItemValue(int row, int column, QString text)
     ui->fileinfotable->item(row,column)->setText(text);
 }
 
-void FileInfoHandler::setNameValue(QString text)
-{
-    ui->fileinfotable->item(0,1)->setText(text);
-}
-
-void FileInfoHandler::setWidthValue(int value)
-{
-    ui->fileinfotable->item(1,1)->setText(convert_str.number(value));
-}
-
-void FileInfoHandler::setHeigthValue(int value)
-{
-    ui->fileinfotable->item(2,1)->setText(convert_str.number(value));
-}
-
-void FileInfoHandler::setDepthValue(int value)
-{
-    ui->fileinfotable->item(3,1)->setText(convert_str.number(value));
-}
-
-void FileInfoHandler::setXdpiValue(int value)
-{
-    ui->fileinfotable->item(4,1)->setText(convert_str.number(round(((double)value/100)*2.54, 0)));
-}
-
-void FileInfoHandler::setYdpiValue(int value)
-{
-    ui->fileinfotable->item(5,1)->setText(convert_str.number(round(((double)value/100)*2.54, 0)));
-}
-
-void FileInfoHandler::setSizeValue(qint64 value)
-{
-    ui->fileinfotable->item(6,1)->setText(getSizeOf(value));
-}
-
-void FileInfoHandler::setTypeValue(QString text)
-{
-    ui->fileinfotable->item(7,1)->setText(text);
-}
-
-void FileInfoHandler::setLChangeValue(QDateTime date)
-{
-    ui->fileinfotable->item(8,1)->setText(date.toString());
-}
 
 /*used to determin the file size*/
 QString FileInfoHandler::getSizeOf(qint64 size)

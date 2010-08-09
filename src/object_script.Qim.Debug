@@ -6,7 +6,11 @@ INPUT(
 ./debug\imagehandler.o
 ./debug\filesupport.o
 ./debug\fileinfohandler.o
-./debug\viewport.o
+./debug\imagedatamodel.o
+./debug\fileinfothread.o
+./debug\qmlinterface.o
 ./debug\moc_coreengine.o
 ./debug\moc_fileinfohandler.o
+./debug\moc_imagedatamodel.o
+./debug\moc_qmlinterface.o
 );

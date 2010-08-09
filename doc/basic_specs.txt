@@ -40,6 +40,13 @@ ViewerCore 		- This is the basic engine which handles all image information, rep
 				  directory and provides zooming features, printing options as well as drag and drop.
 				  
 				- The directory and imagedata handling is currently part of the ImageHandler object.
+				- The image representation is now implemented with the ViewPort class which is basically a
+				  QGraphicsView with a QGraphicsScene. The Drag&Drop is also part of the ViewPort.
+				- The ImageHandler is extended by the FileSupport class which hold information of all
+				  types of files supported by Qim.
+				- Information about the image which is presented to the user is part of the FileInfoHandler
+				  implementation.
+				
 			 
 Plug-in Manager - The plug-in manager provides an interface between the Core and the plug-ins.
 				  The manager gets several features that realize the control of all valid plug-ins.

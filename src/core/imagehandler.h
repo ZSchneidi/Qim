@@ -10,6 +10,7 @@
 #include <QObject>
 
 #include "filesupport.h"
+#include "imagedatamodel.h"
 
 /*
  *The image handler provides all functions needed to store
@@ -17,7 +18,7 @@
  *The image handler also provides QDir - directory handler
  *as well as the list of all supported files in the directory.
  */
-class ImageHandler
+class ImageHandler : public FileInfoHandler
 {
 
 private:
@@ -43,6 +44,7 @@ private:
 
     QDir cur_img_folder;
 
+    /*list of all images in the current directory*/
     QFileInfoList file_info_list;
     /*reference to the currently loaded file*/
     QFileInfoList::Iterator cur_file_iterator;
@@ -58,10 +60,6 @@ private:
     int cur_file_index;
 
     /*setter*/
-    /*not in use*/
-    void setPreImage();
-    /*not in use*/
-    void setPostImage();
     void parseFolderPath(QString cur_file_path);
     void initFileList(QFileInfoList &list);
     void initFileIterator(QFileInfoList &list);
@@ -75,16 +73,13 @@ private:
 
 public:
 
-    /*not in use*/
-    bool isSetPreImage;
+    ImageHandler();
+
     /*is used to verify whether the cur_image is already loaded*/
     bool isSetCurImage;
-    /*not in use*/
-    bool isSetPosImage;
     /*is used to verify whether a directory is already loaded by loadImageFolder()*/
     bool isSetDir;
 
-    ImageHandler();
     /*setter*/
     /*
      *loadNext and loadPrev iterate from first image to last image
@@ -94,6 +89,13 @@ public:
     bool loadPrevImage();
     void loadImage(const QString cur_file_path);
     void scaleImage(int width, int height);
+
+    /**/
+    void freeImageFolder();
+
+    /*this setter method is used to initialize the data model for the qml
+    interface with all data of the images*/
+    void initImageDataModel(QList<QObject *> & model);
 
     /*getter*/
     /*returns a string with the path of the current file for the main title*/

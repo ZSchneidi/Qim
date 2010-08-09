@@ -22,6 +22,32 @@ implement translation test english->german
 --------
 <JS>
 implement directory & filehandling
-implement FileSupport class 
-valid file filter for QFileInfoList
+	- imagehandler class
+implement FileSupport 
+	- filesupport class
+	- valid file filter for QFileInfoList
 </JS>
+
+06.07.2010
+--------
+<JS>
+implement of navigation
+	- in coreengine & imagehandler class
+</JS>
+
+07.07.2010
+--------
+<JS>
+implement file information handling
+	- fileinfohandler class
+</JS>
+
+08.07.2010
+--------
+<JS>
+implement of zooming features
+	- changed from QScrollArea+QLabel to QGraphicsView+QGraphicsScene
+	- viewport class (some issue with mem leak)
+</JS>
+
+

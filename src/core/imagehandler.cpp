@@ -1,29 +1,23 @@
 #include "imagehandler.h"
 #include "core/coreengine.h"
+#include "fileinfohandler.h"
+#include "fileinfothread.h"
 
 #include <QDebug>
 #include <QMessageBox>
 
 /*The image handler is declared in namespace Core*/
 
+
 ImageHandler::ImageHandler()
 {
-    isSetPreImage = false;
     isSetCurImage = false;
-    isSetPosImage = false;
     isSetDir = false;
-
     cur_file_iterator = 0;
     first_file_iterator = 0;
     last_file_iterator = 0;
     cur_file_index = 0;
-
     file_support_handler = new FileSupport();
-}
-
-void ImageHandler::setPreImage()
-{
-
 }
 
 /*initialize the cur_image QImage with the file which was
@@ -31,26 +25,15 @@ void ImageHandler::setPreImage()
  */
 void ImageHandler::loadImage(const QString cur_file_path)
 {
-    bool dir_load = false;
-    if(isSetCurImage)
-    {
-        cur_image->~QImage();
-        isSetCurImage = false;
-    }
     cur_image = new QImage(cur_file_path);
     isSetCurImage = true;
     parseFolderPath(cur_file_path);
     /*check if the directory is loaded of not*/
-    dir_load = loadImageFolder(cur_folder_path);
+    isSetDir = loadImageFolder(cur_folder_path);
     initFileList(file_info_list);
     cur_file_iterator = getFileListPosOf(cur_file_name, file_info_list);
     /*store the path in the title_str*/
     title_str = cur_file_path;
-}
-
-void ImageHandler::setPostImage()
-{
-
 }
 
 /*
@@ -110,7 +93,6 @@ bool ImageHandler::loadPrevImage()
 /*Scales the cur_image to the size of with and height*/
 void ImageHandler::scaleImage(int width, int height)
 {
-
     *cur_image = cur_image->scaled(width,height,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 }
 
@@ -120,15 +102,9 @@ void ImageHandler::scaleImage(int width, int height)
  */
 bool ImageHandler::loadImageFolder(QString path)
 {
-    if(!isSetDir)
-    {
-        cur_img_folder = QDir(path);
-        isSetDir = true;
-        return true;
-    }
-    else
-        return false;
-
+    cur_img_folder = QDir(path);
+    qDebug() << cur_img_folder.dirName();
+    return true;
 }
 
 /*parse the path of the folder which contains the currently loaded image file*/
@@ -140,7 +116,6 @@ void ImageHandler::parseFolderPath(QString cur_file_path)
     cur_file_name = cur_file_name.remove(0,++lindex);
     /*set the path to the directory which contains the currently loaded image*/
     cur_folder_path = cur_file_path.remove(cur_file_name);
-
 }
 
 void ImageHandler::initFileList(QFileInfoList &list)
@@ -181,7 +156,6 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
 {
     bool is_set_first = false;
     QFileInfoList::Iterator temp_it = list.begin();
-
     while(temp_it != list.end())
     {
         if( (*temp_it).isFile() )
@@ -197,8 +171,8 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
             temp_it++;
     }
     last_file_iterator = --temp_it;
-
 }
+
 /*Returns an iterator to the position of a File in the file list. */
 QFileInfoList::Iterator ImageHandler::getFileListPosOf(const QString &filename, QFileInfoList &list)
 {
@@ -229,4 +203,35 @@ QString ImageHandler::getFilePathFromList(const QFileInfoList::Iterator position
         temp_it++;
     }
     return (*temp_it).filePath();
+}
+
+void ImageHandler::initImageDataModel(QList<QObject *> &model)
+{
+    //qDebug() << "item count " << model.count();
+    if(model.count() > 0)
+    {
+        model.clear();
+    }
+    QFileInfoList::Iterator temp_it = this->file_info_list.begin();
+    while(temp_it != this->file_info_list.end())
+    {
+        if( (*temp_it).isFile() )
+        {
+            FileInfoContainer file_info;
+            file_info.name = (*temp_it).fileName();
+            file_info.path = (*temp_it).absoluteFilePath();
+            /*file_info.width =
+            file_info.height =
+            file_info.depth =
+            file_info.xdpi =
+            file_info.ydpi = */
+            file_info.size = (*temp_it).size();
+            file_info.size_str = FileInfoHandler::getSizeStr((*temp_it).size());
+            file_info.type = (*temp_it).suffix();
+
+            model.append(new ImageDataModel(file_info));
+
+        }
+        temp_it++;
+    }
 }

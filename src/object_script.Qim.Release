@@ -6,7 +6,11 @@ INPUT(
 ./release\imagehandler.o
 ./release\filesupport.o
 ./release\fileinfohandler.o
-./release\viewport.o
+./release\imagedatamodel.o
+./release\fileinfothread.o
+./release\qmlinterface.o
 ./release\moc_coreengine.o
 ./release\moc_fileinfohandler.o
+./release\moc_imagedatamodel.o
+./release\moc_qmlinterface.o
 );

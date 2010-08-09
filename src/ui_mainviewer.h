@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainviewer.ui'
 **
-** Created: Thu 10. Jun 18:09:36 2010
-**      by: Qt User Interface Compiler version 4.6.2
+** Created: Thu 5. Aug 09:43:17 2010
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -16,9 +16,6 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMainWindow>
-#include <QtGui/QMenuBar>
-#include <QtGui/QStatusBar>
-#include <QtGui/QToolBar>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -27,29 +24,20 @@ class Ui_MainViewer
 {
 public:
     QWidget *centralWidget;
-    QMenuBar *menuBar;
-    QToolBar *mainToolBar;
-    QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainViewer)
     {
         if (MainViewer->objectName().isEmpty())
             MainViewer->setObjectName(QString::fromUtf8("MainViewer"));
         MainViewer->resize(600, 400);
+        MainViewer->setCursor(QCursor(Qt::ArrowCursor));
+        MainViewer->setContextMenuPolicy(Qt::PreventContextMenu);
+        MainViewer->setWindowOpacity(1);
+        MainViewer->setAutoFillBackground(false);
         MainViewer->setStyleSheet(QString::fromUtf8("background:qlineargradient(spread:pad, x1:1, y1:1, x2:1, y2:0, stop:0 rgba(59, 59, 59, 180), stop:1 rgba(102, 102, 102, 0));"));
         centralWidget = new QWidget(MainViewer);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainViewer->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(MainViewer);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 600, 21));
-        MainViewer->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainViewer);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        MainViewer->addToolBar(Qt::TopToolBarArea, mainToolBar);
-        statusBar = new QStatusBar(MainViewer);
-        statusBar->setObjectName(QString::fromUtf8("statusBar"));
-        MainViewer->setStatusBar(statusBar);
 
         retranslateUi(MainViewer);
 

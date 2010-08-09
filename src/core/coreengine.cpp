@@ -1,49 +1,74 @@
 #include "coreengine.h"
 
-#include "imagehandler.h"
-#include "fileinfohandler.h"
-#include "manager/thememanager.h"
-#include "manager/pluginmmanager.h"
-#include "core/viewport.h"
 
+#define QIMVISLAYERFILE "visuallayer/QimVisualLayer.qml"
+#define QIMDEFLAYERFILE "visuallayer/QimDefaultLayer.qml"
+#define SCALEFACTORX 0.1
+#define SCALEFACTORY 0.1
 
+/*
+ *The core engine is the major class which operates with all handler classes.
+ */
 CoreEngine::CoreEngine(QWidget *parent) : 
     QMainWindow(parent)
 {
+
+    curr_qml_index = 0;
+
     default_title = "Qim";
+    //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
-    /*implementation of the QScrollArea with Label*/
-    image_label = new QLabel;
-    image_label->setAlignment(Qt::AlignCenter);
-    image_label->setSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
-    image_label->setText(tr("no picture loaded"));
+    //setWindowState(Qt::WindowFullScreen);
 
-    image_area = new QScrollArea;
-    image_area->setWidget(image_label);
-    image_area->setAlignment(Qt::AlignCenter);
-
-    /*the zooming feature scales the image by the scale factor*/
-    scale_factor_x = 0.1;
-    scale_factor_y = 0.1;
-
-    setAcceptDrops(true);
-
-    showMaximized();
-
-    buildActions();
-    buildMenu();
-
-    /*initialize the viewport which prints the image data*/
-    image_viewport = new ViewPort;
-    setCentralWidget(image_viewport);
-    image_viewport->show();
-
+    /*extension objects instantiation*/
     /*initialize the image handler object which provides the image and directory data*/
     image_handler = new ImageHandler;
     /*initialize the styling manager*/
     theme_manager = new ThemeManager(this);
     /*initialize the info handler object which contains all kinds of information about the shown image*/
     file_info_handler = new FileInfoHandler(this);
+
+    /*this object is the interface object between c++ logic layer and the qml ui layer*/
+    //qml_interface = new QmlInterface(this);
+
+    /*instatiate and load the qml declarative ui into the qml viewer*/
+    visual_qml_view = new QDeclarativeView;
+    //visual_qml_view.acceptDrops();
+
+    /*initialize the context with the root context of the qml viewer*/
+    context = visual_qml_view->rootContext();
+    /*define imageDataModel as a variant of the data list in the qml context*/
+
+    /*set the source of the default qim layer qml file */
+    visual_qml_view->setSource(QUrl(QIMDEFLAYERFILE));
+    /*this fills the parent application window with the qml view*/
+    visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+
+    /*the zooming feature scales the image by the scale factor*/
+    scale_factor_x = SCALEFACTORX;
+    scale_factor_y = SCALEFACTORY;
+
+    /*set-up the main window*/
+    setCentralWidget(visual_qml_view);
+    setAcceptDrops(true);
+    showMaximized();
+
+    buildActions();
+    buildMenu();
+}
+
+/*setUpQml will be called when an image was loaded and is used to define the data model for the qml view*/
+void CoreEngine::setUpQml()
+{
+
+    context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
+    //context->setContextProperty("qmlInterface", qml_interface );
+    context->setContextProperty("qmlInterface", new QmlInterface(this) );
+    context->setContextProperty("icolor", QColor(Qt::red) );
+
+
+    /*set the source qml file */
+    visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
 
 }
 
@@ -52,7 +77,15 @@ void CoreEngine::open()
     QString file = QFileDialog::getOpenFileName(this,tr("open file"),QDir::currentPath());
     if(!file.isEmpty())
         {
+        if(image_handler->isSetCurImage)
+        {
+
+        }
+
         image_handler->loadImage(file);
+        /*image data initialization to get all image data to qml*/
+        image_handler->initImageDataModel(imageDataModelList);
+        setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
         file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
         if (image_handler->getCurImage().isNull())
@@ -60,11 +93,9 @@ void CoreEngine::open()
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
             return;
-            }
+            }       
         image_handler->scaleImage((width()),(height()-40));
-        //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-        //image_label->adjustSize();
-        image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
+
         updateMainTitle(image_handler->getTitleStr());
 
         return;
@@ -78,6 +109,9 @@ void CoreEngine::open(QString filepath)
     if(!filepath.isEmpty())
         {
         image_handler->loadImage(filepath);
+        /*image data initialization to get all image data to qml*/
+        image_handler->initImageDataModel(imageDataModelList);
+        setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
         file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
         if (image_handler->getCurImage().isNull())
@@ -87,9 +121,6 @@ void CoreEngine::open(QString filepath)
             return;
             }
         image_handler->scaleImage((width()),(height()-40));
-        //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-        //image_label->adjustSize();
-        image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
         updateMainTitle(image_handler->getTitleStr());
         return;
         }
@@ -102,17 +133,16 @@ void CoreEngine::updateMainTitle(QString titlestr)
     QString newtitle = default_title;
     newtitle.append(" - ");
     setWindowTitle(newtitle.append(titlestr));
-
 }
 
 void CoreEngine::zoomIn()
 {
-    image_viewport->zoomIn(scale_factor_x,scale_factor_y);
+    //image_viewport->zoomIn(scale_factor_x,scale_factor_y);
 }
 
 void CoreEngine::zoomOut()
 {
-    image_viewport->zoomOut(scale_factor_x,scale_factor_y);
+    //image_viewport->zoomOut(scale_factor_x,scale_factor_y);
 }
 
 void CoreEngine::showInfo()
@@ -140,10 +170,12 @@ void CoreEngine::navigateForward()
             /*the file information has to be updated before scaling or manipulate the image otherwise */
             file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
             image_handler->scaleImage((width()),(height()-40));
-            //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-            //image_label->adjustSize();
-            image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
             updateMainTitle(image_handler->getTitleStr());
+            //context->setContextProperty("index",++index);
+            //this->curr_qml_index++;
+            qml_interface->incrementIndex();
+            //context->setContextProperty("index",qml_interface->index);
+
         }
     }
 }
@@ -157,10 +189,10 @@ void CoreEngine::navigateBackward()
             /*the file information has to be updated before scaling or manipulate the image otherwise */
             file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
             image_handler->scaleImage((width()),(height()-40));
-            //image_label->setPixmap(QPixmap::fromImage(image_handler->getCurImage()));
-            //image_label->adjustSize();
-            image_viewport->showPixmap(QPixmap::fromImage(image_handler->getCurImage()));
             updateMainTitle(image_handler->getTitleStr());
+            //this->curr_qml_index--;
+            qml_interface->decrementIndex();
+            //context->setContextProperty("index",qml_interface->index);
         }
     }
 }
@@ -276,11 +308,12 @@ void CoreEngine::closeEvent(QCloseEvent *event)
 /*
  *the contextMenuEvent is called by systemdependent contextMenu actions
  */
+/*
 void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 {
-    /*set the position of the context menu to the current position*/
+    //set the position of the context menu to the current position
     contextMenu->move(event->x(),event->y());
-    /*for now the contextMenu will be cleared before adding all needed actions*/
+    //for now the contextMenu will be cleared before adding all needed actions
     contextMenu->clear();
     if(file_info_handler->isVisible())
     {
@@ -292,6 +325,7 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
     }
     contextMenu->show();
 }
+*/
 
 void CoreEngine::openFromArgument(char *file)
 {
@@ -299,6 +333,17 @@ void CoreEngine::openFromArgument(char *file)
     open(filepath);
 }
 
+void CoreEngine::incCurrQmlIndex()
+{
+    this->curr_qml_index++;
+    qDebug() << "index: " << this->curr_qml_index;
+}
+
+void CoreEngine::decCurrQmlIndex()
+{
+    this->curr_qml_index--;
+    qDebug() << "index: " << this->curr_qml_index;
+}
 
 
 CoreEngine::~CoreEngine()
