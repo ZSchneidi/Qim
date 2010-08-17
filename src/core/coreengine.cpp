@@ -1,6 +1,5 @@
 #include "coreengine.h"
 
-
 #define QIMVISLAYERFILE "visuallayer/QimVisualLayer.qml"
 #define QIMDEFLAYERFILE "visuallayer/QimDefaultLayer.qml"
 #define SCALEFACTORX 0.1
@@ -9,66 +8,68 @@
 /*
  *The core engine is the major class which operates with all handler classes.
  */
-CoreEngine::CoreEngine(QWidget *parent) : 
-    QMainWindow(parent)
+CoreEngine::CoreEngine(QWidget *parent) :
+        QMainWindow(parent)
 {
 
-    curr_qml_index = 0;
+    this->curr_qml_index = 0;
 
-    default_title = "Qim";
+    this->default_title = "Qim";
     //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
     //setWindowState(Qt::WindowFullScreen);
 
     /*extension objects instantiation*/
     /*initialize the image handler object which provides the image and directory data*/
-    image_handler = new ImageHandler;
+    this->image_handler = new ImageHandler;
+
     /*initialize the styling manager*/
-    theme_manager = new ThemeManager(this);
+    this->theme_manager = new ThemeManager(this);
+
     /*initialize the info handler object which contains all kinds of information about the shown image*/
-    file_info_handler = new FileInfoHandler(this);
+    this->file_info_handler = new FileInfoHandler(this);
 
     /*this object is the interface object between c++ logic layer and the qml ui layer*/
     //qml_interface = new QmlInterface(this);
 
     /*instatiate and load the qml declarative ui into the qml viewer*/
-    visual_qml_view = new QDeclarativeView;
+    this->visual_qml_view = new QDeclarativeView;
     //visual_qml_view.acceptDrops();
 
     /*initialize the context with the root context of the qml viewer*/
-    context = visual_qml_view->rootContext();
+    this->context = this->visual_qml_view->rootContext();
     /*define imageDataModel as a variant of the data list in the qml context*/
 
     /*set the source of the default qim layer qml file */
-    visual_qml_view->setSource(QUrl(QIMDEFLAYERFILE));
+    this->visual_qml_view->setSource(QUrl(QIMDEFLAYERFILE));
     /*this fills the parent application window with the qml view*/
-    visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    this->visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
     /*the zooming feature scales the image by the scale factor*/
-    scale_factor_x = SCALEFACTORX;
-    scale_factor_y = SCALEFACTORY;
+    this->scale_factor_x = SCALEFACTORX;
+    this->scale_factor_y = SCALEFACTORY;
 
     /*set-up the main window*/
-    setCentralWidget(visual_qml_view);
-    setAcceptDrops(true);
-    showMaximized();
+    this->setCentralWidget(visual_qml_view);
+    this->setAcceptDrops(true);
+    this->showMaximized();
 
-    buildActions();
-    buildMenu();
+    this->buildActions();
+    this->buildMenu();
 }
 
 /*setUpQml will be called when an image was loaded and is used to define the data model for the qml view*/
 void CoreEngine::setUpQml()
 {
 
-    context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
+    this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
     //context->setContextProperty("qmlInterface", qml_interface );
-    context->setContextProperty("qmlInterface", new QmlInterface(this) );
-    context->setContextProperty("icolor", QColor(Qt::red) );
+    this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
+    this->context->setContextProperty("icolor", QColor(Qt::red) );
 
 
     /*set the source qml file */
-    visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
+    this->visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
 
 }
 
@@ -76,30 +77,30 @@ void CoreEngine::open()
 {
     QString file = QFileDialog::getOpenFileName(this,tr("open file"),QDir::currentPath());
     if(!file.isEmpty())
-        {
-        if(image_handler->isSetCurImage)
+    {
+        if(this->image_handler->isSetCurImage)
         {
 
         }
 
-        image_handler->loadImage(file);
+        this->image_handler->loadImage(file);
         /*image data initialization to get all image data to qml*/
-        image_handler->initImageDataModel(imageDataModelList);
-        setUpQml();
+        this->image_handler->initImageDataModel(this->imageDataModelList);
+        this->setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
-        file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
-        if (image_handler->getCurImage().isNull())
-            {
+        this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
+                                                this->image_handler->getCurImage());
+        if (this->image_handler->getCurImage().isNull())
+        {
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
             return;
-            }       
-        image_handler->scaleImage((width()),(height()-40));
-
-        updateMainTitle(image_handler->getTitleStr());
+        }
+        this->image_handler->scaleImage((width()),(height()-40));
+        this->updateMainTitle(this->image_handler->getTitleStr());
 
         return;
-        }
+    }
     QMessageBox::information(this, tr("Qim - error report"),
                              tr("Can't load file!"));
 }
@@ -107,32 +108,34 @@ void CoreEngine::open()
 void CoreEngine::open(QString filepath)
 {
     if(!filepath.isEmpty())
-        {
-        image_handler->loadImage(filepath);
+    {
+        this->image_handler->loadImage(filepath);
         /*image data initialization to get all image data to qml*/
-        image_handler->initImageDataModel(imageDataModelList);
-        setUpQml();
+        this->image_handler->initImageDataModel(this->imageDataModelList);
+        this->setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
-        file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
-        if (image_handler->getCurImage().isNull())
-            {
+        this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
+                                                this->image_handler->getCurImage());
+        if (this->image_handler->getCurImage().isNull())
+        {
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
             return;
-            }
-        image_handler->scaleImage((width()),(height()-40));
-        updateMainTitle(image_handler->getTitleStr());
-        return;
         }
+        this->image_handler->scaleImage((width()),(height()-40));
+        this->updateMainTitle(image_handler->getTitleStr());
+
+        return;
+    }
     QMessageBox::information(this, tr("Qim - error report"),
                              tr("Can't load file!"));
 }
 
 void CoreEngine::updateMainTitle(QString titlestr)
 {
-    QString newtitle = default_title;
+    QString newtitle = this->default_title;
     newtitle.append(" - ");
-    setWindowTitle(newtitle.append(titlestr));
+    this->setWindowTitle(newtitle.append(titlestr));
 }
 
 void CoreEngine::zoomIn()
@@ -147,33 +150,34 @@ void CoreEngine::zoomOut()
 
 void CoreEngine::showInfo()
 {
-    if(!file_info_handler->isVisible())
+    if(!this->file_info_handler->isVisible())
     {
-        file_info_handler->show();
+        this->file_info_handler->show();
     }
 }
 
 void CoreEngine::closeInfo()
 {
-    if(file_info_handler->isVisible())
+    if(this->file_info_handler->isVisible())
     {
-        file_info_handler->close();
+        this->file_info_handler->close();
     }
 }
 
 void CoreEngine::navigateForward()
 {
-    if(image_handler->isSetDir)
+    if(this->image_handler->isSetDir)
     {
-        if(image_handler->loadNextImage())
+        if(this->image_handler->loadNextImage())
         {
             /*the file information has to be updated before scaling or manipulate the image otherwise */
-            file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
-            image_handler->scaleImage((width()),(height()-40));
-            updateMainTitle(image_handler->getTitleStr());
+            this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
+                                                    this->image_handler->getCurImage());
+            this->image_handler->scaleImage(this->width(), this->height() - 40);
+            this->updateMainTitle(this->image_handler->getTitleStr());
             //context->setContextProperty("index",++index);
             //this->curr_qml_index++;
-            qml_interface->incrementIndex();
+            this->qml_interface->incrementIndex();
             //context->setContextProperty("index",qml_interface->index);
 
         }
@@ -182,16 +186,17 @@ void CoreEngine::navigateForward()
 
 void CoreEngine::navigateBackward()
 {
-    if(image_handler->isSetDir)
+    if(this->image_handler->isSetDir)
     {
-        if(image_handler->loadPrevImage())
+        if(this->image_handler->loadPrevImage())
         {
             /*the file information has to be updated before scaling or manipulate the image otherwise */
-            file_info_handler->updateFileInfo(image_handler->getCurImageFileInfo(),image_handler->getCurImage());
-            image_handler->scaleImage((width()),(height()-40));
-            updateMainTitle(image_handler->getTitleStr());
+            this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
+                                                    this->image_handler->getCurImage());
+            this->image_handler->scaleImage(width(), height() - 40);
+            this->updateMainTitle(this->image_handler->getTitleStr());
             //this->curr_qml_index--;
-            qml_interface->decrementIndex();
+            this->qml_interface->decrementIndex();
             //context->setContextProperty("index",qml_interface->index);
         }
     }
@@ -202,49 +207,50 @@ void CoreEngine::buildActions()
     /*this creates the action in the menubar
       the tr() function is used for translation in internationalized apps
     */
-    open_action = new QAction(tr("&Open"),this);
-    open_action->setShortcut(QKeySequence::Open);
-    connect(open_action , SIGNAL(triggered()), this, SLOT(open()));
+    this->open_action = new QAction(tr("&Open"),this);
+    this->open_action->setShortcut(QKeySequence::Open);
+    this->connect(this->open_action , SIGNAL(triggered()), this, SLOT(open()));
 
-    exit_action = new QAction(tr("&Exit"),this);
-    exit_action->setShortcut(QKeySequence::Quit);
-    connect(exit_action, SIGNAL(triggered()), this, SLOT(close()));
+    this->exit_action = new QAction(tr("&Exit"),this);
+    this->exit_action->setShortcut(QKeySequence::Quit);
+    this->connect(this->exit_action, SIGNAL(triggered()), this, SLOT(close()));
 
-    show_file_info = new QAction(tr("&Show Info"),this);
-    connect(show_file_info, SIGNAL(triggered()), this, SLOT(showInfo()));
+    this->show_file_info = new QAction(tr("&Show Info"),this);
+    this->connect(this->show_file_info, SIGNAL(triggered()), this, SLOT(showInfo()));
 
-    close_file_info = new QAction(tr("&Close Info"),this);
-    connect(close_file_info, SIGNAL(triggered()), this, SLOT(closeInfo()));
+    this->close_file_info = new QAction(tr("&Close Info"),this);
+    this->connect(this->close_file_info, SIGNAL(triggered()), this, SLOT(closeInfo()));
 
     /*the aboutQT() function is a build in dialog*/
-    about_qt_qction = new QAction(tr("About &Qt"), this);
-    connect(about_qt_qction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    this->about_qt_qction = new QAction(tr("About &Qt"), this);
+    this->connect(this->about_qt_qction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 }
 
 void CoreEngine::buildMenu()
 {
-    fileMenu = new QMenu(tr("&File"),this);
-    fileMenu->addAction(open_action);
-    fileMenu->addSeparator();
-    fileMenu->addAction(exit_action);
+    this->fileMenu = new QMenu(tr("&File"),this);
+    this->fileMenu->addAction(this->open_action);
+    this->fileMenu->addSeparator();
+    this->fileMenu->addAction(this->exit_action);
 
-    helpMenu = new QMenu(tr("&Help"),this);
-    helpMenu->addAction(show_file_info);
-    helpMenu->addAction(about_qt_qction);
+    this->helpMenu = new QMenu(tr("&Help"),this);
+    this->helpMenu->addAction(this->show_file_info);
+    this->helpMenu->addAction(this->about_qt_qction);
 
-    contextMenu = new QMenu;
+    this->contextMenu = new QMenu;
 
-    menuBar()->addMenu(fileMenu);
-    menuBar()->addMenu(helpMenu);
+    this->menuBar()->addMenu(this->fileMenu);
+    this->menuBar()->addMenu(this->helpMenu);
 }
 
 void CoreEngine::dragEnterEvent(QDragEnterEvent *event)
 {
     /*the dragEnterEvent is also needed to implement the Drag&Drop feature*/
     const QMimeData* md = event->mimeData();
-    if( event && (md->hasImage() ||
-                  md->hasUrls() || md->hasText()))
+    if (event && (md->hasImage() || md->hasUrls() || md->hasText()))
+    {
         event->acceptProposedAction();
+    }
 }
 /*
 void CoreEngine::dragMoveEvent(QDragMoveEvent *event)
@@ -255,8 +261,8 @@ void CoreEngine::dragMoveEvent(QDragMoveEvent *event)
 void CoreEngine::dropEvent(QDropEvent *event)
 {
     /*the dropEvent is emitted whenever a file is dropped by the user over the main widget*/
-    if( event && event->mimeData())
-        {
+    if(event && event->mimeData())
+    {
         /*extract the mimeData from the drop*/
         const QMimeData *data = event->mimeData();
         /*to keep it simple I only ask for urls in the mimedata because Qt has some issues with
@@ -264,13 +270,18 @@ void CoreEngine::dropEvent(QDropEvent *event)
           this should be much more plattform independent
         */
         if(data->hasUrls())
-            {
+        {
             QList<QUrl> urls = data->urls();
-            if(urls.isEmpty()) return;
-            QString filepath = urls.first().toLocalFile();
-            open(filepath);
+
+            if(urls.isEmpty())
+            {
+                return;
             }
+
+            QString filepath = urls.first().toLocalFile();
+            this->open(filepath);
         }
+    }
 }
 
 void CoreEngine::wheelEvent(QWheelEvent *event)
@@ -279,30 +290,30 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
     {
         if (event->delta() < 0 )
         {
-            navigateForward();
+            this->navigateForward();
         }
 
         else if (event->delta() > 0)
         {
-            navigateBackward();
+            this->navigateBackward();
         }
     }
     else if (event->modifiers() == Qt::ControlModifier)
     {
         if (event->delta() > 0 )
         {
-            zoomIn();
+            this->zoomIn();
         }
         else if (event->delta() < 0)
         {
-            zoomOut();
+            this->zoomOut();
         }
     }
 }
 
 void CoreEngine::closeEvent(QCloseEvent *event)
 {
-    file_info_handler->close();
+    this->file_info_handler->close();
 }
 
 /*
@@ -330,7 +341,7 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 void CoreEngine::openFromArgument(char *file)
 {
     QString filepath = (QString)file;
-    open(filepath);
+    this->open(filepath);
 }
 
 void CoreEngine::incCurrQmlIndex()
