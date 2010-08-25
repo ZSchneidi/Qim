@@ -25,16 +25,16 @@ ImageHandler::ImageHandler()
  */
 void ImageHandler::loadImage(const QString cur_file_path)
 {
-    this->cur_image = new QImage(this->cur_file_path);
+    this->cur_image = new QImage(cur_file_path);
     this->isSetCurImage = true;
-    this->parseFolderPath(this->cur_file_path);
+    this->parseFolderPath(cur_file_path);
     /*check if the directory is loaded of not*/
     this->isSetDir = this->loadImageFolder(this->cur_folder_path);
+    /*initFileList() takes the file_info_list as reference for storing the informations*/
     this->initFileList(this->file_info_list);
-    this->cur_file_iterator = this->getFileListPosOf(this->cur_file_name,
-                                                     this->file_info_list);
+    this->cur_file_iterator = this->getFileListPosOf(this->cur_file_name,this->file_info_list);
     /*store the path in the title_str*/
-    this->title_str = this->cur_file_path;
+    this->title_str = cur_file_path;
 }
 
 /*
@@ -102,19 +102,19 @@ void ImageHandler::scaleImage(int width, int height)
 bool ImageHandler::loadImageFolder(QString path)
 {
     this->cur_img_folder = QDir(path);
-    qDebug() << this->cur_img_folder.dirName();
+qDebug() << this->cur_img_folder.dirName();
     return true;
 }
 
 /*parse the path of the folder which contains the currently loaded image file*/
 void ImageHandler::parseFolderPath(QString cur_file_path)
 {
-    int lindex = this->cur_file_path.lastIndexOf("/");
+    int lindex = cur_file_path.lastIndexOf("/");
     this->cur_file_name = cur_file_path;
     /*parse the name of the currentlly loaded image out of the path*/
     this->cur_file_name = this->cur_file_name.remove(0,++lindex);
     /*set the path to the directory which contains the currently loaded image*/
-    this->cur_folder_path = this->cur_file_path.remove(this->cur_file_name);
+    this->cur_folder_path = cur_file_path.remove(this->cur_file_name);
 }
 
 void ImageHandler::initFileList(QFileInfoList &list)
@@ -175,7 +175,6 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
 /*Returns an iterator to the position of a File in the file list. */
 QFileInfoList::Iterator ImageHandler::getFileListPosOf(const QString &filename, QFileInfoList &list)
 {
-qDebug() << "filenmae - " << filename;
     this->cur_file_index = 0;
     QFileInfoList::Iterator temp_it = list.begin();
     while(temp_it != list.end())
