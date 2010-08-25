@@ -53,7 +53,7 @@ bool ImageHandler::loadNextImage()
         /*get the path of the next file in the list*/
         this->cur_file_path = this->getFilePathFromList(++this->cur_file_iterator,
                                                         this->file_info_list);
-        if(*this->cur_file_iterator.isFile())
+        if((*cur_file_iterator).isFile())
         {
             *this->cur_image = QImage(this->cur_file_path);
             this->title_str = this->cur_file_path;
@@ -79,7 +79,7 @@ bool ImageHandler::loadPrevImage()
         /*get the path of the next file in the list*/
         this->cur_file_path = this->getFilePathFromList(--this->cur_file_iterator,
                                                         this->file_info_list);
-        if(*this->cur_file_iterator.isFile())
+        if((*cur_file_iterator).isFile())
         {
             *this->cur_image = QImage(this->cur_file_path);
             this->title_str = this->cur_file_path;
@@ -110,7 +110,7 @@ bool ImageHandler::loadImageFolder(QString path)
 void ImageHandler::parseFolderPath(QString cur_file_path)
 {
     int lindex = this->cur_file_path.lastIndexOf("/");
-    this->cur_file_name = this->cur_file_path;
+    this->cur_file_name = cur_file_path;
     /*parse the name of the currentlly loaded image out of the path*/
     this->cur_file_name = this->cur_file_name.remove(0,++lindex);
     /*set the path to the directory which contains the currently loaded image*/
@@ -123,7 +123,7 @@ void ImageHandler::initFileList(QFileInfoList &list)
     QFileInfoList::Iterator temp_it = list.begin();
     while(temp_it != list.end())
     {
-        if(*temp_it.isDir())
+        if((*temp_it).isDir())
         {
             temp_it = list.erase(temp_it);
         }
@@ -134,7 +134,7 @@ void ImageHandler::initFileList(QFileInfoList &list)
              *problems can occur if the path contains more than one "." in the path
              *this must be solved by parsing the suffix
              */
-            bool check = this->file_support_handler->isSupported(*temp_it.suffix());
+            bool check = this->file_support_handler->isSupported((*temp_it).suffix());
             if(!check)
             {
                 temp_it = list.erase(temp_it);
@@ -157,7 +157,7 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
     QFileInfoList::Iterator temp_it = list.begin();
     while(temp_it != list.end())
     {
-        if(*temp_it.isFile())
+        if((*temp_it).isFile())
         {
             if(!is_set_first)
             {
@@ -175,15 +175,16 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
 /*Returns an iterator to the position of a File in the file list. */
 QFileInfoList::Iterator ImageHandler::getFileListPosOf(const QString &filename, QFileInfoList &list)
 {
+qDebug() << "filenmae - " << filename;
     this->cur_file_index = 0;
     QFileInfoList::Iterator temp_it = list.begin();
     while(temp_it != list.end())
     {
         /*int representation of the iterator*/
         this->cur_file_index++;
-        if(*temp_it.isFile())
+        if((*temp_it).isFile())
         {
-            if(*temp_it.fileName() == filename)
+            if((*temp_it).fileName() == filename)
             {
                 return temp_it;
             }
@@ -201,7 +202,7 @@ QString ImageHandler::getFilePathFromList(const QFileInfoList::Iterator position
     {
         temp_it++;
     }
-    return *temp_it.filePath();
+    return (*temp_it).filePath();
 }
 
 void ImageHandler::initImageDataModel(QList<QObject *> &model)
@@ -214,19 +215,19 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
     QFileInfoList::Iterator temp_it = this->file_info_list.begin();
     while(temp_it != this->file_info_list.end())
     {
-        if(*temp_it.isFile())
+        if((*temp_it).isFile())
         {
             FileInfoContainer file_info;
-            file_info.name = *temp_it.fileName();
-            file_info.path = *temp_it.absoluteFilePath();
+            file_info.name = (*temp_it).fileName();
+            file_info.path = (*temp_it).absoluteFilePath();
             /*file_info.width =
             file_info.height =
             file_info.depth =
             file_info.xdpi =
             file_info.ydpi = */
-            file_info.size = *temp_it.size();
-            file_info.size_str = FileInfoHandler::getSizeStr(*temp_it.size());
-            file_info.type = *temp_it.suffix();
+            file_info.size = (*temp_it).size();
+            file_info.size_str = FileInfoHandler::getSizeStr((*temp_it).size());
+            file_info.type = (*temp_it).suffix();
 
             model.append(new ImageDataModel(file_info));
 

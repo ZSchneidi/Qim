@@ -63,7 +63,7 @@ void FileInfoHandler::writeToTable()
     this->setItemValue(3,1,QString::number(file_info.depth));
     this->setItemValue(4,1,QString::number(file_info.xdpi));
     this->setItemValue(5,1,QString::number(file_info.ydpi));
-    this->vsetItemValue(6,1,file_info.size_str);
+    this->setItemValue(6,1,file_info.size_str);
     this->setItemValue(7,1,file_info.type);
     this->setItemValue(8,1,file_info.lchange.toString());
 

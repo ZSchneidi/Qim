@@ -61,7 +61,7 @@ Item {
         ListView {
             id: mainList
             anchors.fill: listViewBox
-            //model: imageDataModel
+            model: imageDataModel
             delegate: ImageListDelegate {}
             highlight: highlight; highlightFollowsCurrentItem: true
             focus: true

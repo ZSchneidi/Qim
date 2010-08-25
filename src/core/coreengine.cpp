@@ -88,8 +88,7 @@ void CoreEngine::open()
         this->image_handler->initImageDataModel(this->imageDataModelList);
         this->setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
-        this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
-                                                this->image_handler->getCurImage());
+        this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),this->image_handler->getCurImage());
         if (this->image_handler->getCurImage().isNull())
         {
             QMessageBox::information(this, tr("Qim - error report"),
