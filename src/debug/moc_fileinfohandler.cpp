@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'fileinfohandler.h'
 **
-** Created: Thu 5. Aug 09:43:47 2010
+** Created: Sat 21. Aug 13:31:15 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../core/fileinfohandler.h"
+#include "D:/Projekte/QT/Qim/src/core/fileinfohandler.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'fileinfohandler.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62

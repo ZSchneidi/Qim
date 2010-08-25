@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'fileinfohandler.h'
 **
-** Created: Tue 3. Aug 09:16:21 2010
+** Created: Mon 9. Aug 20:59:45 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!

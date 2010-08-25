@@ -7,13 +7,6 @@ import "elements"
      color: "#D8D8D8"
      //property int currentIndex: index
 
-
-     function showItemAtIndex(index)
-     {
-
-     }
-
-
     ContextListView {
          id: listView
          listmodel: imageDataModel
@@ -45,6 +38,7 @@ import "elements"
         anchors.fill: parent
         anchors.horizontalCenter: parent.horizontalCenter
 */
+
          ShadowBox{
              id: imageLabel
              color: "#E5E5E5"
@@ -61,12 +55,16 @@ import "elements"
                  fillMode: Image.PreserveAspectFit
                  source: listView.currentItemFilePath
                  onSourceSizeChanged:
+                         {
+                         //console.log("filepath: "+listView.currentItemFilePath)
                          imageLabel.opacity = 1
-                 //source: "img/streettripleR_2009_popup_1.jpg"
+                     }
              }
 
          }
 //     }
+
+
      Text {
          id: info
          anchors.horizontalCenter: parent.horizontalCenter
@@ -74,7 +72,7 @@ import "elements"
 
          color: icolor
          text:
-                "index " + qmlInterface.currIndex
+                "index " + listView.currentItemFilePath
      }
 
  }

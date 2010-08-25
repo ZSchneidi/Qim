@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'coreengine.h'
 **
-** Created: Fri 6. Aug 14:03:01 2010
+** Created: Sun 15. Aug 12:46:36 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!

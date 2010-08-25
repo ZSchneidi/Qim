@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'coreengine.h'
 **
-** Created: Mon 9. Aug 12:14:03 2010
+** Created: Sat 21. Aug 13:31:10 2010
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../core/coreengine.h"
+#include "D:/Projekte/QT/Qim/src/core/coreengine.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'coreengine.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
