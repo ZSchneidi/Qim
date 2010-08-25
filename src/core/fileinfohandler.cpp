@@ -80,7 +80,7 @@ QString FileInfoHandler::getSizeOf(qint64 size)
 {
     QString size_str;
     double file_size = 0.0;
-    double tmp = this->size;
+    double tmp = size;
     int conv_lvl = 0;
     for(;;)
     {
