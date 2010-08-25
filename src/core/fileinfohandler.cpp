@@ -8,70 +8,70 @@ FileInfoHandler::FileInfoHandler(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileInfoHandler)
 {
-    ui->setupUi(this);
+    this->ui->setupUi(this);
 
     connect(ui->close_button,SIGNAL(clicked()),this,SLOT(close()));
 
-    file_name_value = new QTableWidgetItem();
-    file_width_value = new QTableWidgetItem();
-    file_height_value = new QTableWidgetItem();
-    file_depth_value = new QTableWidgetItem();
-    file_xdpi_value = new QTableWidgetItem();
-    file_ydpi_value = new QTableWidgetItem();
-    file_size_value = new QTableWidgetItem();
-    file_type_value = new QTableWidgetItem();
-    file_lchange_value = new QTableWidgetItem();
+    this->file_name_value = new QTableWidgetItem();
+    this->file_width_value = new QTableWidgetItem();
+    this->file_height_value = new QTableWidgetItem();
+    this->file_depth_value = new QTableWidgetItem();
+    this->file_xdpi_value = new QTableWidgetItem();
+    this->file_ydpi_value = new QTableWidgetItem();
+    this->file_size_value = new QTableWidgetItem();
+    this->file_type_value = new QTableWidgetItem();
+    this->file_lchange_value = new QTableWidgetItem();
 
-    ui->fileinfotable->setItem(0,1,file_name_value);
-    ui->fileinfotable->setItem(1,1,file_width_value);
-    ui->fileinfotable->setItem(2,1,file_height_value);
-    ui->fileinfotable->setItem(3,1,file_depth_value);
-    ui->fileinfotable->setItem(4,1,file_xdpi_value);
-    ui->fileinfotable->setItem(5,1,file_ydpi_value);
-    ui->fileinfotable->setItem(6,1,file_size_value);
-    ui->fileinfotable->setItem(7,1,file_type_value);
-    ui->fileinfotable->setItem(8,1,file_lchange_value);
+    this->ui->fileinfotable->setItem(0,1,this->file_name_value);
+    this->ui->fileinfotable->setItem(1,1,this->file_width_value);
+    this->ui->fileinfotable->setItem(2,1,this->file_height_value);
+    this->ui->fileinfotable->setItem(3,1,this->file_depth_value);
+    this->ui->fileinfotable->setItem(4,1,this->file_xdpi_value);
+    this->ui->fileinfotable->setItem(5,1,this->file_ydpi_value);
+    this->ui->fileinfotable->setItem(6,1,this->file_size_value);
+    this->ui->fileinfotable->setItem(7,1,this->file_type_value);
+    this->ui->fileinfotable->setItem(8,1,this->file_lchange_value);
 
 
     /*to define how the file info dialog behaves you can use the WindowFlags*/
-    setWindowFlags(Qt::Dialog);
+    this->setWindowFlags(Qt::Dialog);
 
 }
 
 void FileInfoHandler::updateFileInfo(const QFileInfo &file_info, const QImage &image)
 {
-    setNameValue(file_info.fileName());
-    setWidthValue(image.width());
-    setHeigthValue(image.height());
-    setDepthValue(image.depth());
-    setXdpiValue(image.dotsPerMeterX());
-    setYdpiValue(image.dotsPerMeterY());
-    setSizeValue(file_info.size());
-    setSizeString(file_info.size());
-    setTypeValue(file_info.suffix());
-    setLChangeValue(file_info.lastModified());
+    this->setNameValue(file_info.fileName());
+    this->setWidthValue(image.width());
+    this->setHeigthValue(image.height());
+    this->setDepthValue(image.depth());
+    this->setXdpiValue(image.dotsPerMeterX());
+    this->setYdpiValue(image.dotsPerMeterY());
+    this->setSizeValue(file_info.size());
+    this->setSizeString(file_info.size());
+    this->setTypeValue(file_info.suffix());
+    this->setLChangeValue(file_info.lastModified());
 
-    writeToTable();
+    this->writeToTable();
 
 }
 
 void FileInfoHandler::writeToTable()
 {
-    setItemValue(0,1,file_info.name);
-    setItemValue(1,1,QString::number(file_info.width));
-    setItemValue(2,1,QString::number(file_info.height));
-    setItemValue(3,1,QString::number(file_info.depth));
-    setItemValue(4,1,QString::number(file_info.xdpi));
-    setItemValue(5,1,QString::number(file_info.ydpi));
-    setItemValue(6,1,file_info.size_str);
-    setItemValue(7,1,file_info.type);
-    setItemValue(8,1,file_info.lchange.toString());
+    this->setItemValue(0,1,file_info.name);
+    this->setItemValue(1,1,QString::number(file_info.width));
+    this->setItemValue(2,1,QString::number(file_info.height));
+    this->setItemValue(3,1,QString::number(file_info.depth));
+    this->setItemValue(4,1,QString::number(file_info.xdpi));
+    this->setItemValue(5,1,QString::number(file_info.ydpi));
+    this->vsetItemValue(6,1,file_info.size_str);
+    this->setItemValue(7,1,file_info.type);
+    this->setItemValue(8,1,file_info.lchange.toString());
 
 }
 
 void FileInfoHandler::setItemValue(int row, int column, QString text)
 {
-    ui->fileinfotable->item(row,column)->setText(text);
+    this->ui->fileinfotable->item(row,column)->setText(text);
 }
 
 
@@ -119,6 +119,7 @@ double FileInfoHandler::precision(double x, int precision)
     //x += 0.5;
     x = floor(x);
     x /= temp;
+
     return x;
 }
 
@@ -129,11 +130,12 @@ double FileInfoHandler::round(double x, int precision)
     x += 0.5;
     x = floor(x);
     x /= temp;
+
     return x;
 }
 
 
 FileInfoHandler::~FileInfoHandler()
 {
-    delete ui;
+    delete this->ui;
 }

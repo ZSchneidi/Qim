@@ -4,8 +4,7 @@
 
 ThemeManager::ThemeManager(CoreEngine *parent)
 {
-    core = parent;
-
+    this->core = parent;
 }
 
 

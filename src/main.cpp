@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     //QTranslator translator;
     /*
     the "qim_lang_de_DE.qm" is the binary source for all string in
-    the app which should to be translated. look at the ascii version of the
+    the app which should be translated. Take a look at the ascii version of the
     translation file in src/theme/lang/qim_lang_de_DE.ts
 
     with system().name() the application detects the language code for the currently
@@ -32,5 +32,6 @@ int main(int argc, char *argv[])
     */
     CoreEngine w;
     w.show();
+
     return a.exec();
 }
