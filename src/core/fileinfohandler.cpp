@@ -10,7 +10,7 @@ FileInfoHandler::FileInfoHandler(QWidget *parent) :
 {
     this->ui->setupUi(this);
 
-    connect(ui->close_button,SIGNAL(clicked()),this,SLOT(close()));
+    this->connect(this->ui->close_button,SIGNAL(clicked()),this,SLOT(close()));
 
     this->file_name_value = new QTableWidgetItem();
     this->file_width_value = new QTableWidgetItem();
@@ -80,7 +80,7 @@ QString FileInfoHandler::getSizeOf(qint64 size)
 {
     QString size_str;
     double file_size = 0.0;
-    double tmp = size;
+    double tmp = this->size;
     int conv_lvl = 0;
     for(;;)
     {
