@@ -66,9 +66,9 @@ Item {
             highlight: highlight; highlightFollowsCurrentItem: true
             focus: true
             onCurrentIndexChanged: {
-                currentItemName = currentItem.fileName
+                //currentItemName = currentItem.fileName
                 currentItemFilePath = currentItem.filePath
-                qmlInterface.currIndex = currentIndex
+                qmlInterface.index = currentIndex
 
             }
          }

@@ -20,7 +20,8 @@ ImageHandler::ImageHandler()
     this->file_support_handler = new FileSupport();
 }
 
-/*initialize the cur_image QImage with the file which was
+/*
+ *initialize the cur_image QImage with the file which was
  *load via open() or drag&drop
  */
 void ImageHandler::loadImage(const QString cur_file_path)
@@ -33,6 +34,7 @@ void ImageHandler::loadImage(const QString cur_file_path)
     /*initFileList() takes the file_info_list as reference for storing the informations*/
     this->initFileList(this->file_info_list);
     this->cur_file_iterator = this->getFileListPosOf(this->cur_file_name,this->file_info_list);
+    qDebug() << "pos of load image " << this->cur_file_index;
     /*store the path in the title_str*/
     this->title_str = cur_file_path;
 }
@@ -49,13 +51,15 @@ bool ImageHandler::loadNextImage()
     if(this->cur_file_iterator >= this->first_file_iterator &&
        this->cur_file_iterator < this->last_file_iterator )
     {
-        this->cur_file_index++;
         /*get the path of the next file in the list*/
         this->cur_file_path = this->getFilePathFromList(++this->cur_file_iterator,
                                                         this->file_info_list);
+        this->cur_file_index++;
+        qDebug() << "file index " << this->cur_file_index;
         if((*cur_file_iterator).isFile())
         {
-            *this->cur_image = QImage(this->cur_file_path);
+            /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
+            //*this->cur_image = QImage(this->cur_file_path);
             this->title_str = this->cur_file_path;
         }
         return true;
@@ -81,7 +85,8 @@ bool ImageHandler::loadPrevImage()
                                                         this->file_info_list);
         if((*cur_file_iterator).isFile())
         {
-            *this->cur_image = QImage(this->cur_file_path);
+            /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
+            //*this->cur_image = QImage(this->cur_file_path);
             this->title_str = this->cur_file_path;
         }
         return true;
@@ -92,7 +97,8 @@ bool ImageHandler::loadPrevImage()
 /*Scales the cur_image to the size of with and height*/
 void ImageHandler::scaleImage(int width, int height)
 {
-    *this->cur_image = this->cur_image->scaled(width,height,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
+    //*this->cur_image = this->cur_image->scaled(width,height,Qt::KeepAspectRatio,Qt::SmoothTransformation);
 }
 
 /*
@@ -102,11 +108,14 @@ void ImageHandler::scaleImage(int width, int height)
 bool ImageHandler::loadImageFolder(QString path)
 {
     this->cur_img_folder = QDir(path);
-qDebug() << this->cur_img_folder.dirName();
     return true;
 }
 
-/*parse the path of the folder which contains the currently loaded image file*/
+/*
+ *to obtain the path of the folder which contains the loaded image
+ *this method isolates the image file name from the absolute path
+ *whath remains is the path to the folder
+ */
 void ImageHandler::parseFolderPath(QString cur_file_path)
 {
     int lindex = cur_file_path.lastIndexOf("/");
@@ -116,7 +125,10 @@ void ImageHandler::parseFolderPath(QString cur_file_path)
     /*set the path to the directory which contains the currently loaded image*/
     this->cur_folder_path = cur_file_path.remove(this->cur_file_name);
 }
-
+/*
+ *in this step the list of QFileInfos will be cleaned from unnecessary data
+ *all not supported files and subdirectories will be ereased from the list
+ */
 void ImageHandler::initFileList(QFileInfoList &list)
 {
     list = this->cur_img_folder.entryInfoList();
@@ -134,8 +146,7 @@ void ImageHandler::initFileList(QFileInfoList &list)
              *problems can occur if the path contains more than one "." in the path
              *this must be solved by parsing the suffix
              */
-            bool check = this->file_support_handler->isSupported((*temp_it).suffix());
-            if(!check)
+            if(!this->file_support_handler->isSupported((*temp_it).suffix()))
             {
                 temp_it = list.erase(temp_it);
                 if(temp_it == list.end())
@@ -150,7 +161,11 @@ void ImageHandler::initFileList(QFileInfoList &list)
     this->initFileIterator(list);
 }
 
-/*initialize the interator for the first and the last image in the file list*/
+/*
+ *initialize the interator for the first and the last image in the file list
+ *this is needed in a later state to determine whether the current iterator
+ *is pointing on the first or the last file in the list
+ */
 void ImageHandler::initFileIterator(QFileInfoList &list)
 {
     bool is_set_first = false;
@@ -172,15 +187,18 @@ void ImageHandler::initFileIterator(QFileInfoList &list)
     this->last_file_iterator = --temp_it;
 }
 
-/*Returns an iterator to the position of a File in the file list. */
+/*
+ *returns an iterator to the position of a File in the file list
+ *this information is used to check where the current iterator points on
+ *to check if the user can load a previous or a next image
+ *what isn't possible if the user is already at the first or last position
+ */
 QFileInfoList::Iterator ImageHandler::getFileListPosOf(const QString &filename, QFileInfoList &list)
 {
     this->cur_file_index = 0;
     QFileInfoList::Iterator temp_it = list.begin();
     while(temp_it != list.end())
     {
-        /*int representation of the iterator*/
-        this->cur_file_index++;
         if((*temp_it).isFile())
         {
             if((*temp_it).fileName() == filename)
@@ -188,12 +206,17 @@ QFileInfoList::Iterator ImageHandler::getFileListPosOf(const QString &filename, 
                 return temp_it;
             }
         }
+        /*int representation of the iterator*/
+        this->cur_file_index++;
         temp_it++;
     }
     return temp_it;
 }
 
-/*Returns a QString which holds the */
+/*
+ *returns a QString which contains the absolute path to the file (list entry)
+ *on which the iterator points
+ */
 QString ImageHandler::getFilePathFromList(const QFileInfoList::Iterator position, QFileInfoList &list)
 {
     QFileInfoList::Iterator temp_it = list.begin();
@@ -204,6 +227,16 @@ QString ImageHandler::getFilePathFromList(const QFileInfoList::Iterator position
     return (*temp_it).filePath();
 }
 
+/*
+ *the ImageDataModel is used by the qml engine the picture list on the visual layer
+ *needs a model from which the list gets the data that should be shown
+ *this data model contains all information the list needs to operate with the images
+ *that were loaded.
+ *the file path is used to load the images on screen in the qml view
+ *other informations are shown in the list and the details for each image
+ *
+ * !!!THIS IS CURRENTLY UNDER CONSTRUCTION!!!
+ */
 void ImageHandler::initImageDataModel(QList<QObject *> &model)
 {
     //qDebug() << "item count " << model.count();

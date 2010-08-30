@@ -30,7 +30,7 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->file_info_handler = new FileInfoHandler(this);
 
     /*this object is the interface object between c++ logic layer and the qml ui layer*/
-    //qml_interface = new QmlInterface(this);
+    qml_interface = new QmlInterface(this);
 
     /*instatiate and load the qml declarative ui into the qml viewer*/
     this->visual_qml_view = new QDeclarativeView;
@@ -56,6 +56,10 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
     this->buildActions();
     this->buildMenu();
+
+    //this->open("C:/Users/Public/Pictures/Sample Pictures/Desert.jpg");
+    this->open("C:/Users/Schneidi/Pictures/demo-data/demo-1.jpg");
+
 }
 
 /*setUpQml will be called when an image was loaded and is used to define the data model for the qml view*/
@@ -67,9 +71,11 @@ void CoreEngine::setUpQml()
     this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
     this->context->setContextProperty("icolor", QColor(Qt::red) );
 
+    //qmlRegisterType<Musician>("Music", 1, 0, "Musician");
 
     /*set the source qml file */
     this->visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
+    //this->visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 
 }
 
@@ -78,17 +84,14 @@ void CoreEngine::open()
     QString file = QFileDialog::getOpenFileName(this,tr("open file"),QDir::currentPath());
     if(!file.isEmpty())
     {
-        if(this->image_handler->isSetCurImage)
-        {
-
-        }
-
         this->image_handler->loadImage(file);
+        this->curr_qml_index = this->image_handler->getCurFileIndex();
+        qDebug() << "index: " << this->curr_qml_index;
         /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
         this->setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
-        this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),this->image_handler->getCurImage());
+        //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),this->image_handler->getCurImage());
         if (this->image_handler->getCurImage().isNull())
         {
             QMessageBox::information(this, tr("Qim - error report"),
@@ -109,6 +112,7 @@ void CoreEngine::open(QString filepath)
     if(!filepath.isEmpty())
     {
         this->image_handler->loadImage(filepath);
+        this->curr_qml_index = this->image_handler->getCurFileIndex();
         /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
         this->setUpQml();
@@ -169,16 +173,19 @@ void CoreEngine::navigateForward()
     {
         if(this->image_handler->loadNextImage())
         {
+            this->curr_qml_index = this->image_handler->getCurFileIndex();
             /*the file information has to be updated before scaling or manipulate the image otherwise */
-            this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
-                                                    this->image_handler->getCurImage());
+            //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
+            //                                        this->image_handler->getCurImage());
             this->image_handler->scaleImage(this->width(), this->height() - 40);
             this->updateMainTitle(this->image_handler->getTitleStr());
             //context->setContextProperty("index",++index);
             //this->curr_qml_index++;
-            this->qml_interface->incrementIndex();
+            //this->qml_interface->incrementIndex();
+
             //context->setContextProperty("index",qml_interface->index);
 
+            this->qml_interface->updateQmlIndex(this->curr_qml_index);
         }
     }
 }
@@ -189,13 +196,14 @@ void CoreEngine::navigateBackward()
     {
         if(this->image_handler->loadPrevImage())
         {
+
             /*the file information has to be updated before scaling or manipulate the image otherwise */
             this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
                                                     this->image_handler->getCurImage());
             this->image_handler->scaleImage(width(), height() - 40);
             this->updateMainTitle(this->image_handler->getTitleStr());
             //this->curr_qml_index--;
-            this->qml_interface->decrementIndex();
+            //this->qml_interface->decrementIndex();
             //context->setContextProperty("index",qml_interface->index);
         }
     }
@@ -341,18 +349,6 @@ void CoreEngine::openFromArgument(char *file)
 {
     QString filepath = (QString)file;
     this->open(filepath);
-}
-
-void CoreEngine::incCurrQmlIndex()
-{
-    this->curr_qml_index++;
-    qDebug() << "index: " << this->curr_qml_index;
-}
-
-void CoreEngine::decCurrQmlIndex()
-{
-    this->curr_qml_index--;
-    qDebug() << "index: " << this->curr_qml_index;
 }
 
 

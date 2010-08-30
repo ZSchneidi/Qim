@@ -56,7 +56,7 @@ private:
     /*provides all information about supported file types*/
     FileSupport *file_support_handler;
 
-    /*will be updated by getFileListPosOf() */
+    /*will be initialized by getFileListPosOf() and updated by loadNextImage() or loadPrevImage()*/
     int cur_file_index;
 
     /*setter*/
@@ -109,6 +109,7 @@ public:
     inline const QPixmap& getPreImagePix() const { return *pre_image_pix; }
     inline const QPixmap& getCurImagePix() const { return *cur_image_pix; }
     inline const QPixmap& getPosImagePix() const { return *pos_image_pix; }
+    inline const int getCurFileIndex() const { return cur_file_index; }
 
 };
 

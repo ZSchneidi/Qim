@@ -3,14 +3,14 @@ import "elements"
 
  Rectangle {
      id: page
-     width: 640; height: 480
+     //width: 640; height: 480
      color: "#D8D8D8"
      //property int currentIndex: index
 
     ContextListView {
          id: listView
          listmodel: imageDataModel
-         currentIndex: qmlInterface.currIndex
+         currentIndex: qmlInterface.index
          z: 1
          backgroundColor1: "#a2a2a2"
          backgroundColor2: "#cacacf"
@@ -20,6 +20,10 @@ import "elements"
          highlightColor1: "#a2a2a2"
          highlightColor2: "#cacacf"
          itembackgroundOpacity: 0.9
+         onindexChanged:
+         {
+             console.log("index wurde geaendert!")
+         }
 
      }
 
@@ -54,6 +58,12 @@ import "elements"
                  anchors.fill: parent
                  fillMode: Image.PreserveAspectFit
                  source: listView.currentItemFilePath
+                 onSourceChanged:
+                         {
+                     //console.log("height "+page.height)
+                 }
+                 sourceSize.width:800
+                 sourceSize.height:500
                  onSourceSizeChanged:
                          {
                          //console.log("filepath: "+listView.currentItemFilePath)
@@ -72,7 +82,8 @@ import "elements"
 
          color: icolor
          text:
-                "index " + listView.currentItemFilePath
+                //"index " + listView.currentItemFilePath
+                 "index is : " + qmlInterface.index
      }
 
  }

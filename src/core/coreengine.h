@@ -111,8 +111,7 @@ public:
     void openFromArgument(char *file);
     inline void setIndex(int index) { this->curr_qml_index = index; }
     inline int currQmlIndex() { return this->curr_qml_index; }
-    void incCurrQmlIndex();
-    void decCurrQmlIndex();
+
 };
 
 #endif // COREENGINE_H
