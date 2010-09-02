@@ -66,9 +66,9 @@ Item {
             highlight: highlight; highlightFollowsCurrentItem: true
             focus: true
             onCurrentIndexChanged: {
-                //currentItemName = currentItem.fileName
+                currentItemName = currentItem.fileName
                 currentItemFilePath = currentItem.filePath
-                qmlInterface.index = currentIndex
+                //qmlInterface.index = currentIndex
 
             }
          }
@@ -135,15 +135,13 @@ Item {
     Component {
         id: highlight
         Rectangle {
-            width: mainList.width; height: labelHeight
+            width: mainList.width; //height: labelHeight
             radius: itemRadius
             gradient: Gradient {
                     GradientStop { position: 0.0; color:  highlightColor1}
                     GradientStop { position: 1.0; color:  highlightColor2 }
                  }
-
-
-            SpringFollow on y { to: mainList.currentItem.y; spring: 3; damping: 0.2 }
+            //SpringFollow on y { to: mainList.currentItem.y; spring: 3; damping: 0.2 }
         }
     }
 

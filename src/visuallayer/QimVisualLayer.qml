@@ -1,5 +1,7 @@
+//import "QmlInterface" 1.0
 import Qt 4.7
 import "elements"
+
 
  Rectangle {
      id: page
@@ -20,10 +22,10 @@ import "elements"
          highlightColor1: "#a2a2a2"
          highlightColor2: "#cacacf"
          itembackgroundOpacity: 0.9
-         onindexChanged:
+         /*onindexChanged:
          {
              console.log("index wurde geaendert!")
-         }
+         }*/
 
      }
 
@@ -62,8 +64,8 @@ import "elements"
                          {
                      //console.log("height "+page.height)
                  }
-                 sourceSize.width:800
-                 sourceSize.height:500
+                 //sourceSize.width:800
+                 //sourceSize.height:500
                  onSourceSizeChanged:
                          {
                          //console.log("filepath: "+listView.currentItemFilePath)

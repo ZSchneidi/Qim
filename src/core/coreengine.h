@@ -19,6 +19,7 @@
 #include <QtGui>
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QDeclarativeEngine>
 
 #include "imagehandler.h"
 #include "fileinfohandler.h"
@@ -108,6 +109,7 @@ public:
     CoreEngine(QWidget *parent = 0);
     ~CoreEngine();
 
+    static CoreEngine* getInstance() { return this; }
     void openFromArgument(char *file);
     inline void setIndex(int index) { this->curr_qml_index = index; }
     inline int currQmlIndex() { return this->curr_qml_index; }

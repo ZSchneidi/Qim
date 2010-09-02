@@ -15,6 +15,7 @@ class QmlInterface : public QObject
     CoreEngine *core;
     int curr_index;
 
+
 public:
     explicit QmlInterface(CoreEngine *core);
 

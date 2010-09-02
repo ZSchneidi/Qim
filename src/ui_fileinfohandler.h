@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'fileinfohandler.ui'
 **
-** Created: Mon 30. Aug 17:39:30 2010
+** Created: Tue 31. Aug 07:48:12 2010
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

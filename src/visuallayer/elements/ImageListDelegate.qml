@@ -50,7 +50,7 @@ Component {
                             id: picCol
                             height: labelHeight-12; fillMode: Image.PreserveAspectFit
                             source: path
-                            //sourceSize.height: 10
+                            sourceSize.height: 100
                             onSourceChanged: {
                                 console.log("path is " + path)
                                 filePath = path
@@ -59,7 +59,7 @@ Component {
                         }
                         Column {
                             Text { x: 10; font.pixelSize: 14; text: '<b>Name:</b> ' + name; }
-                            Text { x: 10; font.pixelSize: 14; text: '<b>Number:</b> ' + number }
+                            //Text { x: 10; font.pixelSize: 14; text: '<b>Number:</b> ' + number }
                         }
                     }
                 }

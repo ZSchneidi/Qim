@@ -3,9 +3,9 @@
 QmlInterface::QmlInterface(CoreEngine *parent_core) :
     QObject()
 {
-    core = parent_core;
+    //core = parent_core;
     this->curr_index = 0;
-
+    core = CoreEngine::getInstance();
     //index = 0;
 }
 

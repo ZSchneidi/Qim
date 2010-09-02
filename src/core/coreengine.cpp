@@ -58,20 +58,20 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->buildMenu();
 
     //this->open("C:/Users/Public/Pictures/Sample Pictures/Desert.jpg");
-    this->open("C:/Users/Schneidi/Pictures/demo-data/demo-1.jpg");
+    //this->open("C:/Users/Schneidi/Pictures/demo-data/demo-1.jpg");
 
 }
 
 /*setUpQml will be called when an image was loaded and is used to define the data model for the qml view*/
 void CoreEngine::setUpQml()
 {
+    //qmlRegisterType<QmlInterface>("QmlInterface", 1, 0, "QmlInterface");
 
     this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
-    //context->setContextProperty("qmlInterface", qml_interface );
-    this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
+    this->context->setContextProperty("qmlInterface", qml_interface );
+    //this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
     this->context->setContextProperty("icolor", QColor(Qt::red) );
 
-    //qmlRegisterType<Musician>("Music", 1, 0, "Musician");
 
     /*set the source qml file */
     this->visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
@@ -87,6 +87,7 @@ void CoreEngine::open()
         this->image_handler->loadImage(file);
         this->curr_qml_index = this->image_handler->getCurFileIndex();
         qDebug() << "index: " << this->curr_qml_index;
+        this->qml_interface->updateQmlIndex(this->curr_qml_index);
         /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
         this->setUpQml();
