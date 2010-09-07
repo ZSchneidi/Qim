@@ -114,7 +114,7 @@
     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">4.7.0-RC1 Debug</value>
     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Qt4BuildConfiguration</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration" type="int">2</value>
-    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory" type="QString">N:/Projekte/Qt/Qim/Qim-build-desktop</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory" type="QString">E:/Dev_Environment/Projekte/QT/Qim/src</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId" type="int">15</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.ToolChain" type="int">2</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild" type="bool">true</value>
@@ -148,7 +148,7 @@
     <value key="ProjectExplorer.ProjectConfiguration.DisplayName" type="QString">4.7.0-RC1 Release</value>
     <value key="ProjectExplorer.ProjectConfiguration.Id" type="QString">Qt4ProjectManager.Qt4BuildConfiguration</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration" type="int">0</value>
-    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory" type="QString">N:/Projekte/Qt/Qim/src</value>
+    <value key="Qt4ProjectManager.Qt4BuildConfiguration.BuildDirectory" type="QString">E:/Dev_Environment/Projekte/QT/Qim/src</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.QtVersionId" type="int">15</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.ToolChain" type="int">2</value>
     <value key="Qt4ProjectManager.Qt4BuildConfiguration.UseShadowBuild" type="bool">true</value>
