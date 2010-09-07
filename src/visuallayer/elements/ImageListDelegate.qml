@@ -51,17 +51,28 @@ Component {
                             height: labelHeight-12; fillMode: Image.PreserveAspectFit
                             source: path
                             sourceSize.height: 100
-                            onSourceChanged: {
+                            /*onSourceChanged: {
                                 console.log("path is " + path)
                                 filePath = path
                                 fileName = name
-                            }
+                            }*/
                         }
                         Column {
-                            Text { x: 10; font.pixelSize: 14; text: '<b>Name:</b> ' + name; }
+                            Text {
+                                x: 10
+                                font.pixelSize: 14
+                                text: '<b>Name:</b> ' + name
+                                onTextChanged: {
+                                    console.log("path is " + path)
+                                    filePath = path
+                                    fileName = name
+                                }
+                            }
                             //Text { x: 10; font.pixelSize: 14; text: '<b>Number:</b> ' + number }
                         }
+
                     }
+
                 }
 
                 Item {

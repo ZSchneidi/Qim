@@ -58,7 +58,7 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->buildMenu();
 
     //this->open("C:/Users/Public/Pictures/Sample Pictures/Desert.jpg");
-    //this->open("C:/Users/Schneidi/Pictures/demo-data/demo-1.jpg");
+    //this->open("N:/Projekte/Qt/Qim/src/demo-data/demo-2.jpg");
 
 }
 
@@ -68,7 +68,9 @@ void CoreEngine::setUpQml()
     //qmlRegisterType<QmlInterface>("QmlInterface", 1, 0, "QmlInterface");
 
     this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
-    this->context->setContextProperty("qmlInterface", qml_interface );
+qDebug() << "interface index " << this->qml_interface->currIndex();
+    this->context->setContextProperty("qmlInterface", this->qml_interface );
+
     //this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
     this->context->setContextProperty("icolor", QColor(Qt::red) );
 
@@ -114,6 +116,7 @@ void CoreEngine::open(QString filepath)
     {
         this->image_handler->loadImage(filepath);
         this->curr_qml_index = this->image_handler->getCurFileIndex();
+        this->qml_interface->updateQmlIndex(this->curr_qml_index);
         /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
         this->setUpQml();

@@ -141,7 +141,9 @@ Item {
                     GradientStop { position: 0.0; color:  highlightColor1}
                     GradientStop { position: 1.0; color:  highlightColor2 }
                  }
+            //y: mainList.currentItem.y
             //SpringFollow on y { to: mainList.currentItem.y; spring: 3; damping: 0.2 }
+
         }
     }
 

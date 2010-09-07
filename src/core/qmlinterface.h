@@ -16,17 +16,20 @@ class QmlInterface : public QObject
     int curr_index;
 
 
+    void setCurrIndex( const int &index );
+
 public:
     explicit QmlInterface(CoreEngine *core);
 
     //inline int currIndex() const { return core->currQmlIndex(); }
 
     //inline void setCurrIndex( const int &index ) { if(index != core->currQmlIndex()) core->setIndex(index);  }
-    void setCurrIndex( const int &index );
+
+    inline const int currIndex() const { return this->curr_index; }
+
     void setIndexTo(int index);
     void updateQmlIndex(int index);
 
-    inline const int currIndex() const { return this->curr_index; }
 
 signals:
 

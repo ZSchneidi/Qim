@@ -29,21 +29,6 @@ import "elements"
 
      }
 
-     /*ListView {
-         id: list
-          width: 180; height: 200
-          highlight: Rectangle { color: "white" }
-          model: imageDataModel
-          focus:true
-          delegate: Text { text: name + path }
-      }*/
-
- /*   Flickable {
-        id: flickView
-        contentWidth: imageLabel.width; contentHeight: imageLabel.height
-        anchors.fill: parent
-        anchors.horizontalCenter: parent.horizontalCenter
-*/
 
          ShadowBox{
              id: imageLabel
@@ -62,10 +47,12 @@ import "elements"
                  source: listView.currentItemFilePath
                  onSourceChanged:
                          {
-                     //console.log("height "+page.height)
+                     console.log("height "+ mainpicture.sourceSize.height)
+                     console.log("width "+ mainpicture.sourceSize.width)
                  }
-                 //sourceSize.width:800
-                 //sourceSize.height:500
+                 /*define the picture size in the view*/
+                 sourceSize.width:800
+                 sourceSize.height:500
                  onSourceSizeChanged:
                          {
                          //console.log("filepath: "+listView.currentItemFilePath)
