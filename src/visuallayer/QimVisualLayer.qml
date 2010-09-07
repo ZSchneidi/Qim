@@ -22,10 +22,10 @@ import "elements"
          highlightColor1: "#a2a2a2"
          highlightColor2: "#cacacf"
          itembackgroundOpacity: 0.9
-         /*onindexChanged:
+         onCurrentIndexChanged:
          {
              console.log("index wurde geaendert!")
-         }*/
+         }
 
      }
 
@@ -47,8 +47,8 @@ import "elements"
                  source: listView.currentItemFilePath
                  onSourceChanged:
                          {
-                     console.log("height "+ mainpicture.sourceSize.height)
-                     console.log("width "+ mainpicture.sourceSize.width)
+                     //console.log("height "+ mainpicture.sourceSize.height)
+                     //console.log("width "+ mainpicture.sourceSize.width)
                  }
                  /*define the picture size in the view*/
                  sourceSize.width:800

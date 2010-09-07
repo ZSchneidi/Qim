@@ -68,7 +68,7 @@ void CoreEngine::setUpQml()
     //qmlRegisterType<QmlInterface>("QmlInterface", 1, 0, "QmlInterface");
 
     this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
-qDebug() << "interface index " << this->qml_interface->currIndex();
+//qDebug() << "interface index " << this->qml_interface->currIndex();
     this->context->setContextProperty("qmlInterface", this->qml_interface );
 
     //this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
@@ -181,7 +181,7 @@ void CoreEngine::navigateForward()
             /*the file information has to be updated before scaling or manipulate the image otherwise */
             //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
             //                                        this->image_handler->getCurImage());
-            this->image_handler->scaleImage(this->width(), this->height() - 40);
+            //this->image_handler->scaleImage(this->width(), this->height() - 40);
             this->updateMainTitle(this->image_handler->getTitleStr());
             //context->setContextProperty("index",++index);
             //this->curr_qml_index++;
@@ -200,15 +200,16 @@ void CoreEngine::navigateBackward()
     {
         if(this->image_handler->loadPrevImage())
         {
-
+            this->curr_qml_index = this->image_handler->getCurFileIndex();
             /*the file information has to be updated before scaling or manipulate the image otherwise */
-            this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
-                                                    this->image_handler->getCurImage());
-            this->image_handler->scaleImage(width(), height() - 40);
+            //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
+            //                                        this->image_handler->getCurImage());
+            //this->image_handler->scaleImage(width(), height() - 40);
             this->updateMainTitle(this->image_handler->getTitleStr());
             //this->curr_qml_index--;
             //this->qml_interface->decrementIndex();
             //context->setContextProperty("index",qml_interface->index);
+            this->qml_interface->updateQmlIndex(this->curr_qml_index);
         }
     }
 }

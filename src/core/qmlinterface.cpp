@@ -22,7 +22,7 @@ void QmlInterface::setCurrIndex(const int &index)
 void QmlInterface::updateQmlIndex(int index)
 {
     this->curr_index = index;
-    qDebug() << "curIndex " << this->curr_index;
+//    qDebug() << "curIndex " << this->curr_index;
     emit indexChanged();
 }
 

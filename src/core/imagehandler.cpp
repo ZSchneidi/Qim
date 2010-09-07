@@ -55,7 +55,7 @@ bool ImageHandler::loadNextImage()
         this->cur_file_path = this->getFilePathFromList(++this->cur_file_iterator,
                                                         this->file_info_list);
         this->cur_file_index++;
-        qDebug() << "file index " << this->cur_file_index;
+//        qDebug() << "file index " << this->cur_file_index;
         if((*cur_file_iterator).isFile())
         {
             /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
@@ -79,10 +79,10 @@ bool ImageHandler::loadPrevImage()
     if(this->cur_file_iterator > this->first_file_iterator &&
        this->cur_file_iterator <= this->last_file_iterator)
     {
-        this->cur_file_index--;
         /*get the path of the next file in the list*/
         this->cur_file_path = this->getFilePathFromList(--this->cur_file_iterator,
                                                         this->file_info_list);
+        this->cur_file_index--;
         if((*cur_file_iterator).isFile())
         {
             /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
