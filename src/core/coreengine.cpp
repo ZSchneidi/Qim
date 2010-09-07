@@ -11,7 +11,7 @@
 CoreEngine::CoreEngine(QWidget *parent) :
         QMainWindow(parent)
 {
-
+    //test
     this->curr_qml_index = 0;
 
     this->default_title = "Qim";
