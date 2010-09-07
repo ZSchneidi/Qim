@@ -1,0 +1,11 @@
+collection of known problems of Qim
+---------------------------------------
+
+on Windows 7:
+
+	Windows is terminating Qim process on fast navigation
+	but this happens in other application too.
+	So this should be varify in other operation systems.
+	Maybe it could be avoid by allowing navigation only if
+	the last navigation step is done.
+		But this could be a bit annoying.
