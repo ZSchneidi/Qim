@@ -356,6 +356,11 @@ void CoreEngine::openFromArgument(char *file)
     this->open(filepath);
 }
 
+void CoreEngine::setQmlIndex(int index)
+{
+    this->curr_qml_index = index;
+    this->image_handler->setCurFileIndex(index);
+}
 
 CoreEngine::~CoreEngine()
 {

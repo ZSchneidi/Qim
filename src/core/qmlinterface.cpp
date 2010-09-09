@@ -8,21 +8,24 @@ QmlInterface::QmlInterface(CoreEngine *parent_core) :
     //index = 0;
 }
 
-void QmlInterface::setIndexTo(int index)
-{
-    core->setIndex(index);
-}
-
 void QmlInterface::setCurrIndex(const int &index)
 {
-    if(index != core->currQmlIndex())
-        core->setIndex(index);
+    if(index != this->core->currQmlIndex())
+        {
+        this->core->setQmlIndex(index);
+        this->updateQmlIndex(index);
+        //this->updateQmlIndex(index);
+        //this->curr_index = index;
+qDebug() << "index changed in qml to " << this->core->currQmlIndex();
+        }
+    else
+qDebug() << "same index";
 }
 
 void QmlInterface::updateQmlIndex(int index)
 {
     this->curr_index = index;
-//    qDebug() << "curIndex " << this->curr_index;
+qDebug() << "curIndex " << this->curr_index;
     emit indexChanged();
 }
 

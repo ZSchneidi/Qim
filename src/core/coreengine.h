@@ -110,7 +110,7 @@ public:
     ~CoreEngine();
 
     void openFromArgument(char *file);
-    inline void setIndex(int index) { this->curr_qml_index = index; }
+    void setQmlIndex(int index);
     inline int currQmlIndex() { return this->curr_qml_index; }
 
 };

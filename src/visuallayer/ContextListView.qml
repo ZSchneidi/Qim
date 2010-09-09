@@ -68,7 +68,7 @@ Item {
             onCurrentIndexChanged: {
                 currentItemName = currentItem.fileName
                 currentItemFilePath = currentItem.filePath
-                //qmlInterface.index = currentIndex
+                qmlInterface.index = currentIndex
 
             }
          }

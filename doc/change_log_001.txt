@@ -65,3 +65,13 @@ the new qml UI needs more memory especially in consequence of using the listview
 with pictures, this could be fixed by scaling the thumbnails in the list
 	
 </JS>
+
+09.09.2010
+--------
+<JS>
+
+major migration steps done, visual qml based layer for image presentation completed
+navigation through qml and c++ logic syncronized
+memory problem caused by the qml listview solved
+	
+</JS>

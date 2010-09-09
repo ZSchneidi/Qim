@@ -22,11 +22,10 @@ import "elements"
          highlightColor1: "#a2a2a2"
          highlightColor2: "#cacacf"
          itembackgroundOpacity: 0.9
-         onCurrentIndexChanged:
-         {
-             console.log("index wurde geaendert!")
+         Connections {
+             target: qmlInterface
+             //onIndexChanged: console.log("foo")
          }
-
      }
 
 

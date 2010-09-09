@@ -213,6 +213,20 @@ QFileInfoList::Iterator ImageHandler::getFileListPosOf(const QString &filename, 
     return temp_it;
 }
 
+
+QFileInfoList::Iterator ImageHandler::getFileListPosOfIndex(const int index, QFileInfoList &list)
+{
+    int i;
+    QFileInfoList::Iterator temp_it = list.begin();
+    for(i = 0; i < index ; i++)
+    {
+        temp_it++;
+    }
+qDebug() << "new Index on " << (*temp_it).fileName();
+    return temp_it;
+
+}
+
 /*
  *returns a QString which contains the absolute path to the file (list entry)
  *on which the iterator points
@@ -266,4 +280,11 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
         }
         temp_it++;
     }
+}
+
+void ImageHandler::setCurFileIndex(int index)
+{
+    this->cur_file_index = index;
+qDebug() << "setting imagehandler index";
+    this->cur_file_iterator = this->getFileListPosOfIndex(index,this->file_info_list);
 }

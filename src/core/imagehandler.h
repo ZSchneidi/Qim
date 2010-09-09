@@ -68,6 +68,7 @@ private:
 
     /*getter*/
     QFileInfoList::Iterator getFileListPosOf(const QString &filename , QFileInfoList &list);
+    QFileInfoList::Iterator getFileListPosOfIndex(const int index, QFileInfoList &list);
 
     QString getFilePathFromList(const QFileInfoList::Iterator position, QFileInfoList &list);
 
@@ -96,6 +97,9 @@ public:
     /*this setter method is used to initialize the data model for the qml
     interface with all data of the images*/
     void initImageDataModel(QList<QObject *> & model);
+
+    /*set the file_index of the image_handler to index*/
+    void setCurFileIndex(int index);
 
     /*getter*/
     /*returns a string with the path of the current file for the main title*/
