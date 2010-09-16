@@ -17,8 +17,6 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->default_title = "Qim";
     //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
-    //setWindowState(Qt::WindowFullScreen);
-
     /*extension objects instantiation*/
     /*initialize the image handler object which provides the image and directory data*/
     this->image_handler = new ImageHandler;
@@ -30,11 +28,11 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->file_info_handler = new FileInfoHandler(this);
 
     /*this object is the interface object between c++ logic layer and the qml ui layer*/
-    qml_interface = new QmlInterface(this);
+    this->qml_interface = new QmlInterface(this);
 
     /*instatiate and load the qml declarative ui into the qml viewer*/
     this->visual_qml_view = new QDeclarativeView;
-    //visual_qml_view.acceptDrops();
+    this->visual_qml_view->setAcceptDrops(true);
 
     /*initialize the context with the root context of the qml viewer*/
     this->context = this->visual_qml_view->rootContext();
@@ -44,6 +42,7 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->visual_qml_view->setSource(QUrl(QIMDEFLAYERFILE));
     /*this fills the parent application window with the qml view*/
     this->visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    this->visual_qml_view->setAcceptDrops(true);
 
     /*the zooming feature scales the image by the scale factor*/
     this->scale_factor_x = SCALEFACTORX;
@@ -51,14 +50,11 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
     /*set-up the main window*/
     this->setCentralWidget(visual_qml_view);
-    this->setAcceptDrops(true);
+    //this->setAcceptDrops(true);
     this->showMaximized();
 
     this->buildActions();
     this->buildMenu();
-
-    //this->open("C:/Users/Public/Pictures/Sample Pictures/Desert.jpg");
-    //this->open("N:/Projekte/Qt/Qim/src/demo-data/demo-2.jpg");
 
 }
 
@@ -227,15 +223,21 @@ void CoreEngine::buildActions()
     this->exit_action->setShortcut(QKeySequence::Quit);
     this->connect(this->exit_action, SIGNAL(triggered()), this, SLOT(close()));
 
-    this->show_file_info = new QAction(tr("&Show Info"),this);
+    this->show_file_info = new QAction(tr("Show &Info"),this);
     this->connect(this->show_file_info, SIGNAL(triggered()), this, SLOT(showInfo()));
 
-    this->close_file_info = new QAction(tr("&Close Info"),this);
+    this->close_file_info = new QAction(tr("Close &Info"),this);
     this->connect(this->close_file_info, SIGNAL(triggered()), this, SLOT(closeInfo()));
 
     /*the aboutQT() function is a build in dialog*/
     this->about_qt_qction = new QAction(tr("About &Qt"), this);
     this->connect(this->about_qt_qction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
+    this->show_fullsreen = new QAction(tr("Show &Fullscreen"),this);
+    this->connect(this->show_fullsreen, SIGNAL(triggered()), this, SLOT(showFullScreen()));
+
+    this->close_fullsreen = new QAction(tr("Close &Fullscreen"),this);
+    this->connect(this->close_fullsreen, SIGNAL(triggered()), this, SLOT(showNormal()));
 }
 
 void CoreEngine::buildMenu()
@@ -248,6 +250,7 @@ void CoreEngine::buildMenu()
     this->helpMenu = new QMenu(tr("&Help"),this);
     this->helpMenu->addAction(this->show_file_info);
     this->helpMenu->addAction(this->about_qt_qction);
+    this->helpMenu->addAction(this->show_fullsreen);
 
     this->contextMenu = new QMenu;
 
@@ -270,6 +273,7 @@ void CoreEngine::dragMoveEvent(QDragMoveEvent *event)
     qDebug() << "drag move event occur";
 }
 */
+
 void CoreEngine::dropEvent(QDropEvent *event)
 {
     /*the dropEvent is emitted whenever a file is dropped by the user over the main widget*/
@@ -331,24 +335,32 @@ void CoreEngine::closeEvent(QCloseEvent *event)
 /*
  *the contextMenuEvent is called by systemdependent contextMenu actions
  */
-/*
 void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 {
     //set the position of the context menu to the current position
-    contextMenu->move(event->x(),event->y());
+    this->contextMenu->move(event->x(),event->y());
     //for now the contextMenu will be cleared before adding all needed actions
-    contextMenu->clear();
-    if(file_info_handler->isVisible())
+    this->contextMenu->clear();
+    if(this->file_info_handler->isVisible())
     {
-        contextMenu->addAction(close_file_info);
+        this->contextMenu->addAction(this->close_file_info);
     }
     else
     {
-        contextMenu->addAction(show_file_info);
+        this->contextMenu->addAction(this->show_file_info);
     }
-    contextMenu->show();
+
+    if (this->isFullScreen())
+    {
+        this->contextMenu->addAction(this->close_fullsreen);
+    }
+    else
+    {
+        this->contextMenu->addAction(this->show_fullsreen);
+    }
+    this->contextMenu->show();
 }
-*/
+
 
 void CoreEngine::openFromArgument(char *file)
 {

@@ -71,6 +71,8 @@ class CoreEngine : public QMainWindow
     QAction *about_qt_qction;
     QAction *show_file_info;
     QAction *close_file_info;
+    QAction *show_fullsreen;
+    QAction *close_fullsreen;
 
     QMenu *fileMenu;
     QMenu *helpMenu;
@@ -92,7 +94,7 @@ class CoreEngine : public QMainWindow
     /*the closeEvent will be if the main window is closed*/
     void closeEvent(QCloseEvent *event);
 
-    //void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:
 
