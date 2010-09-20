@@ -63,6 +63,9 @@ void CoreEngine::setUpQml()
 {
     //qmlRegisterType<QmlInterface>("QmlInterface", 1, 0, "QmlInterface");
 
+    /*this provides the image data model to the qml visual layer, the data model is
+     *needed to get the data of all loaded images to the qml list
+     */
     this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
 //qDebug() << "interface index " << this->qml_interface->currIndex();
     this->context->setContextProperty("qmlInterface", this->qml_interface );
@@ -84,7 +87,6 @@ void CoreEngine::open()
     {
         this->image_handler->loadImage(file);
         this->curr_qml_index = this->image_handler->getCurFileIndex();
-        qDebug() << "index: " << this->curr_qml_index;
         this->qml_interface->updateQmlIndex(this->curr_qml_index);
         /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
@@ -335,8 +337,10 @@ void CoreEngine::closeEvent(QCloseEvent *event)
 /*
  *the contextMenuEvent is called by systemdependent contextMenu actions
  */
+
 void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 {
+    /*
     //set the position of the context menu to the current position
     this->contextMenu->move(event->x(),event->y());
     //for now the contextMenu will be cleared before adding all needed actions
@@ -359,6 +363,7 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
         this->contextMenu->addAction(this->show_fullsreen);
     }
     this->contextMenu->show();
+    */
 }
 
 

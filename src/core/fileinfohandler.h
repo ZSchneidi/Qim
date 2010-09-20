@@ -11,7 +11,10 @@ namespace Ui {
     class FileInfoHandler;
 }
 
-/*this class can store all major and minor file informations*/
+/*this class can store all major and minor file informations
+ *and is used by the ImageHandler::initImageDataModel() function
+ *to store the information in the
+ */
 class FileInfoContainer
 {
 public:

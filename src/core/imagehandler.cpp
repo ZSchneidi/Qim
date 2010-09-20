@@ -259,18 +259,20 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
         model.clear();
     }
     QFileInfoList::Iterator temp_it = this->file_info_list.begin();
+    QImage temp_img;
     while(temp_it != this->file_info_list.end())
     {
         if((*temp_it).isFile())
         {
+            temp_img = QImage((*temp_it).absoluteFilePath());
             FileInfoContainer file_info;
             file_info.name = (*temp_it).fileName();
             file_info.path = (*temp_it).absoluteFilePath();
-            /*file_info.width =
-            file_info.height =
-            file_info.depth =
-            file_info.xdpi =
-            file_info.ydpi = */
+            file_info.width = temp_img.width();
+            file_info.height = temp_img.height();
+            file_info.depth = temp_img.depth();
+            file_info.xdpi = temp_img.dotsPerMeterX();
+            file_info.ydpi = temp_img.dotsPerMeterY();
             file_info.size = (*temp_it).size();
             file_info.size_str = FileInfoHandler::getSizeStr((*temp_it).size());
             file_info.type = (*temp_it).suffix();
@@ -280,6 +282,7 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
         }
         temp_it++;
     }
+    //temp_img.~QImage();
 }
 
 void ImageHandler::setCurFileIndex(int index)

@@ -40,9 +40,8 @@ class CoreEngine : public QMainWindow
 {
     Q_OBJECT
 
-    /*object list */
+    /*object list of image data informations to provide them via */
     QList<QObject *> imageDataModelList;
-
     /*qml declaritive view is used to display qml based visual layer*/
     QDeclarativeView *visual_qml_view;
     /*context for the QDeclarative environment*/

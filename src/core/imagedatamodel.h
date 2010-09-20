@@ -10,17 +10,23 @@ class ImageDataModel : public QObject
     /*The NOTIFY signal in the property is used to emit a signal when the property vlaue is changed
     but it is optional. Don't know why I get a message: depends on non-NOTIFYable properties when using
     without NOTIFY*/
-    Q_PROPERTY(QString name READ name CONSTANT)
-    Q_PROPERTY(QString path READ path CONSTANT)
+    Q_PROPERTY(QString m_name READ name CONSTANT)
+    Q_PROPERTY(QString m_path READ path CONSTANT)
+    Q_PROPERTY(QString m_sizeStr READ sizeStr CONSTANT)
+    Q_PROPERTY(int m_width READ width CONSTANT)
+    Q_PROPERTY(int m_height READ height CONSTANT)
+    Q_PROPERTY(int m_xdpi READ xdpi CONSTANT)
+    Q_PROPERTY(int m_ydpi READ ydpi CONSTANT)
+    Q_PROPERTY(int m_size READ size CONSTANT)
 
 public:
     ImageDataModel(FileInfoContainer file_info );
 
     inline QString name() const {return m_name; }
     inline QString path() const {return m_path; }
-    inline QString sizeStr() const {return m_filesize_str; }
+    inline QString sizeStr() const {return m_size_str; }
     inline int width() const {return m_width; }
-    inline int heigth() const {return m_heigth; }
+    inline int height() const {return m_height; }
     inline int depth() const {return m_depth; }
     inline int xdpi() const {return m_xdpi; }
     inline int ydpi() const {return m_ydpi; }
@@ -32,10 +38,10 @@ private:
     they are CONSTANT properties*/
     QString  m_name;
     QString  m_path;
-    QString m_filesize_str;
+    QString m_size_str;
     QString m_ldate;
     int m_width;
-    int m_heigth;
+    int m_height;
     int m_depth;
     int m_xdpi;
     int m_ydpi;

@@ -11,6 +11,10 @@ import "elements"
 
     ContextListView {
          id: listView
+         /*as listmodel the image data model from coreengine is called
+          *the definition can be found in ImageHandler::initImageDataModel()
+          *and in the imagedatamodel class
+          */
          listmodel: imageDataModel
          currentIndex: qmlInterface.index
          z: 1
@@ -46,12 +50,16 @@ import "elements"
                  source: listView.currentItemFilePath
                  onSourceChanged:
                          {
-                     //console.log("height "+ mainpicture.sourceSize.height)
-                     //console.log("width "+ mainpicture.sourceSize.width)
+                         console.log("load: "+listView.currentItemFilePath)
+                         console.log("height "+ sourceSize.height)
+                         //console.log("width "+ )
+                         width: sourceSize.width/2
+                         height: sourceSize.height/2
                  }
                  /*define the picture size in the view*/
-                 sourceSize.width:800
-                 sourceSize.height:500
+
+                 //sourceSize.width:800
+                 //sourceSize.height:500
                  onSourceSizeChanged:
                          {
                          //console.log("filepath: "+listView.currentItemFilePath)

@@ -65,6 +65,7 @@ Item {
             delegate: ImageListDelegate {}
             highlight: highlight; highlightFollowsCurrentItem: true
             focus: true
+            /*update the current viewed image object parameter*/
             onCurrentIndexChanged: {
                 currentItemName = currentItem.fileName
                 currentItemFilePath = currentItem.filePath
