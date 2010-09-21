@@ -49,24 +49,22 @@ Component {
                         Image {
                             id: picCol
                             height: labelHeight-12; fillMode: Image.PreserveAspectFit
-                            source: path
+                            source: m_path
                             sourceSize.height: 100
-                            /*onSourceChanged: {
-                                console.log("path is " + path)
-                                filePath = path
-                                fileName = name
-                            }*/
+                            /*update image data parameters to provide them for the listView*/
+                            onSourceChanged: {
+                                console.log("path is " + m_path)
+                                console.log("image width "+m_width)
+                                filePath = m_path
+                                fileName = m_name
+                            }
                         }
                         Column {
                             Text {
                                 x: 10
                                 font.pixelSize: 14
-                                text: '<b>Name:</b> ' + name
-                                onTextChanged: {
-                                    console.log("path is " + path)
-                                    filePath = path
-                                    fileName = name
-                                }
+                                text: '<b>Name:</b> ' + m_name
+
                             }
                             //Text { x: 10; font.pixelSize: 14; text: '<b>Number:</b> ' + number }
                         }
