@@ -4,6 +4,12 @@
 #include <QObject>
 #include "fileinfohandler.h"
 
+/*
+ *The ImageDataModel class is design to record various informations about every
+ *image file that was found in the loaded folder.
+ *ImageDataModel class is used by ImageHandler::initImageDataModel() to create a list
+ *of informations of all images
+ */
 class ImageDataModel : public QObject
 {
     Q_OBJECT

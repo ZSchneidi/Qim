@@ -5,7 +5,7 @@ import "elements"
 
  Rectangle {
      id: page
-     //width: 640; height: 480
+     width: 640; height: 480
      color: "#D8D8D8"
      //property int currentIndex: index
 
@@ -28,39 +28,50 @@ import "elements"
          }
      }
 
+    Item {
+        id: mainView
+        property int image_width: page.width
+        property int image_height: page.height
 
-         ShadowBox{
-             id: imageLabel
-             color: "#E5E5E5"
-             shadowIntensity: 0.5
-             anchors.centerIn: parent
-             anchors.margins: 10
-             width: mainpicture.sourceSize.width
-             height: mainpicture.sourceSize.height
-             opacity: 0.0
+        ShadowBox{
+            id: imageLabel
+            color: "#E5E5E5"
+            shadowIntensity: 0.5
+            anchors.centerIn: parent
+            anchors.margins: 10
+            width: 800
+            height: 500
+            opacity: 0.0
 
-             Image {
-                 id: mainpicture
-                 anchors.fill: parent
-                 fillMode: Image.PreserveAspectFit
-                 source: listView.currentItemFilePath
-                 onSourceChanged:
-                         {
-                     //console.log("height "+ mainpicture.sourceSize.height)
-                     //console.log("width "+ mainpicture.sourceSize.width)
-                 }
-                 /*define the picture size in the view*/
-                 sourceSize.width:800
-                 sourceSize.height:500
-                 onSourceSizeChanged:
-                         {
-                         //console.log("filepath: "+listView.currentItemFilePath)
-                         imageLabel.opacity = 1
-                     }
-             }
+            Image {
+                id: mainpicture
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectFit
+                source: listView.currentItemFilePath
+                onSourceChanged:
+                        {
+                    console.log("page size " + page.width + ":" + mainView.image_height )
+                }
+                /*define the picture size in the view*/
+                onWidthChanged:
+                        {
+                        console.log("size changed: "+ mainpicture.sourceSize.width)
+                        imageLabel.opacity = 1
+                    }
+                Connections {
+                    target: qmlInterface
+                    onZoomIn:
+                            {
+                           console.log("zoomed IN "+mainpicture.width/2)
+                           mainpicture.width = (mainpicture.width/2)
+                           mainpicture.height = (mainpicture.height/2)
+                    }
+                }
+            }
+        }
+    }
 
-         }
-//     }
+
 
 
      Text {

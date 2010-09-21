@@ -56,20 +56,26 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->buildActions();
     this->buildMenu();
 
+    this->open("D:/Schuldaten/wirtschaftskunde_arbeitsheft/Seite 05.jpg");
+
 }
 
-/*setUpQml will be called when an image was loaded and is used to define the data model for the qml view*/
+/*setUpQml will be called when an image was loaded and is used to define the data model for the qml view
+ *the imageDataModel contains the processed informations about all found images
+ *the qmlInterface is designed to share data and signals between QML and C++ logic
+ *these propertys are available in QML via the proterty system
+ *the setSource of the qml view is called to load the main .qml application
+ *see QimVisualLayer.qml for more information about the qml presentation layer
+ */
 void CoreEngine::setUpQml()
 {
-    //qmlRegisterType<QmlInterface>("QmlInterface", 1, 0, "QmlInterface");
-
+    /*for more informations see imagedatamodel.h - imageDataModelList is just a QList of
+     *ImageDataModel which will be defined in the ImageHandler class in the ImageHandler::initImageDataModel()
+     *method
+     */
     this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
-//qDebug() << "interface index " << this->qml_interface->currIndex();
+    /*for more informations see qmlinterface.h */
     this->context->setContextProperty("qmlInterface", this->qml_interface );
-
-    //this->context->setContextProperty("qmlInterface", new QmlInterface(this) );
-    this->context->setContextProperty("icolor", QColor(Qt::red) );
-
 
     /*set the source qml file */
     this->visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
@@ -77,6 +83,10 @@ void CoreEngine::setUpQml()
 
 }
 
+/*This is the main open process to load images. When loading an image
+ *the folder which contains the image will be parsed to load a list of
+ *all images in this folder except all unsupported files
+ */
 void CoreEngine::open()
 {
     QString file = QFileDialog::getOpenFileName(this,tr("open file"),QDir::currentPath());
@@ -144,11 +154,14 @@ void CoreEngine::updateMainTitle(QString titlestr)
 void CoreEngine::zoomIn()
 {
     //image_viewport->zoomIn(scale_factor_x,scale_factor_y);
+    this->qml_interface->emitZoom(QmlInterface::IN);
 }
 
 void CoreEngine::zoomOut()
 {
     //image_viewport->zoomOut(scale_factor_x,scale_factor_y);
+    this->qml_interface->emitZoom(QmlInterface::OUT);
+
 }
 
 void CoreEngine::showInfo()
@@ -325,6 +338,12 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
             this->zoomOut();
         }
     }
+}
+
+/*the resize event is needed to forward the current window size to the qml environment*/
+void CoreEngine::resizeEvent(QResizeEvent *event)
+{
+    this->qml_interface->setNewSize(event->size());
 }
 
 void CoreEngine::closeEvent(QCloseEvent *event)

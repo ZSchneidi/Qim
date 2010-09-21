@@ -93,7 +93,13 @@ class CoreEngine : public QMainWindow
     void wheelEvent(QWheelEvent *event);
     /*the closeEvent will be if the main window is closed*/
     void closeEvent(QCloseEvent *event);
-
+    /*the resizeEvent is used to delegate the mainwindow size to the qml interface whenever the
+     *main window is changing its size
+     */
+    void resizeEvent(QResizeEvent *event);
+    /*called on an rightclick to open the widget based context menu
+     *qml context menu is implemented seperatly
+     */
     void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:

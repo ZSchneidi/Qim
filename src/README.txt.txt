@@ -1,3 +1,10 @@
+
+Qim - program hirarchy
+
+start at main.cpp 					//this is the main function
+core/coreendinge.cpp				//this is the main class of Qim here you find all other instances
+
+
 Always remeber the dependences of applications.
 
 The Qim is a Qt based application. So what you need to have in

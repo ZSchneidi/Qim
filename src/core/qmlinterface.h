@@ -6,29 +6,47 @@
 
 class CoreEngine;
 
+/*
+ *The QmlInterface is the main interface for sharing informations between
+ *the C++ logic and the Qml visual layer and the opposite way
+ */
 class QmlInterface : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(int index READ currIndex WRITE setCurrIndex NOTIFY indexChanged )
+    Q_PROPERTY(int main_width READ mainWidth NOTIFY widthChanged )
+    Q_PROPERTY(int main_height READ mainHeight NOTIFY heightChanged )
 
     CoreEngine *core;
     int curr_index;
-
-
+    int main_width;
+    int main_height;
+    /*set the index from qml*/
     void setCurrIndex( const int &index );
 
 public:
+
+    enum zoomMode {IN,OUT};
+
     explicit QmlInterface(CoreEngine *core);
 
     inline const int currIndex() const { return this->curr_index; }
+    inline const int mainWidth() const { return this->main_width; }
+    inline const int mainHeight() const { return this->main_height; }
 
+    void setNewSize(const QSize size);
+    /**/
     void updateQmlIndex(int index);
-
+    void emitZoom(zoomMode);
 
 signals:
 
+    void widthChanged();
+    void heightChanged();
     void indexChanged();
+    void zoomIn();
+    void zoomOut();
 
 
 
