@@ -15,8 +15,8 @@ class QmlInterface : public QObject
     Q_OBJECT
 
     Q_PROPERTY(int index READ currIndex WRITE setCurrIndex NOTIFY indexChanged )
-    Q_PROPERTY(int main_width READ mainWidth NOTIFY widthChanged )
-    Q_PROPERTY(int main_height READ mainHeight NOTIFY heightChanged )
+    Q_PROPERTY(int main_width READ mainWidth CONSTANT )
+    Q_PROPERTY(int main_height READ mainHeight CONSTANT )
 
     CoreEngine *core;
     int curr_index;
@@ -42,8 +42,7 @@ public:
 
 signals:
 
-    void widthChanged();
-    void heightChanged();
+    void sizeChanged(const QSize &size);
     void indexChanged();
     void zoomIn();
     void zoomOut();

@@ -5,7 +5,7 @@ import "elements"
 
  Rectangle {
      id: page
-     width: 640; height: 480
+     //width: 640; height: 480
      color: "#D8D8D8"
      //property int currentIndex: index
 
@@ -30,8 +30,10 @@ import "elements"
 
     Item {
         id: mainView
-        property int image_width: page.width
-        property int image_height: page.height
+        property int image_width: 0
+        property int image_height: 0
+
+        anchors.centerIn: parent
 
         ShadowBox{
             id: imageLabel
@@ -39,8 +41,8 @@ import "elements"
             shadowIntensity: 0.5
             anchors.centerIn: parent
             anchors.margins: 10
-            width: 800
-            height: 500
+            width: mainpicture.width
+            height: mainpicture.height
             opacity: 0.0
 
             Image {
@@ -48,14 +50,18 @@ import "elements"
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
                 source: listView.currentItemFilePath
+                width: mainView.image_width
+                height: mainView.image_height
                 onSourceChanged:
                         {
-                    console.log("page size " + page.width + ":" + mainView.image_height )
+                    //console.log("window size " + qmlInterface.main_width )
+                    mainView.image_height = qmlInterface.main_height-100
+                    mainView.image_width = qmlInterface.main_width-100
                 }
                 /*define the picture size in the view*/
                 onWidthChanged:
                         {
-                        console.log("size changed: "+ mainpicture.sourceSize.width)
+                        //console.log("size changed: "+ mainpicture.sourceSize.width)
                         imageLabel.opacity = 1
                     }
                 Connections {
@@ -65,6 +71,14 @@ import "elements"
                            console.log("zoomed IN "+mainpicture.width/2)
                            mainpicture.width = (mainpicture.width/2)
                            mainpicture.height = (mainpicture.height/2)
+                    }
+                    onSizeChanged:
+                            {
+                            console.log("new size " + size.width)
+                            mainpicture.height = size.height
+                            mainpicture.width = size.width
+
+                            console.log("new picture width : " + mainpicture.width)
                     }
                 }
             }
@@ -78,8 +92,6 @@ import "elements"
          id: info
          anchors.horizontalCenter: parent.horizontalCenter
          anchors.bottom: parent.bottom
-
-         color: icolor
          text:
                 //"index " + listView.currentItemFilePath
                  "index is : " + qmlInterface.index

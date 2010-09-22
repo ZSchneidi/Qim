@@ -7,7 +7,7 @@
 /*
  *FileSupport class provides information
  *of supported image file types as well as
- *method to determine wether an specific
+ *methods to determine wether an specific
  *file type is supported or not
  */
 class FileSupport

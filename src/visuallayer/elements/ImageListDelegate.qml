@@ -54,7 +54,7 @@ Component {
                             /*update image data parameters to provide them for the listView*/
                             onSourceChanged: {
                                 console.log("path is " + m_path)
-                                console.log("image width "+m_width)
+                                //console.log("image width "+m_width)
                                 filePath = m_path
                                 fileName = m_name
                             }

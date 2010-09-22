@@ -10,6 +10,7 @@ src/release/
 src/Makefile
 src/Makefile.Debug
 src/Makefile.Release
+src/Qim.pro.user
 
 # Ignore (generated) html files,
 *.html

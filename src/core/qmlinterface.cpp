@@ -29,7 +29,7 @@ void QmlInterface::setNewSize(const QSize size)
 {
     this->main_height = size.height();
     this->main_width = size.width();
-    qDebug() << "new Size " << size;
+    emit this->sizeChanged(size);
 }
 /*used to synchronize the index of the currently selected file with the qml environment*/
 void QmlInterface::updateQmlIndex(int index)

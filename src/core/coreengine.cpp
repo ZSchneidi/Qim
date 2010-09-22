@@ -56,7 +56,7 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->buildActions();
     this->buildMenu();
 
-    this->open("D:/Schuldaten/wirtschaftskunde_arbeitsheft/Seite 05.jpg");
+    //this->open("D:/Schuldaten/wirtschaftskunde_arbeitsheft/Seite 05.jpg");
 
 }
 
