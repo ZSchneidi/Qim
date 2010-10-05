@@ -72,15 +72,20 @@ class CoreEngine : public QMainWindow
     QAction *close_file_info;
     QAction *show_fullsreen;
     QAction *close_fullsreen;
+    QAction *open_config;
 
     QMenu *fileMenu;
     QMenu *helpMenu;
     QMenu *contextMenu;
 
+    /*build Actions and Menu is obsolete when using qml only*/
     void buildActions();
     void buildMenu();
-    void open(QString filepath);
+    /*set the Window title to titlestr which is now delegated to qml Titlebar*/
     void updateMainTitle(QString titlestr);
+    /*used to define the MainWindow apearance*/
+    void setUpMainWindow();
+    /*used to define the QML environment*/
     void setUpQml();
 
     /*the dragEnterEvent will be emit whenever the mouse cursor enters the application window*/
@@ -95,15 +100,15 @@ class CoreEngine : public QMainWindow
     /*the resizeEvent is used to delegate the mainwindow size to the qml interface whenever the
      *main window is changing its size
      */
-    void resizeEvent(QResizeEvent *event);
+    //void resizeEvent(QResizeEvent *event);
     /*called on an rightclick to open the widget based context menu
      *qml context menu is implemented seperatly
      */
-    void contextMenuEvent(QContextMenuEvent *event);
+    //void contextMenuEvent(QContextMenuEvent *event);
 
 private slots:
 
-    void open();
+    void openConfig();
     void zoomIn();
     void zoomOut();
     void showInfo();
@@ -111,11 +116,21 @@ private slots:
     void navigateForward();
     void navigateBackward();
 
+    void open();
+    void open(QString filepath);
+
+
 public:
+
+    /*enum declaration*/
+    /*the CoreAction enum is used to call QActions from QmlInterface::sendCoreAction()
+     */
+    enum CoreAction {OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG};
 
     CoreEngine(QWidget *parent = 0);
     ~CoreEngine();
 
+    void callCoreAction(CoreAction action);
     void openFromArgument(char *file);
     void setQmlIndex(int index);
     inline int currQmlIndex() { return this->curr_qml_index; }

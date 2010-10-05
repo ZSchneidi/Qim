@@ -34,7 +34,6 @@ void ImageHandler::loadImage(const QString cur_file_path)
     /*initFileList() takes the file_info_list as reference for storing the informations*/
     this->initFileList(this->file_info_list);
     this->cur_file_iterator = this->getFileListPosOf(this->cur_file_name,this->file_info_list);
-    qDebug() << "pos of load image " << this->cur_file_index;
     /*store the path in the title_str*/
     this->title_str = cur_file_path;
 }
@@ -55,7 +54,6 @@ bool ImageHandler::loadNextImage()
         this->cur_file_path = this->getFilePathFromList(++this->cur_file_iterator,
                                                         this->file_info_list);
         this->cur_file_index++;
-//        qDebug() << "file index " << this->cur_file_index;
         if((*cur_file_iterator).isFile())
         {
             /*the cur_image is temporary not needed becaus the image will be loaded in the qml engine*/
@@ -222,7 +220,6 @@ QFileInfoList::Iterator ImageHandler::getFileListPosOfIndex(const int index, QFi
     {
         temp_it++;
     }
-qDebug() << "new Index on " << (*temp_it).fileName();
     return temp_it;
 
 }
@@ -285,9 +282,9 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
     //temp_img.~QImage();
 }
 
+/*used to synchronize the index of the currently selected image file called by the CoreEngine::setQmlIndex(int index)*/
 void ImageHandler::setCurFileIndex(int index)
 {
     this->cur_file_index = index;
-qDebug() << "setting imagehandler index";
     this->cur_file_iterator = this->getFileListPosOfIndex(index,this->file_info_list);
 }

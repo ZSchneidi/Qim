@@ -20,12 +20,13 @@ Item {
     property int contextShowWidth: 250
     property alias contextHideWidth: listView.width
     property int itemRadius: 4
-
     property alias currentIndex: mainList.currentIndex
     property alias currentItem: mainList.currentItem
     /*property list of informations provided by the current item of mainList*/
-    property string currentItemName
+    property string currentItemFileName
     property string currentItemFilePath
+    property int currentItemFileWidth
+    property int currentItemFileHeight
 
 
 
@@ -67,10 +68,11 @@ Item {
             focus: true
             /*update the current viewed image object parameter*/
             onCurrentIndexChanged: {
-                currentItemName = currentItem.fileName
+                currentItemFileName = currentItem.fileName
                 currentItemFilePath = currentItem.filePath
+                currentItemFileWidth = currentItem.fileWidth
+                currentItemFileHeight = currentItem.fileHeight
                 qmlInterface.index = currentIndex
-
             }
          }
 
@@ -105,7 +107,6 @@ Item {
             hoverEnabled: true
             enabled: true
             onExited: {
-                //console.log ("exited " )
                 listViewBox.state = ""
             }
         }
@@ -115,7 +116,6 @@ Item {
         id: timer
         interval: contextDelayTime;
         onTriggered: {
-            //console.log ("time elapsed")
             listViewBox.state = "shown"
         }
     }
@@ -125,11 +125,9 @@ Item {
         hoverEnabled: true
         onEntered: {
             timer.start()
-            //console.log ("timer started ")
         }
         onExited: {
             timer.stop()
-            //console.log ("timer stopped " )
         }
     }
 

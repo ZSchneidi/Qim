@@ -12,6 +12,8 @@ Component {
 
          property string fileName
          property string filePath
+         property int fileWidth
+         property int fileHeight
 
          id:listItem
          width: contextShowWidth-5; height: labelHeight
@@ -53,10 +55,11 @@ Component {
                             sourceSize.height: 100
                             /*update image data parameters to provide them for the listView*/
                             onSourceChanged: {
-                                console.log("path is " + m_path)
-                                //console.log("image width "+m_width)
+                                //console.log("path is " + m_path)
                                 filePath = m_path
                                 fileName = m_name
+                                fileWidth = m_width
+                                fileHeight = m_height
                             }
                         }
                         Column {

@@ -14,36 +14,83 @@ class QmlInterface : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int index READ currIndex WRITE setCurrIndex NOTIFY indexChanged )
-    Q_PROPERTY(int main_width READ mainWidth CONSTANT )
-    Q_PROPERTY(int main_height READ mainHeight CONSTANT )
+    /*the active_layer property holds the path string of the qml source which has to be loaded in the QimMainUILayer*/
+    Q_PROPERTY(QString active_layer READ getActiveLayer WRITE setActiveLayer NOTIFY activeLayerChanged)
 
+    Q_PROPERTY(int index READ currIndex WRITE setCurrIndex NOTIFY indexChanged )
+    Q_PROPERTY(QSize main_size READ mainSize NOTIFY mainSizeChanged )
+    Q_PROPERTY(QPoint main_pos READ mainPos NOTIFY mainPosChanged )
+    Q_PROPERTY(QPoint main_size_cursor READ mainSizeCursor NOTIFY mainSizeCursorChanged )
+    Q_PROPERTY(QString main_title READ mainTitle NOTIFY mainTitleChanged )
+    //Q_ENUMS(CoreAction)
+    //Q_PROPERTY(CoreAction coreAction READ coreAction)
+
+
+    /*member variables*/
     CoreEngine *core;
     int curr_index;
-    int main_width;
-    int main_height;
+    QString *active_layer;
+    QString *main_title;
+    QSize *main_size;
+    QPoint *main_pos;
+    QPoint *main_size_cursor;
+
+    /*property setter*/
     /*set the index from qml*/
     void setCurrIndex( const int &index );
+    /*set the active layer from qml*/
+    void setActiveLayer(const QString layer_path);
 
 public:
 
     enum zoomMode {IN,OUT};
+    enum CoreAction {MAX,MIN,CLOSE};
+    /*this enum represents all valid QimVisualLayer that can be defined as the main content layer in
+     *the QimMainUILayer.qml
+     */
+    enum QmlLayer{Default_Layer,Visual_layer};
 
     explicit QmlInterface(CoreEngine *core);
 
+    /*property getter*/
+    inline const QString getActiveLayer() const { return *this->active_layer;}
     inline const int currIndex() const { return this->curr_index; }
-    inline const int mainWidth() const { return this->main_width; }
-    inline const int mainHeight() const { return this->main_height; }
+    inline const QSize mainSize() const { return *this->main_size; }
+    inline const QPoint mainPos() const { return *this->main_pos; }
+    inline const QPoint mainSizeCursor() const { return *this->main_size_cursor; }
+    inline const QString mainTitle() const { return *this->main_title; }
 
+    /*switches the currently loaded component for content presentation
+     *for more information take a look at the definiton of this method
+     */
+    void changeActiveLayer(QmlLayer path);
     void setNewSize(const QSize size);
-    /**/
-    void updateQmlIndex(int index);
-    void emitZoom(zoomMode);
+    void setNewTitle(const QString title);
+    void updateQmlIndex(const int index);
+    void sendImageScaleSignal();
+    void emitZoom(const zoomMode);
+
+
+
+public slots:
+
+    /*connection from qml*/
+    void sendCoreAction( int action);
+    //void sendCoreAction( CoreAction action);
+    void setMainSize();
+    void setMainPos();
+    void resetPositionCursor();
+    void resetSizeCursor();
 
 signals:
 
-    void sizeChanged(const QSize &size);
+    /*connection to qml*/
+    void activeLayerChanged(const QString new_layer);
     void indexChanged();
+    void mainSizeChanged();
+    void mainTitleChanged(const QString new_title);
+    void updateImageScale();
+    void sizeChanged(const QSize &size);
     void zoomIn();
     void zoomOut();
 
@@ -52,43 +99,3 @@ signals:
 };
 
 #endif // QMLINTERFACE_H
-
-
-
-
-
-
-
-
-/*
-
-class QmlInterface : public QObject
-{
-    Q_OBJECT
-
-    Q_PROPERTY(int index READ currIndex WRITE setCurrIndex NOTIFY indexChanged )
-
-    CoreEngine *core;
-    int curr_index;
-
-
-    void setCurrIndex( const int &index );
-
-public:
-    explicit QmlInterface(CoreEngine *core);
-
-    inline const int currIndex() const { return this->curr_index; }
-
-    void updateQmlIndex(int index);
-
-signals:
-
-    void indexChanged();
-
-
-
-};
-
-
-
-*/

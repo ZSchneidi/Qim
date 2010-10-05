@@ -43,4 +43,8 @@ OTHER_FILES += \
     visuallayer/elements/ImageListVisualDataModel.qml \
     visuallayer/elements/ImageListDelegateDetails.qml \
     visuallayer/elements/QimDefaultLayer.qml \
-    visuallayer/QimDefaultLayer.qml
+    visuallayer/QimDefaultLayer.qml \
+    visuallayer/elements/CustomWindowResizer.qml \
+    visuallayer/elements/CustomTitleBar.qml \
+    visuallayer/elements/CustomMenuBar.qml \
+    visuallayer/QimMainUILayer.qml

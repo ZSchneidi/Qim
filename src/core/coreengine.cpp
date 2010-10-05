@@ -2,6 +2,7 @@
 
 #define QIMVISLAYERFILE "visuallayer/QimVisualLayer.qml"
 #define QIMDEFLAYERFILE "visuallayer/QimDefaultLayer.qml"
+#define QIMMAINUILAYERFILE "visuallayer/QimMainUILayer.qml"
 #define SCALEFACTORX 0.1
 #define SCALEFACTORY 0.1
 
@@ -11,9 +12,14 @@
 CoreEngine::CoreEngine(QWidget *parent) :
         QMainWindow(parent)
 {
-    //test
+    /*init the index of the currently selected image
+     *this index is updated from qml layer and coreengine
+     *it depends on how the index was changed see wheelEvent and qmlInterface
+     *for more informations
+     */
     this->curr_qml_index = 0;
 
+    /*this is the default Window title*/
     this->default_title = "Qim";
     //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
@@ -32,31 +38,50 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
     /*instatiate and load the qml declarative ui into the qml viewer*/
     this->visual_qml_view = new QDeclarativeView;
-    this->visual_qml_view->setAcceptDrops(true);
 
     /*initialize the context with the root context of the qml viewer*/
     this->context = this->visual_qml_view->rootContext();
-    /*define imageDataModel as a variant of the data list in the qml context*/
-
-    /*set the source of the default qim layer qml file */
-    this->visual_qml_view->setSource(QUrl(QIMDEFLAYERFILE));
-    /*this fills the parent application window with the qml view*/
-    this->visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-    this->visual_qml_view->setAcceptDrops(true);
 
     /*the zooming feature scales the image by the scale factor*/
     this->scale_factor_x = SCALEFACTORX;
     this->scale_factor_y = SCALEFACTORY;
 
-    /*set-up the main window*/
+    /*define visual options of the main window*/
+    this->setUpMainWindow();
+
+}
+
+/*define the apearance options of the MainWindow which contains all
+ *visual informations like qml layer and so on
+ */
+void CoreEngine::setUpMainWindow()
+{
+    /*this fills the parent application window with the qml view*/
+    this->visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    this->visual_qml_view->setAcceptDrops(true);
+
+    /*set the QDeclarativeView as main widget in the main window*/
     this->setCentralWidget(visual_qml_view);
-    //this->setAcceptDrops(true);
-    this->showMaximized();
+    /*these two methods are used to define the main window as transparent
+     *but when using a widget in in the window the transparency effect gets lost
+     */
+    this->visual_qml_view->setStyleSheet("background:transparent");
+    this->visual_qml_view->setAttribute(Qt::WA_TranslucentBackground);
+    this->visual_qml_view->setWindowFlags(Qt::FramelessWindowHint);
 
-    this->buildActions();
-    this->buildMenu();
+    this->setStyleSheet("background:transparent;");
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    /*turn off system native window decorations which are implemented in qml*/
+    this->setWindowFlags(Qt::FramelessWindowHint);
+    //this->buildActions();
+    //this->buildMenu();
 
-    //this->open("D:/Schuldaten/wirtschaftskunde_arbeitsheft/Seite 05.jpg");
+    /*this manifests the qmlInterface in the qml environment
+     *for more informations see qmlinterface.h
+     */
+    this->context->setContextProperty("qmlInterface", this->qml_interface );
+    /*set the source of the default qim layer qml file as main qml application*/
+    this->visual_qml_view->setSource(QUrl(QIMMAINUILAYERFILE));
 
 }
 
@@ -74,12 +99,19 @@ void CoreEngine::setUpQml()
      *method
      */
     this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
-    /*for more informations see qmlinterface.h */
-    this->context->setContextProperty("qmlInterface", this->qml_interface );
 
-    /*set the source qml file */
-    this->visual_qml_view->setSource(QUrl(QIMVISLAYERFILE));
-    //this->visual_qml_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    /*the active_layer in qml_interface has to be switched to the QmlInterface::Visual_layer to enable displaying images
+     *more informations about this concept can be found in the QmlInterface header at the changeActiveLayer()
+     *declaration
+     */
+    this->qml_interface->changeActiveLayer(QmlInterface::Visual_layer);
+
+    /*this sendUpdateSignal gets the qml_interface to emit an update signal which is used to
+     *determine in which mode the images should be presented see qml_interface documentation
+     *for more informations
+     *this method is also called when navigating
+     */
+    this->qml_interface->sendImageScaleSignal();
 
 }
 
@@ -93,23 +125,24 @@ void CoreEngine::open()
     if(!file.isEmpty())
     {
         this->image_handler->loadImage(file);
+        /*this updates the index of the currently selected image to synchronize it
+         *with the qml layer this is important to avoid asynchron navigation states
+         */
         this->curr_qml_index = this->image_handler->getCurFileIndex();
-        qDebug() << "index: " << this->curr_qml_index;
+        /*this sends the index to the qml environment to synch the index*/
         this->qml_interface->updateQmlIndex(this->curr_qml_index);
         /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
+        /*see setUpQml definition*/
         this->setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
-        //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),this->image_handler->getCurImage());
         if (this->image_handler->getCurImage().isNull())
         {
             QMessageBox::information(this, tr("Qim - error report"),
-                                     tr("Can't convert to QImage."));
+                                    tr("Can't convert to QImage."));
             return;
         }
-        this->image_handler->scaleImage((width()),(height()-40));
         this->updateMainTitle(this->image_handler->getTitleStr());
-
         return;
     }
     QMessageBox::information(this, tr("Qim - error report"),
@@ -123,19 +156,14 @@ void CoreEngine::open(QString filepath)
         this->image_handler->loadImage(filepath);
         this->curr_qml_index = this->image_handler->getCurFileIndex();
         this->qml_interface->updateQmlIndex(this->curr_qml_index);
-        /*image data initialization to get all image data to qml*/
         this->image_handler->initImageDataModel(this->imageDataModelList);
         this->setUpQml();
-        /*the file information has to be updated before scaling or manipulate the image otherwise */
-        this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
-                                                this->image_handler->getCurImage());
         if (this->image_handler->getCurImage().isNull())
         {
             QMessageBox::information(this, tr("Qim - error report"),
                                      tr("Can't convert to QImage."));
             return;
         }
-        this->image_handler->scaleImage((width()),(height()-40));
         this->updateMainTitle(image_handler->getTitleStr());
 
         return;
@@ -144,11 +172,20 @@ void CoreEngine::open(QString filepath)
                              tr("Can't load file!"));
 }
 
+/*sends an updated title string to the qml layer*/
 void CoreEngine::updateMainTitle(QString titlestr)
 {
     QString newtitle = this->default_title;
     newtitle.append(" - ");
-    this->setWindowTitle(newtitle.append(titlestr));
+    //this->setWindowTitle(newtitle.append(titlestr));
+    /*used to delegate the new title string to the qml environment*/
+    this->qml_interface->setNewTitle(newtitle.append(titlestr));
+}
+
+/*this method is designed to build the configuration dialog for qim*/
+void CoreEngine::openConfig()
+{
+
 }
 
 void CoreEngine::zoomIn()
@@ -187,18 +224,9 @@ void CoreEngine::navigateForward()
         if(this->image_handler->loadNextImage())
         {
             this->curr_qml_index = this->image_handler->getCurFileIndex();
-            /*the file information has to be updated before scaling or manipulate the image otherwise */
-            //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
-            //                                        this->image_handler->getCurImage());
-            //this->image_handler->scaleImage(this->width(), this->height() - 40);
-            this->updateMainTitle(this->image_handler->getTitleStr());
-            //context->setContextProperty("index",++index);
-            //this->curr_qml_index++;
-            //this->qml_interface->incrementIndex();
-
-            //context->setContextProperty("index",qml_interface->index);
-
             this->qml_interface->updateQmlIndex(this->curr_qml_index);
+            this->qml_interface->sendImageScaleSignal();
+            this->updateMainTitle(this->image_handler->getTitleStr());
         }
     }
 }
@@ -210,15 +238,9 @@ void CoreEngine::navigateBackward()
         if(this->image_handler->loadPrevImage())
         {
             this->curr_qml_index = this->image_handler->getCurFileIndex();
-            /*the file information has to be updated before scaling or manipulate the image otherwise */
-            //this->file_info_handler->updateFileInfo(this->image_handler->getCurImageFileInfo(),
-            //                                        this->image_handler->getCurImage());
-            //this->image_handler->scaleImage(width(), height() - 40);
-            this->updateMainTitle(this->image_handler->getTitleStr());
-            //this->curr_qml_index--;
-            //this->qml_interface->decrementIndex();
-            //context->setContextProperty("index",qml_interface->index);
             this->qml_interface->updateQmlIndex(this->curr_qml_index);
+            this->qml_interface->sendImageScaleSignal();
+            this->updateMainTitle(this->image_handler->getTitleStr());
         }
     }
 }
@@ -341,11 +363,11 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
 }
 
 /*the resize event is needed to forward the current window size to the qml environment*/
-void CoreEngine::resizeEvent(QResizeEvent *event)
+/*void CoreEngine::resizeEvent(QResizeEvent *event)
 {
     this->qml_interface->setNewSize(event->size());
 }
-
+*/
 void CoreEngine::closeEvent(QCloseEvent *event)
 {
     this->file_info_handler->close();
@@ -354,6 +376,7 @@ void CoreEngine::closeEvent(QCloseEvent *event)
 /*
  *the contextMenuEvent is called by systemdependent contextMenu actions
  */
+/*
 void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 {
     //set the position of the context menu to the current position
@@ -379,7 +402,7 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
     }
     this->contextMenu->show();
 }
-
+*/
 
 void CoreEngine::openFromArgument(char *file)
 {
@@ -387,11 +410,29 @@ void CoreEngine::openFromArgument(char *file)
     this->open(filepath);
 }
 
+/*synchronize the qml index in the coreengine and the image_handler
+ *the qml_interface updates the index by itself
+ */
 void CoreEngine::setQmlIndex(int index)
 {
     this->curr_qml_index = index;
     this->image_handler->setCurFileIndex(index);
 }
+
+void CoreEngine::callCoreAction(CoreAction action)
+{
+
+    qDebug() << "recieve action " << action;
+    switch(action)
+    {
+    case 0: this->open();
+            break;
+    case 1: this->close();
+            break;
+    }
+}
+
+
 
 CoreEngine::~CoreEngine()
 {

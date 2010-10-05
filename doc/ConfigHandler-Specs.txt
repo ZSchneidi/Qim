@@ -1,0 +1,142 @@
+
+Qim Config Handler specification
+
+To assist the configHandler the CoreEngine could be implemented a kind of main loader method which
+controlls all processes. Otherwise all methods involved in loading process just refer the config handler to
+decide what to do or omit.
+
+This is just a first basic spec becaus Qim don't have that much features yet accept the minimum requirements.
+We also should implement a threaded loading process to speed up the process.
+
+Some extensions will follow if we have done the portation to a 100% QML visual Layer. This may change some things.
+
+- 	class ConfigHandler
+ 
+	#the following member should the configHandler provide
+	#inclusive the corresponding getter and setter 
+	
+		#identifier : type = defaul_value
+	
+	-	main_lang : QString = "E" 
+		#this is the main language Flag which defines the UI language of Qim
+		#the default value should be E for English
+		#Qt detect automatically the language of the system on which Qim but if Qim cant determine
+		#the default system Language the language should be set to english
+		
+	-	def_window_size : QSize = "FULLSCREEN"
+		#the def_window_size contains the inital or last defined window size Qim was painted on
+		#the default or inital Window size could be set to fullscreen if the user don't want Qim to be in
+		#fullscreen he can define another size which will be saved in the config file and restored on next startup
+		
+	-	supported_file_format : QString 
+		#the supported file formats currently statically defined in the file support handler
+		#should be customizable via config dialog
+		#if the user don't want to take account of file formats when parsing a folder for image files
+		#he can define or delete these formats in the config dialog these formats should be saved in the config
+		#file as | (pipe) separated strings (example: SUPP_FILE_FORMAT:.jpg|.gif|.psd) or something like that
+	
+	-	support_preload_images : bool false
+		#this option will handle the behavior of loading images for the navigation
+		#if this flag is set to true Qim will load the predecessor and the successor when finishing image presentation
+		#to perform a better and more smooth navigation
+		#this isn't impolemented yet.
+		
+	-	support_secure_navigation : bool true
+		#this feature is an important on my list
+		#on windows 7 maschines the OS tends to kill a process that turns over for example on navigation processes
+		#on fast scrolling windows will declare the process as broke down so we have to implement a secure variation of
+		#the current navigation to ensure that Qim doesn't load the next image before the currently loaded image is already finished
+		#the user can deactivate this feature for a faster navigation
+	
+	#the include_subdir flags aren't realized yet these options should be discussed first
+	-	include_subdirectory : bool = false
+		#with this flag the user can define wheter he wants to load subdirectories
+		#these subdirectory could be displayed as folder in the file list and if the user clicks on one of these folders
+		#qim loads this folder and update the list
+		
+	-	include_subdir_files : bool = false
+		#this flag depends on the status of the include_subdirectory flag if the include_subdirectoy flag is true
+		#the user can separately define this flag as true
+		#in this case all files from subdirectories will be loaded to on file list which can cause some performance problems
+		#if Qim detect potetial problems like to much files or to much memory requirements the user gets a warning message
+		#and can decide if he want to proceed or to cancel
+	#this part isn't implemented yet but I guess that this could be a nice feature so reflect about this topic
+	#and tell me what you think about it
+	
+	-	navigation_direction_invert : bool = false
+		#this flag is to define how Qim behave on navigating on mouse wheel events
+		#with this flag the user can define how Qim navigate on wheel up and down events
+		#on default Qim navigates forward on wheel down because of the list entry direction where
+		#the next image is below the current image
+		
+	-	zoom_direction_invert : bool = false
+		#its basically the same as on the navigation
+		#on default Qim zooms IN on wheel up but if the user want to zoom IN on wheel down he can set this to true
+		
+	-	set_qml_list : bool = true
+		#on default the qml list should be activate
+		#but if the user don't want to show the file list to save memory and performance
+		#he can set this to false to deactivate the qml file list
+		
+	- 	set_qml_shadowbox : bool = true
+		#on default the images have a shadow
+		#to simplify the UI the user can deactivate this visual feature
+		#this shouldn't affect the overall performance
+		
+	-	set_qml_image_smooth : bool = true
+		#on default this flag is true to smooth the currently presented image
+		#when smooth is true the qml engine will filter the presented image with a smooth filter for
+		#better visual quality or scaling pictures
+		#this need more performance than unsmoothed images
+		#the user can deactivate this feature for better performance an older hardware
+		
+	-	set_qml_scale_to_viewport : bool = true
+		#this flag defines if Qim should scale large images down to the viewport when loading them
+		#or display them in real size on default Qim scales large image down to the currently window size
+		
+	-	set_qml_strech_to_viewport : bool = false
+		#this flag defines if Qim should stretch smaller images to the currently viewport size to present them in
+		#larger size on default this is false so that Qim presents smaller images in their real size
+		
+	-	set_qml_load_fileinfo : bool = true
+		#this flag defines if Qim should provide informations about the images
+		#these infos are presented in the qml list on right click
+		#to speed up the loading process the info loading could be deactivated
+		
+	-	set_navigation_loop : bool = false
+		#on default Qim will stop at the first or the last file in the list of loaded files
+		#if the user want to navigate through a file loop he can set this to true
+		#in this case Qim will show the last image on navigation backward when the first image is visible
+		#!!! this feature isn't implemented yet
+		
+	-	activate_plugin_manager : bool = true
+		#this feature isn't implemented yet because the plugin interface isn't specified
+		#but if the plugin manager is ready the user can decide if he want to load the plugin interface
+		#or deactivate this feature for better performance
+		
+	#in later states when the themeManager is implemented the following becomes relevant
+	
+	-	main_layout_theme : QString = "default"
+		#with this flag the user can define the theme he wanna use
+		
+	-	main_view_color : QString
+		#with this flag the user can define another color for the main background
+		#I guess that this could be useful if the user wants to change just the main background of a theme
+		#so he can personalize the layout a bit more
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
