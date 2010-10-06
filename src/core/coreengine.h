@@ -21,6 +21,8 @@
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 
+#include "confighandler.h"
+#include "configdialog.h"
 #include "imagehandler.h"
 #include "fileinfohandler.h"
 #include "manager/thememanager.h"
@@ -49,6 +51,8 @@ class CoreEngine : public QMainWindow
 
     /*extension objects*/
 
+    ConfigDialog *config_dialog;
+    ConfigHandler *config_handler;
     ImageHandler *image_handler;
     ThemeManager *theme_manager;
     FileInfoHandler *file_info_handler;
@@ -63,6 +67,8 @@ class CoreEngine : public QMainWindow
 
     /*index of the currently selected picture in the qml list*/
     int curr_qml_index;
+
+    bool is_full_screen;
 
     /*QActions and QMenus*/
     QAction *open_action;
@@ -115,6 +121,8 @@ private slots:
     void closeInfo();
     void navigateForward();
     void navigateBackward();
+    void toggleFullScreen();
+    void about();
 
     void open();
     void open(QString filepath);

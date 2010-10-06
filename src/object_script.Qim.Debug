@@ -9,8 +9,10 @@ INPUT(
 ./debug\imagedatamodel.o
 ./debug\fileinfothread.o
 ./debug\qmlinterface.o
+./debug\configdialog.o
 ./debug\moc_coreengine.o
 ./debug\moc_fileinfohandler.o
 ./debug\moc_imagedatamodel.o
 ./debug\moc_qmlinterface.o
+./debug\moc_configdialog.o
 );

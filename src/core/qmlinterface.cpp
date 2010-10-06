@@ -39,7 +39,8 @@ void QmlInterface::sendCoreAction(int action)
         case 2: this->core->close();
                 break;
         case 3: this->core->callCoreAction(CoreEngine::OPEN);
-                qDebug() << "still here";
+                break;
+        case 4: this->core->callCoreAction(CoreEngine::CONFIG);
                 break;
     }
 }

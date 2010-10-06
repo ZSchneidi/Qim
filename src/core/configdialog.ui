@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ConfigDialog</class>
+ <widget class="QDialog" name="ConfigDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>550</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>550</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>551</width>
+     <height>411</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Major</string>
+    </attribute>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>120</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QCheckBox" name="checkBox_2">
+        <property name="text">
+         <string>secure navigation:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>150</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>loading features</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_5">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>240</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>invert navigation</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_6">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>260</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>invert zoom direction</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_13">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>240</y>
+       <width>141</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>activate navigation loop</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>40</y>
+       <width>241</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Language:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBox"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>70</y>
+       <width>301</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Supported file formats:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>120</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QCheckBox" name="checkBox">
+        <property name="text">
+         <string>Image preload:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>170</y>
+       <width>241</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <item>
+       <widget class="QCheckBox" name="checkBox_3">
+        <property name="text">
+         <string>load subdirectories:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>200</y>
+       <width>305</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QCheckBox" name="checkBox_4">
+        <property name="text">
+         <string>load files from subdirectory:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Visual Style</string>
+    </attribute>
+    <widget class="QCheckBox" name="checkBox_15">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>200</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>start in fullscreen</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_16">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>180</y>
+       <width>131</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>activate advanced UI</string>
+     </property>
+    </widget>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>151</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>advanced Ui features</string>
+     </property>
+     <widget class="QCheckBox" name="checkBox_9">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>activate image smooth</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>activate shadowbox</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>activate image list</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>140</y>
+       <width>151</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>image handling</string>
+     </property>
+     <widget class="QCheckBox" name="checkBox_12">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>91</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>load file infos</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>91</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>strech images</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>91</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>scale images </string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>30</y>
+       <width>261</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>visual style options</string>
+     </property>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>241</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Background Opacity:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QSlider" name="horizontalSlider">
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>x %</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>20</y>
+        <width>211</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Theme:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_2">
+         <item>
+          <property name="text">
+           <string>White</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Dark</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Blue-Gray</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>50</y>
+        <width>182</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Background Color:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>15</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>15</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background: rgb(160, 178, 199)
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_3">
+    <attribute name="title">
+     <string>Plug-in</string>
+    </attribute>
+    <widget class="QCheckBox" name="checkBox_14">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>30</y>
+       <width>151</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>activate Plug-in manager</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>420</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>save</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_2">
+   <property name="geometry">
+    <rect>
+     <x>370</x>
+     <y>420</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>cancel</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

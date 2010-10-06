@@ -19,11 +19,16 @@ CoreEngine::CoreEngine(QWidget *parent) :
      */
     this->curr_qml_index = 0;
 
+    /*defines the default screen mode*/
+    this->is_full_screen = false;
+
     /*this is the default Window title*/
     this->default_title = "Qim";
     //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
     /*extension objects instantiation*/
+    this->config_handler = new ConfigHandler;
+    this->config_dialog = new ConfigDialog;
     /*initialize the image handler object which provides the image and directory data*/
     this->image_handler = new ImageHandler;
 
@@ -185,7 +190,8 @@ void CoreEngine::updateMainTitle(QString titlestr)
 /*this method is designed to build the configuration dialog for qim*/
 void CoreEngine::openConfig()
 {
-
+    this->config_dialog->show();
+    //this->config_dialog->setWindowFlags(Qt::WindowStaysOnTopHint);
 }
 
 void CoreEngine::zoomIn()
@@ -243,6 +249,20 @@ void CoreEngine::navigateBackward()
             this->updateMainTitle(this->image_handler->getTitleStr());
         }
     }
+}
+
+
+void CoreEngine::toggleFullScreen()
+{
+    if(this->is_full_screen)
+        this->showNormal();
+    else if(this->is_full_screen == false)
+        this->showFullScreen();
+}
+
+void CoreEngine::about()
+{
+
 }
 
 void CoreEngine::buildActions()
@@ -419,6 +439,8 @@ void CoreEngine::setQmlIndex(int index)
     this->image_handler->setCurFileIndex(index);
 }
 
+
+//OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG
 void CoreEngine::callCoreAction(CoreAction action)
 {
 
@@ -428,6 +450,12 @@ void CoreEngine::callCoreAction(CoreAction action)
     case 0: this->open();
             break;
     case 1: this->close();
+            break;
+    case 2: this->about();
+            break;
+    case 3: this->toggleFullScreen();
+            break;
+    case 4: this->openConfig();
             break;
     }
 }

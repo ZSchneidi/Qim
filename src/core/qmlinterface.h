@@ -22,8 +22,6 @@ class QmlInterface : public QObject
     Q_PROPERTY(QPoint main_pos READ mainPos NOTIFY mainPosChanged )
     Q_PROPERTY(QPoint main_size_cursor READ mainSizeCursor NOTIFY mainSizeCursorChanged )
     Q_PROPERTY(QString main_title READ mainTitle NOTIFY mainTitleChanged )
-    //Q_ENUMS(CoreAction)
-    //Q_PROPERTY(CoreAction coreAction READ coreAction)
 
 
     /*member variables*/
@@ -43,6 +41,7 @@ class QmlInterface : public QObject
 
 public:
 
+
     enum zoomMode {IN,OUT};
     enum CoreAction {MAX,MIN,CLOSE};
     /*this enum represents all valid QimVisualLayer that can be defined as the main content layer in
@@ -59,6 +58,7 @@ public:
     inline const QPoint mainPos() const { return *this->main_pos; }
     inline const QPoint mainSizeCursor() const { return *this->main_size_cursor; }
     inline const QString mainTitle() const { return *this->main_title; }
+    CoreAction getCoreAction() const;
 
     /*switches the currently loaded component for content presentation
      *for more information take a look at the definiton of this method

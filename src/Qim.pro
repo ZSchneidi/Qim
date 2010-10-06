@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     core/fileinfohandler.cpp \
     core/imagedatamodel.cpp \
     core/fileinfothread.cpp \
-    core/qmlinterface.cpp
+    core/qmlinterface.cpp \
+    core/configdialog.cpp \
+    core/confighandler.cpp
 
 HEADERS += core/coreengine.h \
     manager/pluginmmanager.h \
@@ -26,11 +28,14 @@ HEADERS += core/coreengine.h \
     core/fileinfohandler.h \
     core/imagedatamodel.h \
     core/fileinfothread.h \
-    core/qmlinterface.h
+    core/qmlinterface.h \
+    core/configdialog.h \
+    core/confighandler.h
 
 
 FORMS += mainviewer.ui \
-    core/fileinfohandler.ui
+    core/fileinfohandler.ui \
+    core/configdialog.ui
 
 TRANSLATIONS = theme/language/qim_lang_de_DE.ts
 
