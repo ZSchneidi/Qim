@@ -18,7 +18,7 @@ Item {
         anchors.fill: parent
         Image {
             anchors.fill: parent
-            source: "../img/titlebar_background.png"
+            source: "qrc:/img_source/titlebar_background.png"
         }
 
     }

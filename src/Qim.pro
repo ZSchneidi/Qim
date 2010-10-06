@@ -48,3 +48,6 @@ OTHER_FILES += \
     visuallayer/elements/CustomTitleBar.qml \
     visuallayer/elements/CustomMenuBar.qml \
     visuallayer/QimMainUILayer.qml
+
+RESOURCES += \
+    main_resource.qrc
