@@ -69,7 +69,7 @@ Item {
             onEntered: closeIcon.source = "../img/close_active.png"
             onExited: closeIcon.source = "../img/close_inactive.png"
             /*the button control parameter should be changed to enum type*/
-            onClicked: qmlInterface.sendCoreAction(2)
+            onClicked: qmlInterface.sendCoreAction(3)
         }
     }
 

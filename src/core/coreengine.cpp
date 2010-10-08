@@ -1,10 +1,6 @@
 #include "coreengine.h"
+#include "globaldefinitions.h"
 
-#define QIMVISLAYERFILE "visuallayer/QimVisualLayer.qml"
-#define QIMDEFLAYERFILE "visuallayer/QimDefaultLayer.qml"
-#define QIMMAINUILAYERFILE "visuallayer/QimMainUILayer.qml"
-#define SCALEFACTORX 0.1
-#define SCALEFACTORY 0.1
 
 /*
  *The core engine is the major class which operates with all handler classes.
@@ -19,16 +15,13 @@ CoreEngine::CoreEngine(QWidget *parent) :
      */
     this->curr_qml_index = 0;
 
-    /*defines the default screen mode*/
-    this->is_full_screen = false;
-
     /*this is the default Window title*/
     this->default_title = "Qim";
     //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
     /*extension objects instantiation*/
     this->config_handler = new ConfigHandler;
-    this->config_dialog = new ConfigDialog;
+    this->config_dialog = new ConfigDialog(this,this->getConfigHandler());
     /*initialize the image handler object which provides the image and directory data*/
     this->image_handler = new ImageHandler;
 
@@ -88,6 +81,17 @@ void CoreEngine::setUpMainWindow()
     /*set the source of the default qim layer qml file as main qml application*/
     this->visual_qml_view->setSource(QUrl(QIMMAINUILAYERFILE));
 
+    /*set the window size to the via config defined size if maximized or fullscreen is set
+     *the size will be ignored
+     */
+
+    if(this->config_handler->startMaximized())
+        this->showMaximized();
+    else if(this->config_handler->startFullScreen())
+        this->showFullScreen();
+    else
+        this->resize(this->config_handler->defWindowSize());
+    this->show();
 }
 
 /*setUpQml will be called when an image was loaded and is used to define the data model for the qml view
@@ -254,9 +258,9 @@ void CoreEngine::navigateBackward()
 
 void CoreEngine::toggleFullScreen()
 {
-    if(this->is_full_screen)
+    if(this->isFullScreen())
         this->showNormal();
-    else if(this->is_full_screen == false)
+    else if(!this->isFullScreen())
         this->showFullScreen();
 }
 
@@ -388,9 +392,16 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
     this->qml_interface->setNewSize(event->size());
 }
 */
+/*if anything is left to do befor closing the application do it here*/
 void CoreEngine::closeEvent(QCloseEvent *event)
 {
+    this->config_handler->setDefWindowSize(this->size());
+    this->config_handler->setStartMaximized(this->isMaximized());
+    this->config_handler->setStartFullScreen(this->isFullScreen());
+
+    this->config_handler->writeNewConfig();
     this->file_info_handler->close();
+
 }
 
 /*
@@ -443,8 +454,6 @@ void CoreEngine::setQmlIndex(int index)
 //OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG
 void CoreEngine::callCoreAction(CoreAction action)
 {
-
-    qDebug() << "recieve action " << action;
     switch(action)
     {
     case 0: this->open();
@@ -459,8 +468,6 @@ void CoreEngine::callCoreAction(CoreAction action)
             break;
     }
 }
-
-
 
 CoreEngine::~CoreEngine()
 {

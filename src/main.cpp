@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     this is only a first test of the internationalization function.
     */
     CoreEngine w;
-    w.show();
+    //w.show();
 
     return a.exec();
 

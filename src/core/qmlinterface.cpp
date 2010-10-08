@@ -23,7 +23,6 @@ QmlInterface::CoreAction QmlInterface::coreAction() const
 //void QmlInterface::sendCoreAction(CoreAction action)
 void QmlInterface::sendCoreAction(int action)
 {
-    qDebug() << "get signal " << action;
     /*for definition of coreAction take a look at the enum definition in the qmlinterface header*/
     switch (action)
     {
@@ -36,11 +35,15 @@ void QmlInterface::sendCoreAction(int action)
                 break;
         case 1: this->core->showMinimized();
                 break;
-        case 2: this->core->close();
+        case 2: this->core->callCoreAction(CoreEngine::OPEN);
                 break;
-        case 3: this->core->callCoreAction(CoreEngine::OPEN);
+        case 3: this->core->callCoreAction(CoreEngine::CLOSE);
                 break;
-        case 4: this->core->callCoreAction(CoreEngine::CONFIG);
+        case 4: this->core->callCoreAction(CoreEngine::ABOUT);
+                break;
+        case 5: this->core->callCoreAction(CoreEngine::FULLSCREEN);
+                break;
+        case 6: this->core->callCoreAction(CoreEngine::CONFIG);
                 break;
     }
 }
@@ -66,7 +69,6 @@ void QmlInterface::changeActiveLayer(QmlLayer path)
      *this is basically the folder for all qml files
      */
     QString temp_path;
-    qDebug() << "new layer " << path;
     switch(path)
     {
     case 0: temp_path = "QimDefaultLayer.qml";

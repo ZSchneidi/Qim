@@ -30,7 +30,8 @@ HEADERS += core/coreengine.h \
     core/fileinfothread.h \
     core/qmlinterface.h \
     core/configdialog.h \
-    core/confighandler.h
+    core/confighandler.h \
+    core/globaldefinitions.h
 
 
 FORMS += mainviewer.ui \
@@ -52,4 +53,4 @@ OTHER_FILES += \
     visuallayer/elements/CustomWindowResizer.qml \
     visuallayer/elements/CustomTitleBar.qml \
     visuallayer/elements/CustomMenuBar.qml \
-    visuallayer/QimMainUILayer.qml
+    visuallayer/QimMainUILayer.qml \

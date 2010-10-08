@@ -10,6 +10,7 @@ INPUT(
 ./release\fileinfothread.o
 ./release\qmlinterface.o
 ./release\configdialog.o
+./release\confighandler.o
 ./release\moc_coreengine.o
 ./release\moc_fileinfohandler.o
 ./release\moc_imagedatamodel.o
