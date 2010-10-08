@@ -10,6 +10,7 @@ INPUT(
 ./debug\fileinfothread.o
 ./debug\qmlinterface.o
 ./debug\configdialog.o
+./debug\confighandler.o
 ./debug\moc_coreengine.o
 ./debug\moc_fileinfohandler.o
 ./debug\moc_imagedatamodel.o

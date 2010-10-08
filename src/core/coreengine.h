@@ -68,8 +68,6 @@ class CoreEngine : public QMainWindow
     /*index of the currently selected picture in the qml list*/
     int curr_qml_index;
 
-    bool is_full_screen;
-
     /*QActions and QMenus*/
     QAction *open_action;
     QAction *exit_action;
@@ -101,7 +99,7 @@ class CoreEngine : public QMainWindow
     void dropEvent(QDropEvent *event);
     /*the wheelEvent will be emit whenever the mouse wheel sends a signal*/
     void wheelEvent(QWheelEvent *event);
-    /*the closeEvent will be if the main window is closed*/
+    /*the closeEvent will be emit when the main window is closing*/
     void closeEvent(QCloseEvent *event);
     /*the resizeEvent is used to delegate the mainwindow size to the qml interface whenever the
      *main window is changing its size
@@ -127,7 +125,6 @@ private slots:
     void open();
     void open(QString filepath);
 
-
 public:
 
     /*enum declaration*/
@@ -142,6 +139,7 @@ public:
     void openFromArgument(char *file);
     void setQmlIndex(int index);
     inline int currQmlIndex() { return this->curr_qml_index; }
+    inline ConfigHandler* getConfigHandler() { return this->config_handler; }
 
 };
 

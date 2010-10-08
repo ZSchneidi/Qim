@@ -49,11 +49,34 @@ Item {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    qmlInterface.sendCoreAction(4)
+                    qmlInterface.sendCoreAction(6)
                 }
             }
         }
         /*configAction end*/
+        /*fullscreen begin*/
+        Item {
+            id: fullscreen
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: configAction.left
+            width: 70
+            Rectangle{
+                anchors.fill: parent
+                color: "green"
+            }
+            Text {
+                anchors.centerIn: parent
+                text: "Fullscreen"
+            }
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    qmlInterface.sendCoreAction(5)
+                }
+            }
+        }
+        /*fullscreen end*/
     }
 
 }

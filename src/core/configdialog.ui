@@ -46,13 +46,13 @@
       <rect>
        <x>190</x>
        <y>120</y>
-       <width>111</width>
+       <width>114</width>
        <height>22</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QCheckBox" name="checkBox_2">
+       <widget class="QCheckBox" name="check_secure_nav">
         <property name="text">
          <string>secure navigation:</string>
         </property>
@@ -73,7 +73,7 @@
       <string>loading features</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_5">
+    <widget class="QCheckBox" name="check_invert_nav">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -86,7 +86,7 @@
       <string>invert navigation</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_6">
+    <widget class="QCheckBox" name="check_inver_zooming">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -99,7 +99,7 @@
       <string>invert zoom direction</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_13">
+    <widget class="QCheckBox" name="check_nav_loop">
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -112,7 +112,7 @@
       <string>activate navigation loop</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -143,11 +143,11 @@
        </spacer>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox"/>
+       <widget class="QComboBox" name="lang_combo_box"/>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -178,11 +178,11 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="supp_file_edit"/>
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -193,7 +193,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="check_image_preload">
         <property name="text">
          <string>Image preload:</string>
         </property>
@@ -201,7 +201,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -212,7 +212,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QCheckBox" name="checkBox_3">
+       <widget class="QCheckBox" name="check_load_subdir">
         <property name="text">
          <string>load subdirectories:</string>
         </property>
@@ -220,7 +220,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -231,7 +231,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_6">
       <item>
-       <widget class="QCheckBox" name="checkBox_4">
+       <widget class="QCheckBox" name="check_load_subdir_files">
         <property name="text">
          <string>load files from subdirectory:</string>
         </property>
@@ -244,7 +244,7 @@
     <attribute name="title">
      <string>Visual Style</string>
     </attribute>
-    <widget class="QCheckBox" name="checkBox_15">
+    <widget class="QCheckBox" name="check_start_fullscreen">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -257,7 +257,7 @@
       <string>start in fullscreen</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_16">
+    <widget class="QCheckBox" name="check_advanced_ui">
      <property name="geometry">
       <rect>
        <x>230</x>
@@ -282,7 +282,7 @@
      <property name="title">
       <string>advanced Ui features</string>
      </property>
-     <widget class="QCheckBox" name="checkBox_9">
+     <widget class="QCheckBox" name="check_image_smooth">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -295,7 +295,7 @@
        <string>activate image smooth</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_8">
+     <widget class="QCheckBox" name="check_shadow_box">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -308,7 +308,7 @@
        <string>activate shadowbox</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_7">
+     <widget class="QCheckBox" name="check_image_list">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -334,7 +334,7 @@
      <property name="title">
       <string>image handling</string>
      </property>
-     <widget class="QCheckBox" name="checkBox_12">
+     <widget class="QCheckBox" name="check_load_fileinfo">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -347,7 +347,7 @@
        <string>load file infos</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_11">
+     <widget class="QCheckBox" name="check_image_streching">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -360,7 +360,7 @@
        <string>strech images</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox_10">
+     <widget class="QCheckBox" name="check_image_scaling">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -386,7 +386,7 @@
      <property name="title">
       <string>visual style options</string>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -417,7 +417,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QSlider" name="horizontalSlider">
+        <widget class="QSlider" name="background_opacity">
          <property name="maximum">
           <number>10</number>
          </property>
@@ -435,7 +435,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -466,7 +466,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox_2">
+        <widget class="QComboBox" name="theme_combo_box">
          <item>
           <property name="text">
            <string>White</string>
@@ -486,7 +486,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -517,7 +517,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_6">
+        <widget class="QLabel" name="background_color_label">
          <property name="minimumSize">
           <size>
            <width>40</width>
@@ -547,7 +547,7 @@
     <attribute name="title">
      <string>Plug-in</string>
     </attribute>
-    <widget class="QCheckBox" name="checkBox_14">
+    <widget class="QCheckBox" name="check_activate_plugin">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -562,7 +562,7 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="save_config_button">
    <property name="geometry">
     <rect>
      <x>280</x>
@@ -575,7 +575,7 @@
     <string>save</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="cancel_config_buttion">
    <property name="geometry">
     <rect>
      <x>370</x>
