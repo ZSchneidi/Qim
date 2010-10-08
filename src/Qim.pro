@@ -16,9 +16,7 @@ SOURCES += main.cpp \
     core/fileinfohandler.cpp \
     core/imagedatamodel.cpp \
     core/fileinfothread.cpp \
-    core/qmlinterface.cpp \
-    core/configdialog.cpp \
-    core/confighandler.cpp
+    core/qmlinterface.cpp
 
 HEADERS += core/coreengine.h \
     manager/pluginmmanager.h \
@@ -28,15 +26,11 @@ HEADERS += core/coreengine.h \
     core/fileinfohandler.h \
     core/imagedatamodel.h \
     core/fileinfothread.h \
-    core/qmlinterface.h \
-    core/configdialog.h \
-    core/confighandler.h \
-    core/globaldefinitions.h
+    core/qmlinterface.h
 
 
 FORMS += mainviewer.ui \
-    core/fileinfohandler.ui \
-    core/configdialog.ui
+    core/fileinfohandler.ui
 
 TRANSLATIONS = theme/language/qim_lang_de_DE.ts
 
@@ -53,4 +47,7 @@ OTHER_FILES += \
     visuallayer/elements/CustomWindowResizer.qml \
     visuallayer/elements/CustomTitleBar.qml \
     visuallayer/elements/CustomMenuBar.qml \
-    visuallayer/QimMainUILayer.qml \
+    visuallayer/QimMainUILayer.qml
+
+RESOURCES += \
+    main_resource.qrc
