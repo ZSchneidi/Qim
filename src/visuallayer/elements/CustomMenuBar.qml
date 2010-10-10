@@ -26,7 +26,7 @@ Item {
             MouseArea{
                 anchors.fill: parent
                 onClicked: {
-                    qmlInterface.sendCoreAction(3)
+                    qmlInterface.sendCoreAction(2)
                 }
             }
         }

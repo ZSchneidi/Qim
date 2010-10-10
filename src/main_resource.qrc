@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/qml_source">
+        <file>visuallayer/QimMainUILayer.qml</file>
+        <file>visuallayer/ContextListView.qml</file>
+        <file>visuallayer/QimDefaultLayer.qml</file>
+        <file>visuallayer/QimVisualLayer.qml</file>
+        <file>visuallayer/elements/CustomMenuBar.qml</file>
+        <file>visuallayer/elements/CustomTitleBar.qml</file>
+        <file>visuallayer/elements/CustomWindowResizer.qml</file>
+        <file>visuallayer/elements/ImageListDelegate.qml</file>
+        <file>visuallayer/elements/ImageListDelegateDetails.qml</file>
+        <file>visuallayer/elements/ImageListVisualDataModel.qml</file>
+        <file>visuallayer/elements/ListDelegate.qml</file>
+        <file>visuallayer/elements/ShadowBox.qml</file>
+    </qresource>
+    <qresource prefix="/img_source">
+        <file>visuallayer/img/arrow.png</file>
+        <file>visuallayer/img/close_active.png</file>
+        <file>visuallayer/img/close_inactive.png</file>
+        <file>visuallayer/img/max_active.png</file>
+        <file>visuallayer/img/max_inactive.png</file>
+        <file>visuallayer/img/mini_active.png</file>
+        <file>visuallayer/img/mini_inactive.png</file>
+        <file>visuallayer/img/resizer.png</file>
+        <file>visuallayer/img/seperator.png</file>
+        <file>visuallayer/img/shadow-corner.png</file>
+        <file>visuallayer/img/shadow-left.png</file>
+        <file>visuallayer/img/shadow-top.png</file>
+        <file>visuallayer/img/shadow.png</file>
+        <file>visuallayer/img/shadow1.png</file>
+        <file>visuallayer/img/titlebar_background.png</file>
+    </qresource>
+</RCC>

@@ -6,34 +6,52 @@
 #define QT_USE_FAST_CONCATENATION
 #define QT_USE_FAST_OPERATOR_PLUS
 
+
+
+/*The ConfigHandler operates with a config file which name is defined
+ *in the globaldefinition.h to swith features on or off the handler
+ *is parsing the config file and provides information about the config
+ *swithes these switch identifiers are also defined in the globaldefinition.h
+ */
 ConfigHandler::ConfigHandler()
 {
-    /*the config_head_line is just a short comment in the config file*/
+    /*the config_head_line is just a comment in the config file*/
     this->config_head_line = QString("#") + QString(APP_NAME) + QString("-Config\n");
-    this->config_head_line.append("#this config file is automatically generated\n#please don't edit this lines unless you know what you're doing\n");
+    this->config_head_line.append("#this config file is automatically generated\n#please don't edit these lines unless you know what you're doing\n");
+    this->config_head_line.append("#the config allow only single line comments with # or // - do not append comments after a config switch\n");
+    this->config_head_line.append(QString("#deleted options will be restored automatically by ")+QString(APP_NAME)+QString("\n"));
 
     this->config_map = new  QMap<QString, QString>;
     this->config_map_iterator = new QMap<QString, QString>::iterator;
-
 
     /*on constructing the config_handler the config file has to be loaded
      *and parsed to set all config variables
      */
     this->config_file = new QFile(CONFIG_FILE);
-    if(this->config_file->open(QIODevice::ReadWrite))
+    if(!this->config_file->exists())
     {
-        while (!this->config_file->atEnd())
-        {
-            QByteArray line = this->config_file->readLine();
-            QString temp_line(line);
-            if(!isConfigComment(temp_line) && temp_line.count() > 2)
-            {
-                *this->config_map_iterator = this->extendConfigMap(temp_line);
-                qDebug() << this->config_map_iterator->key() << "is " << this->config_map_iterator->value();
-            }
-        }
+        this->restoreConfigFile();
     }
-    this->config_file->close();
+    else
+    {
+        if(this->config_file->open(QIODevice::ReadWrite))
+        {
+            while (!this->config_file->atEnd())
+            {
+                QByteArray line = this->config_file->readLine();
+                QString temp_line(line);
+                if(!isConfigComment(temp_line) && temp_line.count() > 2)
+                {
+                    *this->config_map_iterator = this->extendConfigMap(temp_line);
+                    //qDebug() << this->config_map_iterator->key() << "is " << this->config_map_iterator->value();
+                }
+            }
+
+            this->config_file->close();
+        }
+        else
+            qDebug() << "cant open config file";
+    }
 }
 
 QMap<QString, QString>::iterator ConfigHandler::extendConfigMap(const QString line)
@@ -67,21 +85,37 @@ bool ConfigHandler::writeNewConfig()
         return true;
 }
 
-/*return the bool equivalent to the bool value of key*/
+/*if the config file does not exist the config handler tries to restore it*/
+bool ConfigHandler::restoreConfigFile()
+{
+    if(this->config_file->open(QIODevice::ReadWrite))
+    {
+        qDebug() << "try to restore config - not implemented yet";
+        this->config_file->close();
+        return true;
+    }
+    else
+    {
+        qDebug() << "cant open config file";
+        return false;
+    }
+}
+
+/*return the bool equivalent to the bool value of key
+ *if the key wasn't found in the config file it returns false
+ */
 bool ConfigHandler::getBoolFromValue(const QString key)
 {
-    QMap<QString, QString>::const_iterator i = this->config_map->find(key);
-    if(i.value().toUpper() == "TRUE" )
+    if(this->config_map->find(key).value().toUpper() == "TRUE" )
         return true;
     else
         return false;
 }
 
 /*return the value from key as QString*/
-QString ConfigHandler::getStringValue(const QString key)
+QString ConfigHandler::getStringFromValue(const QString key)
 {
-    QMap<QString, QString>::const_iterator i = this->config_map->find(key);
-    return i.value();
+    return this->config_map->find(key).value();
 }
 
 /*return a bool String equivalent of value*/
@@ -93,254 +127,323 @@ QString ConfigHandler::getStrFromBool(const bool value)
         return "FALSE";
 }
 
-/*return the value of DEF_WINDIOW_SIZE*/
+/*return true is the key is stored in the config_map otherwise return false*/
+bool ConfigHandler::switchExists(const QString key)
+{
+    if(this->config_map->find(key) != this->config_map->end())
+        return true;
+    else
+        return false;
+}
+
+/*defaul window size getter and setter*/
 QSize ConfigHandler::defWindowSize()
 {
     /*search for defaul size flag and make QSize out of it*/
-    QString value = this->getStringValue("DEF_WINDIOW_SIZE").toUpper();
-    int width = QString(value).remove(value.indexOf("X"),value.length()).toInt();
-    int height = QString(value).remove(0,value.indexOf("X")+1).toInt();
+    QString value;
+
+    if(this->switchExists(WINDOW_SIZE_SWITCH))
+    {
+        value = this->getStringFromValue(WINDOW_SIZE_SWITCH);
+    }
+    /*if the value of the window size switch wasn't found set size to default value definition*/
+    else
+    {
+        value = DEFAULT_WINDOW_SIZE;
+    }
+    int width = QString(value).remove(value.indexOf(CONFIG_SIZE_SEPERATOR),value.length()).toInt();
+    int height = QString(value).remove(0,value.indexOf(CONFIG_SIZE_SEPERATOR)+1).toInt();
     return QSize(width,height);
 }
 
 void ConfigHandler::setDefWindowSize(const QSize size)
 {
     QString new_size;
-    new_size.append(QString::number(size.width())).append("x").append(QString::number(size.height()));
-    this->config_map->insert("DEF_WINDIOW_SIZE",new_size);
+    new_size.append(QString::number(size.width())).append(CONFIG_SIZE_SEPERATOR).append(QString::number(size.height()));
+    this->config_map->insert(WINDOW_SIZE_SWITCH,new_size);
 }
 
 /*start maximizing getter and setter*/
 bool ConfigHandler::startMaximized()
 {
-    return this->getBoolFromValue("START_MAXIMIZED");
+    if(this->switchExists(MAXIMIZED_SWITCH))
+        return this->getBoolFromValue(MAXIMIZED_SWITCH);
+    else
+        return DEFAULT_START_MAX;
 }
 
 void ConfigHandler::setStartMaximized(const bool is_max)
 {
-    this->config_map->insert("START_MAXIMIZED",this->getStrFromBool(is_max));
+    this->config_map->insert(MAXIMIZED_SWITCH,this->getStrFromBool(is_max));
 }
 
 /*start fullscreen getter and setter*/
 bool ConfigHandler::startFullScreen()
 {
-    return this->getBoolFromValue("START_FULLSCREEN");
+    if(this->switchExists(FULLSCREEN_SWITCH))
+        return this->getBoolFromValue(FULLSCREEN_SWITCH);
+    else
+        return DEFAULT_START_FULL;
 }
 
 void ConfigHandler::setStartFullScreen(const bool is_full)
 {
-
-    this->config_map->insert("START_FULLSCREEN",this->getStrFromBool(is_full));
+    this->config_map->insert(FULLSCREEN_SWITCH,this->getStrFromBool(is_full));
 }
 
 /*file info getter and setter*/
 bool ConfigHandler::isActiveFileInfo()
 {
-    return this->getBoolFromValue("ACTIVATE_FILE_INFO");
+    if(this->switchExists(FILE_INFO_SWITCH))
+        return this->getBoolFromValue(FILE_INFO_SWITCH);
+    else
+        return DEFAULT_FILE_INFO;
 }
 
 void ConfigHandler::setActiveFileInfo(const bool file_info)
 {
-    this->config_map->insert("ACTIVATE_FILE_INFO",this->getStrFromBool(file_info));
+    this->config_map->insert(FILE_INFO_SWITCH,this->getStrFromBool(file_info));
 }
 
 /*image preload getter and setter*/
 bool ConfigHandler::isActiveImagePreload()
 {
-    return this->getBoolFromValue("ACTIVATE_IMAGE_PRELOAD");
+    if(this->switchExists(IMAGE_PRELOAD_SWITCH))
+        return this->getBoolFromValue(IMAGE_PRELOAD_SWITCH);
+    else
+        return DEFAULT_IMAGE_PRE;
 }
 
 void ConfigHandler::setActiveImagePreload(const bool image_pre)
 {
-    this->config_map->insert("ACTIVATE_IMAGE_PRELOAD",this->getStrFromBool(image_pre));
+    this->config_map->insert(IMAGE_PRELOAD_SWITCH,this->getStrFromBool(image_pre));
 }
 
 /*image scaling getter and setter*/
 bool ConfigHandler::isActiveImageScale()
 {
-    return this->getBoolFromValue("ACTIVATE_IMAGE_SCALE");
+    if(this->switchExists(IMAGE_SCALE_SWITCH))
+        return this->getBoolFromValue(IMAGE_SCALE_SWITCH);
+    else
+        return DEFAULT_IMAGE_SCALE;
 }
 
 void ConfigHandler::setActiveImageScale(const bool image_scale)
 {
-    this->config_map->insert("ACTIVATE_IMAGE_SCALE", this->getStrFromBool(image_scale));
+    this->config_map->insert(IMAGE_SCALE_SWITCH, this->getStrFromBool(image_scale));
 }
 
 /*image smooth */
 bool ConfigHandler::isActiveImageSmooth()
 {
-    return this->getBoolFromValue("ACTIVATE_IMAGE_SMOOTH");
+    if(this->switchExists(IMAGE_SMOOTH_SWITCH))
+        return this->getBoolFromValue(IMAGE_SMOOTH_SWITCH);
+    else
+        return DEFAULT_IMAGE_SMOOTH;
 }
 
 void ConfigHandler::setActiveImageSmooth(const bool image_smooth)
 {
-    this->config_map->insert("ACTIVATE_IMAGE_SMOOTH", this->getStrFromBool(image_smooth));
+    this->config_map->insert(IMAGE_SMOOTH_SWITCH, this->getStrFromBool(image_smooth));
 }
 
 /*image streching getter and setter*/
 bool ConfigHandler::isActiveImageStrech()
 {
-    return this->getBoolFromValue("ACTIVATE_IMAGE_STRECH");
+    if(this->switchExists(IMAGE_STRECH_SWITCH))
+        return this->getBoolFromValue(IMAGE_STRECH_SWITCH);
+    else
+        return DEFAULT_IMAGE_STRECH;
 }
 
 void ConfigHandler::setActiveImageStrech(const bool image_strech)
 {
-    this->config_map->insert("ACTIVATE_IMAGE_STRECH", this->getStrFromBool(image_strech));
+    this->config_map->insert(IMAGE_STRECH_SWITCH, this->getStrFromBool(image_strech));
 }
 
 /*navigation loop getter and setter*/
 bool ConfigHandler::isActiveNavLoop()
 {
-    return this->getBoolFromValue("ACTIVATE_NAV_LOOP");
+    if(this->switchExists(NAV_LOOP_SWITCH))
+        return this->getBoolFromValue(NAV_LOOP_SWITCH);
+    else
+        return DEFAULT_NAV_LOOP;
 }
 
 void ConfigHandler::setActiveNavigationLoop(const bool nav_loop)
 {
-    this->config_map->insert("ACTIVATE_NAV_LOOP", this->getStrFromBool(nav_loop));
+    this->config_map->insert(NAV_LOOP_SWITCH, this->getStrFromBool(nav_loop));
 }
 
 /*plugins getter and setter*/
 bool ConfigHandler::isActivePlugIn()
 {
-    return this->getBoolFromValue("ACTIVATE_PLUGIN");
+    if(this->switchExists(PLUGIN_SWITCH))
+        return this->getBoolFromValue(PLUGIN_SWITCH);
+    else
+        return DEFAULT_PLUGIN;
 }
 
 void ConfigHandler::setActivePlugin(const bool plugin)
 {
-    this->config_map->insert("ACTIVATE_PLUGIN", this->getStrFromBool(plugin));
+    this->config_map->insert(PLUGIN_SWITCH, this->getStrFromBool(plugin));
 }
 
 /*qml list getter and setter*/
 bool ConfigHandler::isActiveQmlList()
 {
-    return this->getBoolFromValue("ACTIVATE_QML_LIST");
+    if(this->switchExists(QML_LIST_SWITCH))
+        return this->getBoolFromValue(QML_LIST_SWITCH);
+    else
+        return DEFAULT_QML_LIST;
 }
 
 void ConfigHandler::setActiveQmlList(const bool qml_list)
 {
-    this->config_map->insert("ACTIVATE_QML_LIST", this->getStrFromBool(qml_list));
+    this->config_map->insert(QML_LIST_SWITCH, this->getStrFromBool(qml_list));
 }
 
 /*raw support getter and setter*/
 bool ConfigHandler::isActiveRawSupport()
 {
-    return this->getBoolFromValue("ACTIVATE_RAW_SUPPORT");
+    if(this->switchExists(RAW_SUPPORT_SWITCH))
+        return this->getBoolFromValue(RAW_SUPPORT_SWITCH);
+    else
+        return DEFAULT_RAW_SUPP;
 }
 
 void ConfigHandler::setActiveRawSupport(const bool raw_support)
 {
-    this->config_map->insert("ACTIVATE_RAW_SUPPORT",this->getStrFromBool(raw_support));
+    this->config_map->insert(RAW_SUPPORT_SWITCH,this->getStrFromBool(raw_support));
 }
 
-/*secure navigation*/
+/*secure navigation getter and setter*/
 bool ConfigHandler::isActiveSecureNav()
 {
-    return this->getBoolFromValue("ACTIVATE_SECURE_NAV");
+    if(this->switchExists(SECURE_NAV_SWITCH))
+        return this->getBoolFromValue(SECURE_NAV_SWITCH);
+    else
+        return DEFAULT_SEC_NAV;
 }
 
 void ConfigHandler::setActiveSecureNav(const bool sec_nav)
 {
-    this->config_map->insert("ACTIVATE_SECURE_NAV", this->getStrFromBool(sec_nav));
+    this->config_map->insert(SECURE_NAV_SWITCH, this->getStrFromBool(sec_nav));
 }
 
 
 /*shadowbox getter and setter*/
 bool ConfigHandler::isActiveShadowBox()
 {
-    return this->getBoolFromValue("ACTIVATE_SHADOWBOX");
+    if(this->switchExists(SHADOWBOX_SWITCH))
+        return this->getBoolFromValue(SHADOWBOX_SWITCH);
+    else
+        return DEFAULT_SHAD_BOX;
 }
 
 void ConfigHandler::setActiveShadowBox(const bool shad_box)
 {
-    this->config_map->insert("ACTIVATE_SHADOWBOX", this->getStrFromBool(shad_box));
+    this->config_map->insert(SHADOWBOX_SWITCH, this->getStrFromBool(shad_box));
 }
 
 /*include subdir getter and setter*/
 bool ConfigHandler::includeSubdir()
 {
-    return this->getBoolFromValue("INCLUDE_SUBDIR");
+    if(this->switchExists(SUBDIR_SWITCH))
+        return this->getBoolFromValue(SUBDIR_SWITCH);
+    else
+        return DEFAULT_SUBDIR;
 }
 
 void ConfigHandler::setIncludeSubDir(const bool sub_dir)
 {
-    this->config_map->insert("INCLUDE_SUBDIR", this->getStrFromBool(sub_dir));
+    this->config_map->insert(SUBDIR_SWITCH, this->getStrFromBool(sub_dir));
 }
 
 /*include subdir files getter and setter*/
 bool ConfigHandler::includeSubdirFiles()
 {
-    return this->getBoolFromValue("INCLUDE_SUBDIR_FILES");
+    if(this->switchExists(SUBDIR_FILES_SWITCH))
+        return this->getBoolFromValue(SUBDIR_FILES_SWITCH);
+    else
+        return DEFAULT_SUBDIR_FILE;
 }
 
 void ConfigHandler::setIncludeSubDirFiles(const bool sub_dir_files)
 {
-    this->config_map->insert("INCLUDE_SUBDIR_FILES", this->getStrFromBool(sub_dir_files));
+    this->config_map->insert(SUBDIR_FILES_SWITCH, this->getStrFromBool(sub_dir_files));
 }
 
 /*invert navigation direction getter and setter*/
 bool ConfigHandler::invertNavDirection()
 {
-    return this->getBoolFromValue("INVERT_NAV_DIRECTION");
+    if(this->switchExists(INVERT_NAV_SWITCH))
+        return this->getBoolFromValue(INVERT_NAV_SWITCH);
+    else
+        return DEFAULT_INV_NAV;
 }
 
 void ConfigHandler::setInvertNavigation(const bool inv_nav)
 {
-    this->config_map->insert("INVERT_NAV_DIRECTION", this->getStrFromBool(inv_nav));
+    this->config_map->insert(INVERT_NAV_SWITCH, this->getStrFromBool(inv_nav));
 }
 
 /*invert zoom direction getter and setter*/
 bool ConfigHandler::invertZoomDirection()
 {
-    return this->getBoolFromValue("INVERT_ZOOM_DIRECTION");
+    if(this->switchExists(INVERT_ZOOM_SWITCH))
+        return this->getBoolFromValue(INVERT_ZOOM_SWITCH);
+    else
+        return DEFUALT_INV_ZOOM;
 }
 
 void ConfigHandler::setInvertZoom(const bool inv_zoom)
 {
-    this->config_map->insert("INVERT_ZOOM_DIRECTION", this->getStrFromBool(inv_zoom));
+    this->config_map->insert(INVERT_ZOOM_SWITCH, this->getStrFromBool(inv_zoom));
 }
 
 /*main background color getter and setter*/
 QString ConfigHandler::mainBackgroundColor()
 {
-    return this->getStringValue("MAIN_BACKGROUND_COLOR");
+    return this->getStringFromValue(BACKGROUND_COLOR_SWITCH);
 }
 
 void ConfigHandler::setMainBackgroundColor(const QString back_color)
 {
-    this->config_map->insert("MAIN_BACKGROUND_COLOR", back_color);
+    this->config_map->insert(BACKGROUND_COLOR_SWITCH, back_color);
 }
 
 /*main theme getter and setter*/
 QString ConfigHandler::mainTheme()
 {
-    return this->getStringValue("MAIN_THEME");
+    return this->getStringFromValue(MAIN_THEME_SWITCH);
 }
 
 void ConfigHandler::setMainTheme(const QString main_theme)
 {
-    this->config_map->insert("MAIN_THEME",main_theme);
+    this->config_map->insert(MAIN_THEME_SWITCH,main_theme);
 }
 
 /*main language getter and setter*/
 QString ConfigHandler::mainLanguage()
 {
-    return this->getStringValue("MAIN_LANG");
+    return this->getStringFromValue(MAIN_LANG_SWITCH);
 }
 
 void ConfigHandler::setMainLanguage(const QString main_lang)
 {
-    this->config_map->insert("MAIN_LANG",main_lang);
+    this->config_map->insert(MAIN_LANG_SWITCH,main_lang);
 }
 
 /*supported files*/
 QString ConfigHandler::supFileFormatStr()
 {
-    return this->getStringValue("SUP_FILE_FORMAT");
+    return this->getStringFromValue(SUPP_FILE_FORMAT_SWITCH);
 }
 
-void ConfigHandler::setSupportedFormats(const Qstring supp_format)
+void ConfigHandler::setSupportedFormats(const QString supp_format)
 {
-    this->config_map->insert("SUP_FILE_FORMAT",supp_format);
+    this->config_map->insert(SUPP_FILE_FORMAT_SWITCH,supp_format);
 }
 
 bool ConfigHandler::isConfigComment(const QString line)

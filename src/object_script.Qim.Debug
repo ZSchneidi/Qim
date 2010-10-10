@@ -16,4 +16,5 @@ INPUT(
 ./debug\moc_imagedatamodel.o
 ./debug\moc_qmlinterface.o
 ./debug\moc_configdialog.o
+./debug\qrc_main_resource.o
 );

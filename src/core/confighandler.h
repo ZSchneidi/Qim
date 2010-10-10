@@ -16,8 +16,11 @@ class ConfigHandler
     QString config_head_line;
 
     bool getBoolFromValue(const QString key);
-    QString getStringValue(const QString key);
+    QString getStringFromValue(const QString key);
     QString getStrFromBool(const bool value);
+    bool restoreConfigFile();
+    bool switchExists(const QString key);
+
 
 
 public:
@@ -62,7 +65,7 @@ public:
     void setIncludeSubDirFiles(const bool sub_dir_files);
     void setInvertNavigation(const bool inv_nav);
     void setInvertZoom(const bool inv_zoom);
-    void setSupportedFormats(const Qstring supp_format);
+    void setSupportedFormats(const QString supp_format);
     void setActiveRawSupport(const bool raw_support);
     void setActiveFileInfo(const bool file_info);
     void setActiveImagePreload(const bool image_pre);
