@@ -3,7 +3,7 @@
 QmlInterface::QmlInterface(CoreEngine *parent_core) :
     QObject()
 {
-    core = parent_core;
+    this->core = parent_core;
     this->curr_index = 0;
     this->main_pos = new QPoint(0,0);
     this->main_size_cursor = new QPoint(0,0);

@@ -13,8 +13,9 @@
  *is parsing the config file and provides information about the config
  *swithes these switch identifiers are also defined in the globaldefinition.h
  */
-ConfigHandler::ConfigHandler()
+ConfigHandler::ConfigHandler(CoreEngine *core)
 {
+    this->core = core;
     /*the config_head_line is just a comment in the config file*/
     this->config_head_line = QString("#") + QString(APP_NAME) + QString("-Config\n");
     this->config_head_line.append("#this config file is automatically generated\n#please don't edit these lines unless you know what you're doing\n");
@@ -23,6 +24,7 @@ ConfigHandler::ConfigHandler()
 
     this->config_map = new  QMap<QString, QString>;
     this->config_map_iterator = new QMap<QString, QString>::iterator;
+    this->config_file_rw_access = false;
 
     /*on constructing the config_handler the config file has to be loaded
      *and parsed to set all config variables
@@ -30,12 +32,13 @@ ConfigHandler::ConfigHandler()
     this->config_file = new QFile(CONFIG_FILE);
     if(!this->config_file->exists())
     {
-        this->restoreConfigFile();
+        this->restoreConfig();
     }
     else
     {
         if(this->config_file->open(QIODevice::ReadWrite))
         {
+            this->config_file_rw_access = true;
             while (!this->config_file->atEnd())
             {
                 QByteArray line = this->config_file->readLine();
@@ -43,14 +46,21 @@ ConfigHandler::ConfigHandler()
                 if(!isConfigComment(temp_line) && temp_line.count() > 2)
                 {
                     *this->config_map_iterator = this->extendConfigMap(temp_line);
-                    //qDebug() << this->config_map_iterator->key() << "is " << this->config_map_iterator->value();
+                    qDebug() << this->config_map_iterator->key() << "is " << this->config_map_iterator->value();
                 }
             }
-
+            /*if the config is incomplete restore all missing config switches*/
+            this->restoreConfig();
             this->config_file->close();
         }
+        /*if the config file can't be opened just to restore default config for runtime
+         *
+         */
         else
+        {
+            this->restoreConfig();
             qDebug() << "cant open config file";
+        }
     }
 }
 
@@ -65,9 +75,17 @@ QMap<QString, QString>::iterator ConfigHandler::extendConfigMap(const QString li
 
 }
 
-/*befor closing write the config back to config file*/
+/*before closing write the config back to config file*/
 bool ConfigHandler::writeNewConfig()
 {
+    if(!this->config_file_rw_access)
+    {
+        /*if the config_file_rw_access is false the config wasn't read from the
+         *config file if the user would write the config it would be written with default values
+         */
+        QString config_warning = QObject::tr("Could not open Config file! Do you want to reset Config file ?");
+        this->core->showErrorDialog(config_warning);
+    }
     qint64 written_bytes = 0;
     this->config_file = new QFile(CONFIG_FILE);
     this->config_file->open(QIODevice::ReadWrite);
@@ -85,20 +103,57 @@ bool ConfigHandler::writeNewConfig()
         return true;
 }
 
-/*if the config file does not exist the config handler tries to restore it*/
-bool ConfigHandler::restoreConfigFile()
+/*if the config file does not exist the config handler restore the config map with default values
+ *in the case that the config file was opened but incomplete the restoreconfig() will check
+ *if a switch is missing and restore it
+ *the config will be written to file on close via writeNewConfig()
+ */
+void ConfigHandler::restoreConfig()
 {
-    if(this->config_file->open(QIODevice::ReadWrite))
-    {
-        qDebug() << "try to restore config - not implemented yet";
-        this->config_file->close();
-        return true;
-    }
-    else
-    {
-        qDebug() << "cant open config file";
-        return false;
-    }
+    if(this->config_map->find(FILE_INFO_SWITCH) == this->config_map->end())
+        this->config_map->insert(FILE_INFO_SWITCH,this->getStrFromBool(DEFAULT_FILE_INFO));
+    if(this->config_map->find(IMAGE_PRELOAD_SWITCH) == this->config_map->end())
+        this->config_map->insert(IMAGE_PRELOAD_SWITCH,this->getStrFromBool(DEFAULT_IMAGE_PRE));
+    if(this->config_map->find(IMAGE_SCALE_SWITCH) == this->config_map->end())
+        this->config_map->insert(IMAGE_SCALE_SWITCH,this->getStrFromBool(DEFAULT_IMAGE_SCALE));
+    if(this->config_map->find(IMAGE_SMOOTH_SWITCH) == this->config_map->end())
+        this->config_map->insert(IMAGE_SMOOTH_SWITCH,this->getStrFromBool(DEFAULT_IMAGE_SMOOTH));
+    if(this->config_map->find(IMAGE_STRECH_SWITCH) == this->config_map->end())
+        this->config_map->insert(IMAGE_STRECH_SWITCH,this->getStrFromBool(DEFAULT_IMAGE_STRECH));
+    if(this->config_map->find(NAV_LOOP_SWITCH) == this->config_map->end())
+        this->config_map->insert(NAV_LOOP_SWITCH,this->getStrFromBool(DEFAULT_NAV_LOOP));
+    if(this->config_map->find(PLUGIN_SWITCH) == this->config_map->end())
+        this->config_map->insert(PLUGIN_SWITCH,this->getStrFromBool(DEFAULT_PLUGIN));
+    if(this->config_map->find(QML_LIST_SWITCH) == this->config_map->end())
+        this->config_map->insert(QML_LIST_SWITCH,this->getStrFromBool(DEFAULT_QML_LIST));
+    if(this->config_map->find(RAW_SUPPORT_SWITCH) == this->config_map->end())
+        this->config_map->insert(RAW_SUPPORT_SWITCH,this->getStrFromBool(DEFAULT_RAW_SUPP));
+    if(this->config_map->find(SECURE_NAV_SWITCH) == this->config_map->end())
+        this->config_map->insert(SECURE_NAV_SWITCH,this->getStrFromBool(DEFAULT_SEC_NAV));
+    if(this->config_map->find(SHADOWBOX_SWITCH) == this->config_map->end())
+        this->config_map->insert(SHADOWBOX_SWITCH,this->getStrFromBool(DEFAULT_SHAD_BOX));
+    if(this->config_map->find(WINDOW_SIZE_SWITCH) == this->config_map->end())
+        this->config_map->insert(WINDOW_SIZE_SWITCH,DEFAULT_WINDOW_SIZE);
+    if(this->config_map->find(SUBDIR_SWITCH) == this->config_map->end())
+        this->config_map->insert(SUBDIR_SWITCH,this->getStrFromBool(DEFAULT_SUBDIR));
+    if(this->config_map->find(SUBDIR_FILES_SWITCH) == this->config_map->end())
+        this->config_map->insert(SUBDIR_FILES_SWITCH,this->getStrFromBool(DEFAULT_SUBDIR_FILE));
+    if(this->config_map->find(INVERT_NAV_SWITCH) == this->config_map->end())
+        this->config_map->insert(INVERT_NAV_SWITCH,this->getStrFromBool(DEFAULT_INV_NAV));
+    if(this->config_map->find(INVERT_ZOOM_SWITCH) == this->config_map->end())
+        this->config_map->insert(INVERT_ZOOM_SWITCH,this->getStrFromBool(DEFUALT_INV_ZOOM));
+    if(this->config_map->find(BACKGROUND_COLOR_SWITCH) == this->config_map->end())
+        this->config_map->insert(BACKGROUND_COLOR_SWITCH,DFEAULT_BACK_COLOR);
+    if(this->config_map->find(MAIN_LANG_SWITCH) == this->config_map->end())
+        this->config_map->insert(MAIN_LANG_SWITCH,DEFAULT_MAIN_LANG);
+    if(this->config_map->find(MAIN_THEME_SWITCH) == this->config_map->end())
+        this->config_map->insert(MAIN_THEME_SWITCH,DEFAULT_MAIN_THEME);
+    if(this->config_map->find(FULLSCREEN_SWITCH) == this->config_map->end())
+        this->config_map->insert(FULLSCREEN_SWITCH,this->getStrFromBool(DEFAULT_START_FULL));
+    if(this->config_map->find(MAXIMIZED_SWITCH) == this->config_map->end())
+        this->config_map->insert(MAXIMIZED_SWITCH,this->getStrFromBool(DEFAULT_START_MAX));
+    if(this->config_map->find(SUPP_FILE_FORMAT_SWITCH) == this->config_map->end())
+        this->config_map->insert(SUPP_FILE_FORMAT_SWITCH,DEFAULT_SUPP_FORMAT);
 }
 
 /*return the bool equivalent to the bool value of key

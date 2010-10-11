@@ -11,6 +11,7 @@ src/Makefile
 src/Makefile.Debug
 src/Makefile.Release
 src/Qim.pro.user
+src/config.cfg
 
 
 

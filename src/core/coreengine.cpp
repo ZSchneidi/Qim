@@ -20,8 +20,11 @@ CoreEngine::CoreEngine(QWidget *parent) :
     //setWindowIcon(QIcon("theme/icon/qim.icon-256.png"));
 
     /*extension objects instantiation*/
-    this->config_handler = new ConfigHandler;
-    this->config_dialog = new ConfigDialog(this,this->getConfigHandler());
+    this->main_local = new QLocale;
+
+    /**/
+    this->config_handler = new ConfigHandler(this);
+    this->config_dialog = new ConfigDialog(this,this,this->getConfigHandler());
     /*initialize the image handler object which provides the image and directory data*/
     this->image_handler = new ImageHandler;
 
@@ -67,7 +70,7 @@ void CoreEngine::setUpMainWindow()
     this->visual_qml_view->setAttribute(Qt::WA_TranslucentBackground);
     this->visual_qml_view->setWindowFlags(Qt::FramelessWindowHint);
 
-    this->setStyleSheet("background:transparent;");
+    //this->setStyleSheet("background:transparent;");
     this->setAttribute(Qt::WA_TranslucentBackground);
     /*turn off system native window decorations which are implemented in qml*/
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -467,6 +470,12 @@ void CoreEngine::callCoreAction(CoreAction action)
     case 4: this->openConfig();
             break;
     }
+}
+
+bool CoreEngine::showErrorDialog(const QString msg)
+{
+    qDebug() << "error: " << msg;
+    return false;
 }
 
 CoreEngine::~CoreEngine()

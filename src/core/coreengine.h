@@ -34,6 +34,8 @@ class ThemeManager;
 class ImageHandler;
 class FileInfoHandler;
 class QmlInterface;
+class ConfigHandler;
+class ConfigDialog;
 
 /*CoreEngine -> ThemeManager interface see below*/
 
@@ -49,7 +51,9 @@ class CoreEngine : public QMainWindow
     /*context for the QDeclarative environment*/
     QDeclarativeContext *context;
 
+
     /*extension objects*/
+    QLocale *main_local;
 
     ConfigDialog *config_dialog;
     ConfigHandler *config_handler;
@@ -140,6 +144,10 @@ public:
     void setQmlIndex(int index);
     inline int currQmlIndex() { return this->curr_qml_index; }
     inline ConfigHandler* getConfigHandler() { return this->config_handler; }
+    inline const QLocale* getMainLocal() const { return this->main_local; }
+
+    bool showErrorDialog(const QString msg);
+
 
 };
 
