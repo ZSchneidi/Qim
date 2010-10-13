@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     core/fileinfothread.cpp \
     core/qmlinterface.cpp \
     core/configdialog.cpp \
-    core/confighandler.cpp
+    core/confighandler.cpp \
+    core/subclass/backgroundcolorpicker.cpp
 
 HEADERS += core/coreengine.h \
     manager/pluginmmanager.h \
@@ -31,7 +32,8 @@ HEADERS += core/coreengine.h \
     core/qmlinterface.h \
     core/configdialog.h \
     core/confighandler.h \
-    core/globaldefinitions.h
+    core/globaldefinitions.h \
+    core/subclass/backgroundcolorpicker.h
 
 
 FORMS += mainviewer.ui \

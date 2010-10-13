@@ -88,19 +88,26 @@ bool ConfigHandler::writeNewConfig()
     }
     qint64 written_bytes = 0;
     this->config_file = new QFile(CONFIG_FILE);
-    this->config_file->open(QIODevice::ReadWrite);
-    this->config_file->write(this->config_head_line.toAscii());
-    QMap<QString, QString>::const_iterator i = this->config_map->constBegin();
-    while (i != this->config_map->constEnd()) {
-        QString line = QString(i.key()).append(":").append(i.value()).append("\n");
-        written_bytes += this->config_file->write(line.toAscii());
-        ++i;
+    this->config_file->remove();
+    if(this->config_file->open(QIODevice::ReadWrite))
+    {
+        this->config_file->write(this->config_head_line.toAscii());
+        QMap<QString, QString>::const_iterator i = this->config_map->constBegin();
+        while (i != this->config_map->constEnd())
+        {
+            QString line = QString(i.key()).append(":").append(i.value()).append("\n");
+            written_bytes += this->config_file->write(line.toAscii());
+            ++i;
+        }
+        this->config_file->close();
+        if(written_bytes <= 0)
+            return false;
+        else
+            return true;
     }
-    this->config_file->close();
-    if(written_bytes <= 0)
-        return false;
+    /*if config couldn't be written a warning should be shown*/
     else
-        return true;
+        return false;
 }
 
 /*if the config file does not exist the config handler restore the config map with default values
@@ -144,6 +151,8 @@ void ConfigHandler::restoreConfig()
         this->config_map->insert(INVERT_ZOOM_SWITCH,this->getStrFromBool(DEFUALT_INV_ZOOM));
     if(this->config_map->find(BACKGROUND_COLOR_SWITCH) == this->config_map->end())
         this->config_map->insert(BACKGROUND_COLOR_SWITCH,DFEAULT_BACK_COLOR);
+    if(this->config_map->find(BACKGROUND_OPACITY_SWITCH) == this->config_map->end())
+        this->config_map->insert(BACKGROUND_OPACITY_SWITCH,DFEAULT_BACK_OPACITY);
     if(this->config_map->find(MAIN_LANG_SWITCH) == this->config_map->end())
         this->config_map->insert(MAIN_LANG_SWITCH,DEFAULT_MAIN_LANG);
     if(this->config_map->find(MAIN_THEME_SWITCH) == this->config_map->end())
@@ -154,6 +163,8 @@ void ConfigHandler::restoreConfig()
         this->config_map->insert(MAXIMIZED_SWITCH,this->getStrFromBool(DEFAULT_START_MAX));
     if(this->config_map->find(SUPP_FILE_FORMAT_SWITCH) == this->config_map->end())
         this->config_map->insert(SUPP_FILE_FORMAT_SWITCH,DEFAULT_SUPP_FORMAT);
+    if(this->config_map->find(ADVANCED_UI_SWITCH) == this->config_map->end())
+        this->config_map->insert(ADVANCED_UI_SWITCH,this->getStrFromBool(DEFAULT_ADVANCED_UI));
 }
 
 /*return the bool equivalent to the bool value of key
@@ -460,7 +471,10 @@ void ConfigHandler::setInvertZoom(const bool inv_zoom)
 /*main background color getter and setter*/
 QString ConfigHandler::mainBackgroundColor()
 {
-    return this->getStringFromValue(BACKGROUND_COLOR_SWITCH);
+    if(this->switchExists(BACKGROUND_COLOR_SWITCH))
+        return this->getStringFromValue(BACKGROUND_COLOR_SWITCH);
+    else
+        return DFEAULT_BACK_COLOR;
 }
 
 void ConfigHandler::setMainBackgroundColor(const QString back_color)
@@ -468,10 +482,28 @@ void ConfigHandler::setMainBackgroundColor(const QString back_color)
     this->config_map->insert(BACKGROUND_COLOR_SWITCH, back_color);
 }
 
+/*main background opacity getter and setter*/
+int ConfigHandler::mainBackgroundOpacity()
+{
+    bool ok;
+    if(this->switchExists(BACKGROUND_OPACITY_SWITCH))
+        return this->getStringFromValue(BACKGROUND_OPACITY_SWITCH).toInt(&ok,10);
+    else
+        return QString(DFEAULT_BACK_OPACITY).toInt(&ok,10);
+}
+
+void ConfigHandler::setMainBackgroundOpacity(const int opacity)
+{
+    this->config_map->insert(BACKGROUND_OPACITY_SWITCH,QString::number(opacity));
+}
+
 /*main theme getter and setter*/
 QString ConfigHandler::mainTheme()
 {
-    return this->getStringFromValue(MAIN_THEME_SWITCH);
+    if(this->switchExists(MAIN_THEME_SWITCH))
+        return this->getStringFromValue(MAIN_THEME_SWITCH);
+    else
+        return DEFAULT_MAIN_THEME;
 }
 
 void ConfigHandler::setMainTheme(const QString main_theme)
@@ -482,7 +514,10 @@ void ConfigHandler::setMainTheme(const QString main_theme)
 /*main language getter and setter*/
 QString ConfigHandler::mainLanguage()
 {
-    return this->getStringFromValue(MAIN_LANG_SWITCH);
+    if(this->switchExists(MAIN_LANG_SWITCH))
+        return this->getStringFromValue(MAIN_LANG_SWITCH);
+    else
+        return DEFAULT_MAIN_LANG;
 }
 
 void ConfigHandler::setMainLanguage(const QString main_lang)
@@ -490,10 +525,13 @@ void ConfigHandler::setMainLanguage(const QString main_lang)
     this->config_map->insert(MAIN_LANG_SWITCH,main_lang);
 }
 
-/*supported files*/
+/*supported files getter and setter*/
 QString ConfigHandler::supFileFormatStr()
 {
-    return this->getStringFromValue(SUPP_FILE_FORMAT_SWITCH);
+    if(this->switchExists(SUPP_FILE_FORMAT_SWITCH))
+        return this->getStringFromValue(SUPP_FILE_FORMAT_SWITCH);
+    else
+        return DEFAULT_SUPP_FORMAT;
 }
 
 void ConfigHandler::setSupportedFormats(const QString supp_format)
@@ -501,6 +539,19 @@ void ConfigHandler::setSupportedFormats(const QString supp_format)
     this->config_map->insert(SUPP_FILE_FORMAT_SWITCH,supp_format);
 }
 
+/*advanced ui getter and setter*/
+bool ConfigHandler::isActiveAdvancedUI()
+{
+    if(this->switchExists(ADVANCED_UI_SWITCH))
+        return this->getBoolFromValue(ADVANCED_UI_SWITCH);
+    else
+        return DEFAULT_ADVANCED_UI;
+}
+
+void ConfigHandler::setActiveAdvancedUI(const bool adv_ui)
+{
+    this->config_map->insert(ADVANCED_UI_SWITCH, this->getStrFromBool(adv_ui));
+}
 bool ConfigHandler::isConfigComment(const QString line)
 {
     if(line.startsWith("//") || line.startsWith("#"))

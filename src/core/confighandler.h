@@ -53,6 +53,7 @@ public:
     QString mainBackgroundColor();
     QString supFileFormatStr();
     QSize defWindowSize();
+    int mainBackgroundOpacity();
     bool startMaximized();
     bool startFullScreen();
     bool includeSubdir();
@@ -70,6 +71,7 @@ public:
     bool isActiveNavLoop();
     bool isActivePlugIn();
     bool isActiveRawSupport();
+    bool isActiveAdvancedUI();
 
     /*config switch setter*/
     void setDefWindowSize(const QSize size);
@@ -78,6 +80,7 @@ public:
     void setMainTheme(const QString main_theme);
     void setMainLanguage(const QString main_lang);
     void setMainBackgroundColor(const QString back_color);
+    void setMainBackgroundOpacity(const int opacity);
     void setIncludeSubDir(const bool sub_dir);
     void setIncludeSubDirFiles(const bool sub_dir_files);
     void setInvertNavigation(const bool inv_nav);
@@ -94,6 +97,7 @@ public:
     void setActiveQmlList(const bool qml_list);
     void setActiveSecureNav(const bool sec_nav);
     void setActiveShadowBox(const bool shad_box);
+    void setActiveAdvancedUI(const bool adv_ui);
 
 };
 
