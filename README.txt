@@ -8,7 +8,11 @@ with Qt 4.6.3 (32bit)
 
 Compiled with:
 	GCC 4.4.0
-	MinGW Version: 3.81
+	MinGW Version: 3.81 		//http://www.mingw.org/
+	--------------------
+	14.10.2010 switched to
+	GCC 4.5
+	MinGW Version: 5.1.6
 
 
 doc/		- Main documentation
