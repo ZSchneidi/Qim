@@ -124,6 +124,7 @@ private slots:
     void navigateForward();
     void navigateBackward();
     void toggleFullScreen();
+    void toggleMaxWindow();
     void about();
 
     void open();
@@ -134,7 +135,7 @@ public:
     /*enum declaration*/
     /*the CoreAction enum is used to call QActions from QmlInterface::sendCoreAction()
      */
-    enum CoreAction {OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG};
+    enum CoreAction {OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG,MAXIMIZE};
 
     CoreEngine(QWidget *parent = 0);
     ~CoreEngine();

@@ -15,9 +15,10 @@ class CoreEngine;
  *the configuraton interface is implemented in the configdialog which gets a pointer to the confighandler to
  *set the switches.
  */
-class ConfigHandler
+class ConfigHandler : public QObject
 {
 
+    Q_OBJECT
     /*member*/
     QFile *config_file;
     QMap<QString, QString> *config_map;
@@ -45,6 +46,8 @@ public:
     QMap<QString, QString> *getConfigMap() { return this->config_map; }
     bool writeNewConfig();
 
+    /**/
+    void transactNewConfig(QMap<QString, QString> *temp_config);
 
     /*config switch getter*/
     bool isConfigComment(const QString line);
@@ -98,6 +101,12 @@ public:
     void setActiveSecureNav(const bool sec_nav);
     void setActiveShadowBox(const bool shad_box);
     void setActiveAdvancedUI(const bool adv_ui);
+
+signals:
+
+    void backgroundColorChanged(QString color);
+    void backgroundOpacityChanged(double opacity);
+
 
 };
 

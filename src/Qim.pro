@@ -9,8 +9,8 @@ TARGET = Qim
 TEMPLATE = app
 SOURCES += main.cpp \
     core/coreengine.cpp \
-    manager/pluginmmanager.cpp \
-    manager/thememanager.cpp \
+#    manager/pluginmmanager.cpp \
+#    manager/thememanager.cpp \
     core/imagehandler.cpp \
     core/filesupport.cpp \
     core/fileinfohandler.cpp \
@@ -22,8 +22,8 @@ SOURCES += main.cpp \
     core/subclass/backgroundcolorpicker.cpp
 
 HEADERS += core/coreengine.h \
-    manager/pluginmmanager.h \
-    manager/thememanager.h \
+#    manager/pluginmmanager.h \
+#    manager/thememanager.h \
     core/imagehandler.h \
     core/filesupport.h \
     core/fileinfohandler.h \

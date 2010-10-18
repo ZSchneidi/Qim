@@ -31,7 +31,7 @@ class ConfigDialog : public QDialog
 
     BackgroundColorPicker *back_picker;
 
-    bool init_config_started;
+    bool init_config_done;
 
     void initConfig();
     void setLanguage();
@@ -62,6 +62,7 @@ public slots:
     void on_check_load_fileinfo_stateChanged(int state);
     void on_check_advanced_ui_stateChanged(int state);
     void on_check_start_fullscreen_stateChanged(int state);
+    void on_check_raw_format_stateChanged(int state);
     void on_check_activate_plugin_stateChanged(int state);
     void on_background_opacity_valueChanged(int value);
     /*subclass signals using connect in construtor*/

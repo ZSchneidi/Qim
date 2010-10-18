@@ -43,6 +43,9 @@
 /*these config value definitions are used to switch to an
  *default value if the expected config switch wasn't found in the config
  */
+#define DEFAULT_WINDOW_SIZE_WIDTH 640
+#define DEFAULT_WINDOW_SIZE_HEIGHT 480
+/*if your change the default window size try to keep int and string representation synchron*/
 #define DEFAULT_WINDOW_SIZE "640"CONFIG_SIZE_SEPERATOR"480"
 #define DEFAULT_START_MAX false
 #define DEFAULT_START_FULL false

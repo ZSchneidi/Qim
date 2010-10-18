@@ -11,9 +11,15 @@
 /*The ConfigHandler operates with a config file which name is defined
  *in the globaldefinition.h to swith features on or off the handler
  *is parsing the config file and provides information about the config
- *swithes these switch identifiers are also defined in the globaldefinition.h
+ *swithes to the config dialog and the hole application
+ *these switch identifiers are also defined in the globaldefinition.h
+ *
+ *if additional features have to be implemented remeber following:
+ *implement the getter and setter in the config handler
+ *provide editable widgets in the config dialog
+ *and the signals which are emitted when there value was changed
  */
-ConfigHandler::ConfigHandler(CoreEngine *core)
+ConfigHandler::ConfigHandler(CoreEngine *core) : QObject()
 {
     this->core = core;
     /*the config_head_line is just a comment in the config file*/
@@ -46,7 +52,7 @@ ConfigHandler::ConfigHandler(CoreEngine *core)
                 if(!isConfigComment(temp_line) && temp_line.count() > 2)
                 {
                     *this->config_map_iterator = this->extendConfigMap(temp_line);
-                    qDebug() << this->config_map_iterator->key() << "is " << this->config_map_iterator->value();
+                    //qDebug() << this->config_map_iterator->key() << "is " << this->config_map_iterator->value();
                 }
             }
             /*if the config is incomplete restore all missing config switches*/
@@ -59,7 +65,7 @@ ConfigHandler::ConfigHandler(CoreEngine *core)
         else
         {
             this->restoreConfig();
-            qDebug() << "cant open config file";
+            //qDebug() << "cant open config file";
         }
     }
 }
@@ -166,6 +172,31 @@ void ConfigHandler::restoreConfig()
     if(this->config_map->find(ADVANCED_UI_SWITCH) == this->config_map->end())
         this->config_map->insert(ADVANCED_UI_SWITCH,this->getStrFromBool(DEFAULT_ADVANCED_UI));
 }
+
+/*this method is called when saving the config dialog
+ *it is used to parse all changed values and emit the signals to activate the changed features
+ */
+void ConfigHandler::transactNewConfig(QMap<QString, QString> *temp_config_map)
+{
+    QMap<QString, QString>::const_iterator i = temp_config_map->constBegin();
+    while (i != temp_config_map->constEnd())
+    {
+        QString key = QString(i.key());
+        QString value = QString(i.value());
+        if(value != "")
+        {
+            this->config_map->insert(key,value);
+            if(key == BACKGROUND_OPACITY_SWITCH)
+                emit this->backgroundOpacityChanged(value.toDouble());
+            if(key == BACKGROUND_COLOR_SWITCH)
+                emit this->backgroundColorChanged(value);
+
+            //qDebug() << "write to config " << key << ":" << value;
+        }
+        ++i;
+    }
+}
+
 
 /*return the bool equivalent to the bool value of key
  *if the key wasn't found in the config file it returns false

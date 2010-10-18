@@ -1,8 +1,6 @@
 INPUT(
 ./release\main.o
 ./release\coreengine.o
-./release\pluginmmanager.o
-./release\thememanager.o
 ./release\imagehandler.o
 ./release\filesupport.o
 ./release\fileinfohandler.o
@@ -17,6 +15,7 @@ INPUT(
 ./release\moc_imagedatamodel.o
 ./release\moc_qmlinterface.o
 ./release\moc_configdialog.o
+./release\moc_confighandler.o
 ./release\moc_backgroundcolorpicker.o
 ./release\qrc_main_resource.o
 );

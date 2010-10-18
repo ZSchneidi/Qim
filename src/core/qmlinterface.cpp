@@ -5,11 +5,17 @@ QmlInterface::QmlInterface(CoreEngine *parent_core) :
 {
     this->core = parent_core;
     this->curr_index = 0;
+    this->main_opacity = ((double) this->core->getConfigHandler()->mainBackgroundOpacity()/100);
     this->main_pos = new QPoint(0,0);
     this->main_size_cursor = new QPoint(0,0);
     this->main_size = new QSize();
     this->main_title = new QString;
     this->active_layer = new QString("");
+    this->main_color = new QColor(this->core->getConfigHandler()->mainBackgroundColor());
+
+
+    connect(this->core->getConfigHandler(),SIGNAL(backgroundOpacityChanged(double)),this,SLOT(on_backgroundOpacityChanged(double)));
+    connect(this->core->getConfigHandler(),SIGNAL(backgroundColorChanged(QString)),this,SLOT(on_backgroundColorChanged(QString)));
 
 }
 /*
@@ -26,12 +32,7 @@ void QmlInterface::sendCoreAction(int action)
     /*for definition of coreAction take a look at the enum definition in the qmlinterface header*/
     switch (action)
     {
-        case 0: if(this->core->isMaximized())
-                {
-                    this->core->showNormal();
-                }
-                else
-                    this->core->showMaximized();
+        case 0: this->core->callCoreAction(CoreEngine::MAXIMIZE);
                 break;
         case 1: this->core->showMinimized();
                 break;
@@ -191,8 +192,18 @@ void QmlInterface::emitZoom(const zoomMode mode)
     }
 }
 
+void QmlInterface::on_backgroundOpacityChanged(double opacity)
+{
+    this->main_opacity = opacity/100;
+    emit mainOpacityChanged();
+}
 
-
+void QmlInterface::on_backgroundColorChanged(QString color)
+{
+    *this->main_color = QColor(color);
+    emit mainColorChanged();
+    qDebug() << "color changed";
+}
 
 
 

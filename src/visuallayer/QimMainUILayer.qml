@@ -5,6 +5,9 @@ Item {
     width: 640
     height: 480
 
+    property double main_opacity : qmlInterface.main_opacity
+    property color main_color : qmlInterface.main_color
+
 
     CustomTitleBar{
         id: qimTitleBar
@@ -43,8 +46,8 @@ Item {
         Rectangle{
             id: mainContentBackground
             anchors.fill: parent
-            color: "#a2a2a2"
-            //opacity: 0.8
+            color: main_color
+            opacity: main_opacity
         }
 
         Loader{

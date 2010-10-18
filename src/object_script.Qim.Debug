@@ -1,8 +1,6 @@
 INPUT(
 ./debug\main.o
 ./debug\coreengine.o
-./debug\pluginmmanager.o
-./debug\thememanager.o
 ./debug\imagehandler.o
 ./debug\filesupport.o
 ./debug\fileinfohandler.o
@@ -17,6 +15,7 @@ INPUT(
 ./debug\moc_imagedatamodel.o
 ./debug\moc_qmlinterface.o
 ./debug\moc_configdialog.o
+./debug\moc_confighandler.o
 ./debug\moc_backgroundcolorpicker.o
 ./debug\qrc_main_resource.o
 );

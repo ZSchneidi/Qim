@@ -29,7 +29,7 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->image_handler = new ImageHandler;
 
     /*initialize the styling manager*/
-    this->theme_manager = new ThemeManager(this);
+//this->theme_manager = new ThemeManager(this);
 
     /*initialize the info handler object which contains all kinds of information about the shown image*/
     this->file_info_handler = new FileInfoHandler(this);
@@ -267,6 +267,16 @@ void CoreEngine::toggleFullScreen()
         this->showFullScreen();
 }
 
+void CoreEngine::toggleMaxWindow()
+{
+    if(this->isMaximized())
+    {
+        this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
+    }
+    else if(!this->isMaximized())
+        this->showMaximized();
+}
+
 void CoreEngine::about()
 {
 
@@ -400,7 +410,7 @@ void CoreEngine::closeEvent(QCloseEvent *event)
 {
     this->config_handler->setDefWindowSize(this->size());
     this->config_handler->setStartMaximized(this->isMaximized());
-    this->config_handler->setStartFullScreen(this->isFullScreen());
+    //this->config_handler->setStartFullScreen(this->isFullScreen());
 
     this->config_handler->writeNewConfig();
     this->file_info_handler->close();
@@ -454,7 +464,7 @@ void CoreEngine::setQmlIndex(int index)
 }
 
 
-//OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG
+//OPEN,CLOSE,ABOUT,FULLSCREEN,CONFIG,MAXIMIZE
 void CoreEngine::callCoreAction(CoreAction action)
 {
     switch(action)
@@ -468,6 +478,8 @@ void CoreEngine::callCoreAction(CoreAction action)
     case 3: this->toggleFullScreen();
             break;
     case 4: this->openConfig();
+            break;
+    case 5: this->toggleMaxWindow();
             break;
     }
 }
