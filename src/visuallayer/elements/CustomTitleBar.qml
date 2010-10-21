@@ -16,10 +16,15 @@ Item {
     Rectangle {
         id: background
         anchors.fill: parent
-        Image {
+        /*Image {
             anchors.fill: parent
             source: "../img/titlebar_background.png"
-        }
+        }*/
+
+        gradient: Gradient {
+        GradientStop { position: 0.0; color: "#E0E0E0" }
+        GradientStop { position: 1.0; color: "#9E9E9E" }
+    }
 
     }
     /*this is the textarea which defines the title of the application*/
@@ -30,7 +35,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         text: title
         font.pointSize: 8
-        color: "white"
+        color: "#565656"
     }
 
     /*this is the mouse handler which is designed to move the MainWindow of the application via qmlInterface*/

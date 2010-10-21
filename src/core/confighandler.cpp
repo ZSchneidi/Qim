@@ -190,6 +190,8 @@ void ConfigHandler::transactNewConfig(QMap<QString, QString> *temp_config_map)
                 emit this->backgroundOpacityChanged(value.toDouble());
             if(key == BACKGROUND_COLOR_SWITCH)
                 emit this->backgroundColorChanged(value);
+            if(key == SUPP_FILE_FORMAT_SWITCH)
+                emit this->supportedFormatsChanged(value);
 
             //qDebug() << "write to config " << key << ":" << value;
         }

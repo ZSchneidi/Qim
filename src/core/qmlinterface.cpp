@@ -14,9 +14,6 @@ QmlInterface::QmlInterface(CoreEngine *parent_core) :
     this->main_color = new QColor(this->core->getConfigHandler()->mainBackgroundColor());
 
 
-    connect(this->core->getConfigHandler(),SIGNAL(backgroundOpacityChanged(double)),this,SLOT(on_backgroundOpacityChanged(double)));
-    connect(this->core->getConfigHandler(),SIGNAL(backgroundColorChanged(QString)),this,SLOT(on_backgroundColorChanged(QString)));
-
 }
 /*
 QmlInterface::CoreAction QmlInterface::coreAction() const

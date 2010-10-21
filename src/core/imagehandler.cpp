@@ -9,15 +9,16 @@
 /*The image handler is declared in namespace Core*/
 
 
-ImageHandler::ImageHandler()
+ImageHandler::ImageHandler(CoreEngine *core)
 {
+    this->core = core;
     this->isSetCurImage = false;
     this->isSetDir = false;
     this->cur_file_iterator = 0;
     this->first_file_iterator = 0;
     this->last_file_iterator = 0;
     this->cur_file_index = 0;
-    this->file_support_handler = new FileSupport();
+    this->file_support_handler = new FileSupport(this->core->getConfigHandler());
 }
 
 /*

@@ -10,12 +10,15 @@ INPUT(
 ./release\configdialog.o
 ./release\confighandler.o
 ./release\backgroundcolorpicker.o
+./release\customdialogbox.o
 ./release\moc_coreengine.o
+./release\moc_filesupport.o
 ./release\moc_fileinfohandler.o
 ./release\moc_imagedatamodel.o
 ./release\moc_qmlinterface.o
 ./release\moc_configdialog.o
 ./release\moc_confighandler.o
 ./release\moc_backgroundcolorpicker.o
+./release\moc_customdialogbox.o
 ./release\qrc_main_resource.o
 );

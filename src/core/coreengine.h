@@ -29,6 +29,7 @@
 #include "manager/pluginmmanager.h"
 #include "imagedatamodel.h"
 #include "qmlinterface.h"
+#include "core/subclass/customdialogbox.h"
 
 class ThemeManager;
 class ImageHandler;

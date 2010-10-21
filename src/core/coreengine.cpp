@@ -22,11 +22,13 @@ CoreEngine::CoreEngine(QWidget *parent) :
     /*extension objects instantiation*/
     this->main_local = new QLocale;
 
-    /**/
+    /*this is the config handling class it is important that the confighandler is
+     *instatiated before proceed with other classes which use the config handler
+     */
     this->config_handler = new ConfigHandler(this);
     this->config_dialog = new ConfigDialog(this,this,this->getConfigHandler());
     /*initialize the image handler object which provides the image and directory data*/
-    this->image_handler = new ImageHandler;
+    this->image_handler = new ImageHandler(this);
 
     /*initialize the styling manager*/
 //this->theme_manager = new ThemeManager(this);
@@ -47,9 +49,17 @@ CoreEngine::CoreEngine(QWidget *parent) :
     this->scale_factor_x = SCALEFACTORX;
     this->scale_factor_y = SCALEFACTORY;
 
+
+    /*signal slot connections*/
+    connect(this->config_handler,SIGNAL(backgroundOpacityChanged(double)),this->qml_interface,SLOT(on_backgroundOpacityChanged(double)));
+    connect(this->config_handler,SIGNAL(backgroundColorChanged(QString)),this->qml_interface,SLOT(on_backgroundColorChanged(QString)));
+    connect(this->config_handler,SIGNAL(supportedFormatsChanged(QString)),this->image_handler->getFileSupport(),SLOT(onSupportedFormatsChanged(QString)));
+
     /*define visual options of the main window*/
     this->setUpMainWindow();
 
+    //CustomDialogBox *diabox = new CustomDialogBox(this);
+    CustomDialogBox::showDialogBox("Test dialog","This message is just for testing!");
 }
 
 /*define the apearance options of the MainWindow which contains all
@@ -262,7 +272,10 @@ void CoreEngine::navigateBackward()
 void CoreEngine::toggleFullScreen()
 {
     if(this->isFullScreen())
+    {
         this->showNormal();
+        this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
+    }
     else if(!this->isFullScreen())
         this->showFullScreen();
 }
@@ -271,10 +284,13 @@ void CoreEngine::toggleMaxWindow()
 {
     if(this->isMaximized())
     {
+        this->showNormal();
         this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
     }
     else if(!this->isMaximized())
+    {
         this->showMaximized();
+    }
 }
 
 void CoreEngine::about()

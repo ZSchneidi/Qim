@@ -54,7 +54,6 @@ ConfigDialog::ConfigDialog(QWidget *parent,CoreEngine *core, ConfigHandler *conf
     this->ui->check_shadow_box->setDisabled(true);
     this->ui->check_advanced_ui->setDisabled(true);
     this->ui->theme_combo_box->setDisabled(true);
-    this->ui->supp_file_edit->setDisabled(true);
     this->ui->lang_combo_box->setDisabled(true);
 
 }

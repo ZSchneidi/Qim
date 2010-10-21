@@ -10,12 +10,15 @@ INPUT(
 ./debug\configdialog.o
 ./debug\confighandler.o
 ./debug\backgroundcolorpicker.o
+./debug\customdialogbox.o
 ./debug\moc_coreengine.o
+./debug\moc_filesupport.o
 ./debug\moc_fileinfohandler.o
 ./debug\moc_imagedatamodel.o
 ./debug\moc_qmlinterface.o
 ./debug\moc_configdialog.o
 ./debug\moc_confighandler.o
 ./debug\moc_backgroundcolorpicker.o
+./debug\moc_customdialogbox.o
 ./debug\qrc_main_resource.o
 );

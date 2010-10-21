@@ -9,8 +9,13 @@
 #include <QFile>
 #include <QObject>
 
+#include "core/coreengine.h"
 #include "filesupport.h"
 #include "imagedatamodel.h"
+
+
+class CoreEngine;
+class FileSupport;
 
 /*
  *The image handler provides all functions needed to store
@@ -56,6 +61,9 @@ private:
     /*provides all information about supported file types*/
     FileSupport *file_support_handler;
 
+    /*the coreengine provides all major features used by several classes */
+    CoreEngine *core;
+
     /*will be initialized by getFileListPosOf() and updated by loadNextImage() or loadPrevImage()*/
     int cur_file_index;
 
@@ -74,7 +82,7 @@ private:
 
 public:
 
-    ImageHandler();
+    ImageHandler(CoreEngine *core);
 
     /*is used to verify whether the cur_image is already loaded*/
     bool isSetCurImage;
@@ -105,6 +113,7 @@ public:
     /*returns a string with the path of the current file for the main title*/
     inline const QString& getTitleStr() const {return title_str; }
     inline const QFileInfo& getCurImageFileInfo() const {return (*cur_file_iterator);}
+    inline const FileSupport* getFileSupport() const { return this->file_support_handler; }
 
     /*to get read-only access to private QImage objects use: */
     inline const QImage& getPreImage() const { return *pre_image; }

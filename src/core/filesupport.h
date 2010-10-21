@@ -2,7 +2,11 @@
 #define FILESUPPORT_H
 
 #include <QString>
-#include <map>
+#include <QMap>
+
+#include "core/confighandler.h"
+
+class ConfigHandler;
 
 /*
  *FileSupport class provides information
@@ -10,23 +14,31 @@
  *methods to determine wether an specific
  *file type is supported or not
  */
-class FileSupport
+class FileSupport : public QObject
 {
+    Q_OBJECT
     /*
-     *map container which provides the information if
+     *QMap container which provides the information whether
      *a file is valid or not.
      */
-    typedef std::map<QString,bool> suppFile;
-    suppFile valid_files_map;
+    QMap<QString,bool> *valid_files_map;
+    QMap<QString,bool>::iterator *supp_file_iterator;
 
-    typedef suppFile::iterator SFI;
-    SFI supp_file_iterator;
+    ConfigHandler *config_handler;
+
+    void initFileSuppMap(QString formats);
+
+public slots:
+
+    void onSupportedFormatsChanged(QString format);
 
 public:
 
-    FileSupport();
+    FileSupport(ConfigHandler *config_handler);
 
     bool isSupported(QString filetype);
+
+
 
 };
 

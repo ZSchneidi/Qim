@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     core/qmlinterface.cpp \
     core/configdialog.cpp \
     core/confighandler.cpp \
-    core/subclass/backgroundcolorpicker.cpp
+    core/subclass/backgroundcolorpicker.cpp \
+    core/subclass/customdialogbox.cpp
 
 HEADERS += core/coreengine.h \
 #    manager/pluginmmanager.h \
@@ -33,7 +34,8 @@ HEADERS += core/coreengine.h \
     core/configdialog.h \
     core/confighandler.h \
     core/globaldefinitions.h \
-    core/subclass/backgroundcolorpicker.h
+    core/subclass/backgroundcolorpicker.h \
+    core/subclass/customdialogbox.h
 
 
 FORMS += mainviewer.ui \
@@ -56,6 +58,7 @@ OTHER_FILES += \
     visuallayer/elements/CustomTitleBar.qml \
     visuallayer/elements/CustomMenuBar.qml \
     visuallayer/QimMainUILayer.qml \
+    visuallayer/elements/DialogBox.qml
 
 RESOURCES += \
     main_resource.qrc
