@@ -106,7 +106,7 @@ signals:
 
     void backgroundColorChanged(QString color);
     void backgroundOpacityChanged(double opacity);
-    void supportedFormatsChanged(QString formats);
+    void blacklistedFormatsChanged(QString formats);
 
 
 };

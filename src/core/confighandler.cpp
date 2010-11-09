@@ -186,11 +186,11 @@ void ConfigHandler::transactNewConfig(QMap<QString, QString> *temp_config_map)
         {
             this->config_map->insert(key,value);
             if(key == BACKGROUND_OPACITY_SWITCH)
-                emit this->backgroundOpacityChanged(value.toDouble());
+                emit this->backgroundOpacityChanged(value.toDouble());  //update the opacity in the QmlInterface
             if(key == BACKGROUND_COLOR_SWITCH)
-                emit this->backgroundColorChanged(value);
+                emit this->backgroundColorChanged(value);               //update the color in the QmlInterface
             if(key == FILE_FORMAT_BLACKLIST_SWITCH)
-                emit this->supportedFormatsChanged(value);
+                emit this->blacklistedFormatsChanged(value);            //update the blacklist string in FileSupport
 
             //qDebug() << "write to config " << key << ":" << value;
         }

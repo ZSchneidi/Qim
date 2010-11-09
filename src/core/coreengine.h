@@ -52,8 +52,9 @@ class CoreEngine : public QMainWindow
     Q_OBJECT
 private:
 
-    /**object list of image data informations to provide them via */
-    QList<QObject *> imageDataModelList;
+    /**object of image data informations to provide them to qml */
+    ImageDataModel *imange_data_model;
+
     /**qml declaritive view is used to display qml based visual layer*/
     QDeclarativeView *visual_qml_view;
     /**context for the QDeclarative environment*/

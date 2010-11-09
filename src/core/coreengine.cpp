@@ -22,6 +22,8 @@ CoreEngine::CoreEngine(QWidget *parent) :
     /** the CustomDialogBox is an object which provides the dialog for machine -> user communication*/
     this->dialog_box = new CustomDialogBox();
 
+    this->imange_data_model = new ImageDataModel();
+
     /*this is the config handling class it is important that the confighandler is
      *instatiated before proceed with other classes which use the config handler
      */
@@ -51,9 +53,12 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
 
     /*signal slot connections*/
+    /** connect opacity changes in the config dialog with the QmlInterface*/
     connect(this->config_handler,SIGNAL(backgroundOpacityChanged(double)),this->qml_interface,SLOT(on_backgroundOpacityChanged(double)));
+    /** connect color changes in the config dialog with the QmlInterface*/
     connect(this->config_handler,SIGNAL(backgroundColorChanged(QString)),this->qml_interface,SLOT(on_backgroundColorChanged(QString)));
-    connect(this->config_handler,SIGNAL(supportedFormatsChanged(QString)),this->image_handler->getFileSupport(),SLOT(onSupportedFormatsChanged(QString)));
+    /** connect blacklisted formats line edit in the config dialog with FileSupport::initFileBlacklistMap*/
+    connect(this->config_handler,SIGNAL(blacklistedFormatsChanged(QString)),this->image_handler->getFileSupport(),SLOT(onBlacklistedFormatsChanged(QString)));
 
     /*define visual options of the main window*/
     this->setUpMainWindow();
@@ -121,7 +126,8 @@ void CoreEngine::setUpQml()
      *ImageDataModel which will be defined in the ImageHandler class in the ImageHandler::initImageDataModel()
      *method
      */
-    this->context->setContextProperty("imageDataModel", QVariant::fromValue(imageDataModelList));
+this->imange_data_model->debugModel();
+    this->context->setContextProperty("imageDataModel", QVariant::fromValue(this->imange_data_model->getDataModel()));
 
     /*the active_layer in qml_interface has to be switched to the QmlInterface::Visual_layer to enable displaying images
      *more informations about this concept can be found in the QmlInterface header at the changeActiveLayer()
@@ -156,7 +162,7 @@ void CoreEngine::open()
         /*this sends the index to the qml environment to synch the index*/
         this->qml_interface->updateQmlIndex(this->curr_qml_index);
         /*image data initialization to get all image data to qml*/
-        this->image_handler->initImageDataModel(this->imageDataModelList);
+        this->image_handler->initImageDataModel(this->imange_data_model->getDataModel());
         /*see setUpQml definition*/
         this->setUpQml();
         /*the file information has to be updated before scaling or manipulate the image otherwise */
@@ -168,7 +174,7 @@ void CoreEngine::open()
         this->updateMainTitle(this->image_handler->getTitleStr());
         return;
     }
-    this->dialog_box->showDialogBox(tr("Qim - error report"),tr("No File selected"));
+    this->dialog_box->showDialogBox(tr("Qim - wrong file format"),tr("Please select a valid file!"));
 }
 
 /**
@@ -183,7 +189,7 @@ void CoreEngine::open(QString filepath)
         this->image_handler->loadImage(filepath);
         this->curr_qml_index = this->image_handler->getCurFileIndex();
         this->qml_interface->updateQmlIndex(this->curr_qml_index);
-        this->image_handler->initImageDataModel(this->imageDataModelList);
+        this->image_handler->initImageDataModel(this->imange_data_model->getDataModel());
         this->setUpQml();
         if (this->image_handler->getCurImage().isNull())
         {
@@ -296,7 +302,8 @@ void CoreEngine::toggleFullScreen()
     if(this->isFullScreen())
     {
         this->showNormal();
-        this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
+        //this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
+        this->resize(this->config_handler->defWindowSize().width(),this->config_handler->defWindowSize().height());
     }
     else if(!this->isFullScreen())
         this->showFullScreen();
@@ -308,7 +315,8 @@ void CoreEngine::toggleMaxWindow()
     if(this->isMaximized())
     {
         this->showNormal();
-        this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
+        //this->resize(DEFAULT_WINDOW_SIZE_WIDTH,DEFAULT_WINDOW_SIZE_HEIGHT);
+        this->resize(this->config_handler->defWindowSize().width(),this->config_handler->defWindowSize().height());
     }
     else if(!this->isMaximized())
     {
@@ -454,13 +462,18 @@ void CoreEngine::wheelEvent(QWheelEvent *event)
 /** if anything is left to do befor closing the application do it here*/
 void CoreEngine::closeEvent(QCloseEvent *event)
 {
-    this->config_handler->setDefWindowSize(this->size());
+    /*if the window is maximized or fullscreen do not write the current size to config
+     * this would overwrite the last defined size with the fullscreen or maximized size
+     */
+    if(!this->isMaximized() && !this->isFullScreen() )
+        this->config_handler->setDefWindowSize(this->size());
+    /*if the window is maximized write this to config*/
     this->config_handler->setStartMaximized(this->isMaximized());
-    //this->config_handler->setStartFullScreen(this->isFullScreen());
-
+    /*if the window is in fullscreen write this to config*/
+    this->config_handler->setStartFullScreen(this->isFullScreen());
+    /*updates the config file with the new values*/
     this->config_handler->writeNewConfig();
     this->file_info_handler->close();
-
 }
 
 /*

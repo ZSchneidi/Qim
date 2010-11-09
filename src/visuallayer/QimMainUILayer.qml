@@ -10,7 +10,7 @@ Item {
 
     ShadowBox{
         id: dialogShadow
-        color: "#E5E5E5"
+        color: "transparent"
         anchors.fill: parent
         shadowIntensity: 0.3
         anchors.margins: 7

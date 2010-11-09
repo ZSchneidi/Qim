@@ -21,16 +21,16 @@ class FileSupport : public QObject
      *QMap container which provides the information whether
      *a file is valid or not.
      */
-    QMap<QString,bool> *valid_files_map;
-    QMap<QString,bool>::iterator *supp_file_iterator;
+    QMap<QString,bool> *blacklisted_files_map;
+    QMap<QString,bool>::iterator *blacklisted_file_iterator;
 
     ConfigHandler *config_handler;
 
-    void initFileSuppMap(QString formats);
+    void initFileBlacklistMap(QString formats);
 
 public slots:
 
-    void onSupportedFormatsChanged(QString format);
+    void onBlacklistedFormatsChanged(QString format);
 
 public:
 

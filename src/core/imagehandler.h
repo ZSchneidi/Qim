@@ -11,7 +11,7 @@
 
 #include "core/coreengine.h"
 #include "filesupport.h"
-#include "imagedatamodel.h"
+#include "imagedataentry.h"
 
 
 class CoreEngine;

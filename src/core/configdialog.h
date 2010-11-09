@@ -44,7 +44,7 @@ public slots:
     /*standard signals connected via QMetaObject::connectSlotsByName*/
     void on_lang_combo_box_currentIndexChanged(int index);
     void on_theme_combo_box_currentIndexChanged(int index);
-    void on_supp_file_edit_textEdited(QString txt);
+    void on_file_blacklist_edit_textEdited(QString txt);
     void on_save_config_button_clicked();
     void on_cancel_config_buttion_clicked();
     void on_check_image_preload_stateChanged(int state);

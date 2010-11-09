@@ -6,12 +6,12 @@
 FileSupport::FileSupport(ConfigHandler *config_handler) : QObject()
 {
     this->config_handler = config_handler;
-    this->valid_files_map = new QMap<QString,bool>;
-    this->supp_file_iterator = new QMap<QString,bool>::iterator;
+    this->blacklisted_files_map = new QMap<QString,bool>;
+    this->blacklisted_file_iterator = new QMap<QString,bool>::iterator;
 
     /*initialize the valid_files_map with all supported file types*/
 
-    this->initFileSuppMap(this->config_handler->FileFormatBlacklistStr());
+    this->initFileBlacklistMap(this->config_handler->FileFormatBlacklistStr());
 
 
 }
@@ -19,62 +19,47 @@ FileSupport::FileSupport(ConfigHandler *config_handler) : QObject()
 /**
   *used to load the supported file suffix in the valid_files_map
   */
-void FileSupport::initFileSuppMap(QString formats)
+void FileSupport::initFileBlacklistMap(QString formats)
 {
+    this->blacklisted_files_map->clear();
     QStringList temp = formats.split(",",QString::SkipEmptyParts);
     for (int i = 0; i < temp.size(); i++)
     {
         QString temp_str = temp.at(i);
         temp_str = temp_str.right((temp_str.length() - temp_str.lastIndexOf("."))-1);
-        this->valid_files_map->insert(temp_str,true);
+        this->blacklisted_files_map->insert(temp_str,true);
     }
-
-    qDebug() << "supp: " << *this->valid_files_map;
-    *this->supp_file_iterator = this->valid_files_map->begin();
-}
-
-/** this is a deprecated version of the support validation use the ifFileSupported() method to validate files*/
-bool FileSupport::isSupported(QString filetype)
-{
-
-    *this->supp_file_iterator = this->valid_files_map->find(filetype);
-    if(*this->supp_file_iterator == this->valid_files_map->end())
-    {
-        return this->supp_file_iterator->value();
-    }
-    return false;
+    //qDebug() << "supp: " << *this->blacklisted_files_map;
+    *this->blacklisted_file_iterator = this->blacklisted_files_map->begin();
 }
 
 /**
   * this is a major priority function which is used to determine whether a file is supported
   * or not.
   * in the first step the suffix is used to determine if the file is wished to be loaded
-  * if it is the file will be analysed to determine its actual file format via magic number
-  * recognition
+  * if it is valid the file will be analysed to determine its actual file format via
+  * QImageReader::imageFormat()
   */
 bool FileSupport::isFileSupported(QString filename)
 {
     QString parsed_suffix = filename.right((filename.length()-filename.lastIndexOf("."))-1);
-    qDebug() << "suffix " << parsed_suffix;
-    *this->supp_file_iterator = this->valid_files_map->find(parsed_suffix);
-    if( *this->supp_file_iterator == this->valid_files_map->end())
+    *this->blacklisted_file_iterator = this->blacklisted_files_map->find(parsed_suffix);
+    if( *this->blacklisted_file_iterator == this->blacklisted_files_map->end())
     {
-        qDebug() << "file is ok";
+        /*if the file format is not blacklisted*/
+        if(QImageReader::imageFormat(filename) != "")
+            return true;
+        else
+            return false;
     }
     else
     {
-        qDebug() << "do not load this file";
+        /*if the file format is blacklisted*/
+        return false;
     }
-
-
-
-    return false;
-
 }
 
-
-
-void FileSupport::onSupportedFormatsChanged(QString format)
+void FileSupport::onBlacklistedFormatsChanged(QString format)
 {
-    this->initFileSuppMap(format);
+    this->initFileBlacklistMap(format);
 }

@@ -145,7 +145,7 @@ void ImageHandler::initFileList(QFileInfoList &list)
              *problems can occur if the path contains more than one "." in the path
              *this must be solved by parsing the suffix
              */
-            if(!this->file_support_handler->isSupported((*temp_it).suffix()))
+            if(!this->file_support_handler->isFileSupported((*temp_it).absoluteFilePath()))
             {
                 temp_it = list.erase(temp_it);
                 if(temp_it == list.end())
@@ -251,7 +251,6 @@ QString ImageHandler::getFilePathFromList(const QFileInfoList::Iterator position
  */
 void ImageHandler::initImageDataModel(QList<QObject *> &model)
 {
-    //qDebug() << "item count " << model.count();
     if(model.count() > 0)
     {
         model.clear();
@@ -275,12 +274,10 @@ void ImageHandler::initImageDataModel(QList<QObject *> &model)
             file_info.size_str = FileInfoHandler::getSizeStr((*temp_it).size());
             file_info.type = (*temp_it).suffix();
 
-            model.append(new ImageDataModel(file_info));
-
+            model.append(new ImageDataEntry(file_info));
         }
         temp_it++;
     }
-    //temp_img.~QImage();
 }
 
 /** used to synchronize the index of the currently selected image file called by the CoreEngine::setQmlIndex(int index)*/

@@ -14,13 +14,14 @@ SOURCES += main.cpp \
     core/imagehandler.cpp \
     core/filesupport.cpp \
     core/fileinfohandler.cpp \
-    core/imagedatamodel.cpp \
     core/fileinfothread.cpp \
     core/qmlinterface.cpp \
     core/configdialog.cpp \
     core/confighandler.cpp \
     core/subclass/backgroundcolorpicker.cpp \
-    core/subclass/customdialogbox.cpp
+    core/subclass/customdialogbox.cpp \
+    core/imagedataentry.cpp \
+    core/imagedatamodel.cpp
 
 HEADERS += core/coreengine.h \
 #    manager/pluginmmanager.h \
@@ -28,14 +29,15 @@ HEADERS += core/coreengine.h \
     core/imagehandler.h \
     core/filesupport.h \
     core/fileinfohandler.h \
-    core/imagedatamodel.h \
     core/fileinfothread.h \
     core/qmlinterface.h \
     core/configdialog.h \
     core/confighandler.h \
     core/globaldefinitions.h \
     core/subclass/backgroundcolorpicker.h \
-    core/subclass/customdialogbox.h
+    core/subclass/customdialogbox.h \
+    core/imagedataentry.h \
+    core/imagedatamodel.h
 
 
 FORMS += mainviewer.ui \

@@ -136,7 +136,7 @@ void ConfigDialog::on_theme_combo_box_currentIndexChanged(int index)
 }
 
 /*update the supported file string whenever the lineedit changes its text*/
-void ConfigDialog::on_supp_file_edit_textEdited(QString txt)
+void ConfigDialog::on_file_blacklist_edit_textEdited(QString txt)
 {
     if(this->init_config_done)
     {
