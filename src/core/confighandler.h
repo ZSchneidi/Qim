@@ -105,7 +105,7 @@ public:
 signals:
 
     void backgroundColorChanged(QString color);
-    void backgroundOpacityChanged(double opacity);
+    void backgroundOpacityChanged(float opacity);
     void blacklistedFormatsChanged(QString formats);
 
 

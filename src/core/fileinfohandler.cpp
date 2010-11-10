@@ -79,8 +79,8 @@ void FileInfoHandler::setItemValue(int row, int column, QString text)
 QString FileInfoHandler::getSizeOf(qint64 size)
 {
     QString size_str;
-    double file_size = 0.0;
-    double tmp = size;
+    float file_size = 0.0;
+    float tmp = size;
     int conv_lvl = 0;
     for(;;)
     {
@@ -112,9 +112,9 @@ QString FileInfoHandler::getSizeOf(qint64 size)
     return size_str;
 }
 
-double FileInfoHandler::precision(double x, int precision)
+float FileInfoHandler::precision(float x, int precision)
 {
-    double temp = pow(10.0, precision);
+    float temp = pow(10.0, precision);
     x *= temp;
     //x += 0.5;
     x = floor(x);
@@ -123,9 +123,9 @@ double FileInfoHandler::precision(double x, int precision)
     return x;
 }
 
-double FileInfoHandler::round(double x, int precision)
+float FileInfoHandler::round(float x, int precision)
 {
-    double temp = pow(10.0, precision);
+    float temp = pow(10.0, precision);
     x *= temp;
     x += 0.5;
     x = floor(x);

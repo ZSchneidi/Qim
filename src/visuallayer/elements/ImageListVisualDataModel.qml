@@ -33,7 +33,7 @@ VisualDataModel {
 
                  /*the listItem contains the an item of the list*/
                  Item {
-                     property double labelRadius: itemRadius
+                     property float labelRadius: itemRadius
                      property int labelHeight: 55
                      property int selectedLabelHeight: 100
 

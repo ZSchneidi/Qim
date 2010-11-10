@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "core/coreengine.h"
+#include "core/globaldefinitions.h"
 
 class CoreEngine;
 
@@ -18,7 +19,7 @@ class QmlInterface : public QObject
     Q_PROPERTY(QString active_layer READ getActiveLayer WRITE setActiveLayer NOTIFY activeLayerChanged)
 
     Q_PROPERTY(int index READ currIndex WRITE setCurrIndex NOTIFY indexChanged )
-    Q_PROPERTY(double main_opacity READ mainOpacity NOTIFY mainOpacityChanged )
+    Q_PROPERTY(float main_opacity READ mainOpacity NOTIFY mainOpacityChanged )
     Q_PROPERTY(QSize main_size READ mainSize NOTIFY mainSizeChanged )
     Q_PROPERTY(QPoint main_pos READ mainPos NOTIFY mainPosChanged )
     Q_PROPERTY(QPoint main_size_cursor READ mainSizeCursor NOTIFY mainSizeCursorChanged )
@@ -29,7 +30,7 @@ class QmlInterface : public QObject
     /*member variables*/
     CoreEngine *core;
     int curr_index;
-    double main_opacity;
+    float main_opacity;
     QString *active_layer;
     QString *main_title;
     QSize *main_size;
@@ -58,7 +59,7 @@ public:
     /*property getter*/
     inline const QString getActiveLayer() const { return *this->active_layer;}
     inline const int currIndex() const { return this->curr_index; }
-    inline const double mainOpacity() const { return this->main_opacity; }
+    inline const float mainOpacity() const { return this->main_opacity; }
     inline const QSize mainSize() const { return *this->main_size; }
     inline const QPoint mainPos() const { return *this->main_pos; }
     inline const QPoint mainSizeCursor() const { return *this->main_size_cursor; }
@@ -87,22 +88,24 @@ public slots:
     void setMainPos();
     void resetPositionCursor();
     void resetSizeCursor();
-
-    void on_backgroundOpacityChanged(double opacity);
+    void listIndexChanged();
+    void visualLayerLoaded();
+    void on_backgroundOpacityChanged(float opacity);
     void on_backgroundColorChanged(QString color);
 
 signals:
 
     /*connection to qml*/
     void activeLayerChanged(const QString new_layer);
+    void visualLayerReady();
     void indexChanged();
     void mainOpacityChanged();
     void mainSizeChanged();
     void mainTitleChanged(const QString new_title);
     void updateImageScale();
     void sizeChanged(const QSize &size);
-    void zoomIn();
-    void zoomOut();
+    void zoomIn(float scalefx, float scalefy);
+    void zoomOut(float scalefx, float scalefy);
     void mainColorChanged();
 
 

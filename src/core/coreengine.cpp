@@ -54,7 +54,7 @@ CoreEngine::CoreEngine(QWidget *parent) :
 
     /*signal slot connections*/
     /** connect opacity changes in the config dialog with the QmlInterface*/
-    connect(this->config_handler,SIGNAL(backgroundOpacityChanged(double)),this->qml_interface,SLOT(on_backgroundOpacityChanged(double)));
+    connect(this->config_handler,SIGNAL(backgroundOpacityChanged(float)),this->qml_interface,SLOT(on_backgroundOpacityChanged(float)));
     /** connect color changes in the config dialog with the QmlInterface*/
     connect(this->config_handler,SIGNAL(backgroundColorChanged(QString)),this->qml_interface,SLOT(on_backgroundColorChanged(QString)));
     /** connect blacklisted formats line edit in the config dialog with FileSupport::initFileBlacklistMap*/
@@ -85,6 +85,8 @@ void CoreEngine::setUpMainWindow()
     this->visual_qml_view->setAttribute(Qt::WA_TranslucentBackground);
     this->visual_qml_view->setWindowFlags(Qt::FramelessWindowHint);
 
+
+    this->setMinimumSize(500,400);
     //this->setStyleSheet("background:transparent;");
     this->setAttribute(Qt::WA_TranslucentBackground);
     /*turn off system native window decorations which are implemented in qml*/

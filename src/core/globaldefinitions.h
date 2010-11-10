@@ -6,8 +6,8 @@
 #define QIMVISLAYERFILE "visuallayer/QimVisualLayer.qml"
 #define QIMDEFLAYERFILE "visuallayer/QimDefaultLayer.qml"
 #define QIMMAINUILAYERFILE "visuallayer/QimMainUILayer.qml"
-#define SCALEFACTORX 0.1
-#define SCALEFACTORY 0.1
+#define SCALEFACTORX 0.3
+#define SCALEFACTORY 0.3
 
 #define CONFIG_SIZE_SEPERATOR "x"
 /*config file definition*/
