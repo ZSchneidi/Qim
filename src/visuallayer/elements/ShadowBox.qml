@@ -6,8 +6,6 @@ Item {
     property alias border: rectangle.border
     property alias shadowIntensity: shadow.opacity
 
-
-
     BorderImage {
         id: shadow
         anchors.fill: rectangle

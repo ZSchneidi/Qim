@@ -1,19 +1,32 @@
 import Qt 4.7
+import "../models"
 
 Item {
     id: menuBar
+
 
     Rectangle{
         id:background
         color: "white"
         anchors.fill: parent
 
+        MenuListItem {
+            id: fileMenu
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            width: 70
+            menuTitle: "File Menu"
+            menuColor: "lightblue"
+            //menuListModel:
+        }
+
         /*openAction begin*/
         Item {
             id: openAction
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.left: parent.left
+            anchors.left: fileMenu.right
             width: 70
             Rectangle{
                 anchors.fill: parent

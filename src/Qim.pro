@@ -60,7 +60,9 @@ OTHER_FILES += \
     visuallayer/elements/CustomTitleBar.qml \
     visuallayer/elements/CustomMenuBar.qml \
     visuallayer/QimMainUILayer.qml \
-    visuallayer/elements/DialogBox.qml
+    visuallayer/elements/DialogBox.qml \
+    visuallayer/elements/MenuListItem.qml \
+    visuallayer/models/MenuListModel.qml
 
 RESOURCES += \
     main_resource.qrc
