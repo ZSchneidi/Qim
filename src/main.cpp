@@ -30,7 +30,12 @@ int main(int argc, char *argv[])
     after initializing the language instatiate the Core object and show
     this is only a first test of the internationalization function.
     */
+    //argv[1] = "C:\\Users\\Schneidi\\Pictures\\demo-data\\demo-1.jpg";
     CoreEngine w;
+    //qDebug() << "argv[0] = " << (QString)argv[0];
+    //qDebug() << "argv[1] = " << (QString)argv[1];
+    w.openFromArgument(argv[1]);
+    //w.getDialogBoxHandler()->showDialogBox("Qim - file",(QString)argv[1]);
     //w.show();
 
     return a.exec();

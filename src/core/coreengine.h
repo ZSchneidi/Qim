@@ -157,6 +157,7 @@ public:
     inline int currQmlIndex() { return this->curr_qml_index; }
     inline ConfigHandler* getConfigHandler() { return this->config_handler; }
     inline const QLocale* getMainLocal() const { return this->main_local; }
+    inline CustomDialogBox* getDialogBoxHandler() {return this->dialog_box;}
 
     bool showErrorDialog(const QString msg);
 

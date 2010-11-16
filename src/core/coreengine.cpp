@@ -510,8 +510,14 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 /** this method can be used to open a file from the main() function it only converts the file parameter to QString*/
 void CoreEngine::openFromArgument(char *file)
 {
-    QString filepath = (QString)file;
+    QString filepath;
+    filepath.append((QString)file);
+    filepath = filepath.replace("\\","/");
+
+    //qDebug() << "filepath = " << filepath;
+
     this->open(filepath);
+    this->dialog_box->showDialogBox(tr("Qim - file"),filepath);
 }
 
 /**
