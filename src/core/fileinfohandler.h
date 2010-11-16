@@ -22,12 +22,12 @@ public:
     QString path;
     QString type;
     QString size_str;
-    double size;
+    float size;
     int width;
     int height;
     int depth;
-    double xdpi;
-    double ydpi;
+    float xdpi;
+    float ydpi;
     QDateTime lchange;
 
 };
@@ -59,9 +59,9 @@ class FileInfoHandler : public QWidget
     inline void setWidthValue(int value) { file_info.width = value;}
     inline void setHeigthValue(int value) {file_info.height = value;}
     inline void setDepthValue(int value) {file_info.depth = value;}
-    inline void setXdpiValue(int value) {file_info.xdpi = round(((double)value/100)*2.54, 0);}
-    inline void setYdpiValue(int value) {file_info.ydpi = round(((double)value/100)*2.54, 0);}
-    inline void setSizeValue(qint64 value) {file_info.size = (double)value;}
+    inline void setXdpiValue(int value) {file_info.xdpi = round(((float)value/100)*2.54, 0);}
+    inline void setYdpiValue(int value) {file_info.ydpi = round(((float)value/100)*2.54, 0);}
+    inline void setSizeValue(qint64 value) {file_info.size = (float)value;}
     inline void setSizeString(qint64 value) {file_info.size_str = getSizeOf(value);}
     inline void setTypeValue(QString type) {file_info.type = type;}
     inline void setLChangeValue(QDateTime date) {file_info.lchange = date;}
@@ -72,10 +72,10 @@ public:
 
     QString getSizeStr(qint64 size) {return getSizeOf(size); }
     QString getDateStr(QDateTime date ) {return date.toString();}
-    double getXDpi(int dotspermeterx) {return round(((double)dotspermeterx/100)*2.54, 0);}
-    double getYDpi(int dotspermetery) {return round(((double)dotspermetery/100)*2.54, 0);}
-    double precision(double x, int precision);
-    double round(double x, int precision);
+    float getXDpi(int dotspermeterx) {return round(((float)dotspermeterx/100)*2.54, 0);}
+    float getYDpi(int dotspermetery) {return round(((float)dotspermetery/100)*2.54, 0);}
+    float precision(float x, int precision);
+    float round(float x, int precision);
 
     void updateFileInfo(const QFileInfo &file_info, const QImage &image);
 

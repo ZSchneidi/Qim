@@ -5,7 +5,7 @@ QmlInterface::QmlInterface(CoreEngine *parent_core) :
 {
     this->core = parent_core;
     this->curr_index = 0;
-    this->main_opacity = ((double) this->core->getConfigHandler()->mainBackgroundOpacity()/100);
+    this->main_opacity = ((float) this->core->getConfigHandler()->mainBackgroundOpacity()/100);
     this->main_pos = new QPoint(0,0);
     this->main_size_cursor = new QPoint(0,0);
     this->main_size = new QSize();
@@ -183,24 +183,33 @@ void QmlInterface::emitZoom(const zoomMode mode)
     /*enum  mode defined in the qmlinterface header*/
     switch(mode)
     {
-    case 0: emit this->zoomIn();
+    case 0: emit this->zoomIn(SCALEFACTORX,SCALEFACTORY);
             break;
-    case 1: emit this->zoomOut();
+    case 1: emit this->zoomOut(SCALEFACTORX,SCALEFACTORY);
             break;
     }
 }
 
-void QmlInterface::on_backgroundOpacityChanged(double opacity)
+void QmlInterface::on_backgroundOpacityChanged(float opacity)
 {
     this->main_opacity = opacity/100;
-    emit mainOpacityChanged();
+    emit this->mainOpacityChanged();
 }
 
 void QmlInterface::on_backgroundColorChanged(QString color)
 {
     *this->main_color = QColor(color);
-    emit mainColorChanged();
+    emit this->mainColorChanged();
     qDebug() << "color changed";
+}
+
+void QmlInterface::listIndexChanged()
+{
+}
+
+void QmlInterface::visualLayerLoaded()
+{
+    emit this->visualLayerReady();
 }
 
 

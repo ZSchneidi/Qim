@@ -3,29 +3,6 @@ import Qt 4.7
 VisualDataModel {
     id: visualDataModel
 
-    /*data Model definition
-    model: ListModel {
-        id:contactdata
-        ListElement {
-            name: "Sweety"
-            number: "555 3264"
-            age: "22"
-            picture: "../img/desktop_catrinel01_by_dB_9.jpg"
-        }
-        ListElement {
-            name: "Honey"
-            number: "555 8426"
-            age: "24"
-            picture: "../img/itb_wallpaper_sam1280x1024_a.jpg"
-        }
-        ListElement {
-            name: "Bunny"
-            number: "555 0473"
-            age: "25"
-            picture: "../img/Painting___Sailing_Away_by_Italiener.jpg"
-        }
-    }*/
-
     delegate:
             /*data Delegate definition*/
             Component {
@@ -33,7 +10,7 @@ VisualDataModel {
 
                  /*the listItem contains the an item of the list*/
                  Item {
-                     property double labelRadius: itemRadius
+                     property float labelRadius: itemRadius
                      property int labelHeight: 55
                      property int selectedLabelHeight: 100
 

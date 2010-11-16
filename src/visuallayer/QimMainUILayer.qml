@@ -67,6 +67,8 @@ Item {
                     onActiveLayerChanged:{
                         console.log ("new layer is " + new_layer)
                         mainContentLoader.source = new_layer
+                        qmlInterface.visualLayerLoaded()
+
                     }
 
 

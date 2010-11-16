@@ -29,7 +29,6 @@ Item {
     property int currentItemFileHeight
 
 
-
     width: 15
     anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
 
@@ -73,6 +72,7 @@ Item {
                 currentItemFileWidth = currentItem.fileWidth
                 currentItemFileHeight = currentItem.fileHeight
                 qmlInterface.index = currentIndex
+                newImageLoaded()
             }
          }
 
