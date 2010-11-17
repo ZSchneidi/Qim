@@ -3,9 +3,9 @@
 
 /*this header contains various constant definitions*/
 #define APP_NAME "Qim"
-#define QIMVISLAYERFILE "visuallayer/QimVisualLayer.qml"
-#define QIMDEFLAYERFILE "visuallayer/QimDefaultLayer.qml"
-#define QIMMAINUILAYERFILE "visuallayer/QimMainUILayer.qml"
+#define QIMVISLAYERFILE "qrc:///qml_source/visuallayer/QimVisualLayer.qml"
+#define QIMDEFLAYERFILE "qrc:///qml_source/visuallayer/QimDefaultLayer.qml"
+#define QIMMAINUILAYERFILE "qrc:///qml_source/visuallayer/QimMainUILayer.qml"
 #define SCALEFACTORX 0.3
 #define SCALEFACTORY 0.3
 

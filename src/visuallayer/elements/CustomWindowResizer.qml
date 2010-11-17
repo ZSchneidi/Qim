@@ -17,7 +17,7 @@ Item {
         id: closeIcon
         fillMode: Image.PreserveAspectFit
         anchors.fill: parent
-        source: "../img/resizer.png"
+        source: "qrc:///img_source/visuallayer/img/resizer.png"
     }
 
     MouseArea{

@@ -34,7 +34,7 @@ Item {
 
     Image {
         id: arrow
-        source: "img/arrow.png"
+        source: "qrc:///img_source/visuallayer/img/arrow.png"
         rotation: 90
         anchors.verticalCenter: parent.verticalCenter
     }

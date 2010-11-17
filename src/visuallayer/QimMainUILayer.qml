@@ -1,5 +1,5 @@
 import Qt 4.7
-import "elements"
+import "elements/"
 Item {
     id: mainUiLayer
     width: 640
@@ -60,7 +60,7 @@ Item {
             Loader{
                 id: mainContentLoader
                 anchors.fill: parent
-                source: "QimDefaultLayer.qml"
+                source: "qrc:///qml_source/visuallayer/QimDefaultLayer.qml"
 
                 Connections{
                     target: qmlInterface

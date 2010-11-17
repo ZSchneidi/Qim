@@ -66,13 +66,13 @@ Item {
             id: closeIcon
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "../img/close_inactive.png"
+            source: "qrc:///img_source/visuallayer/img/close_inactive.png"
         }
         MouseArea{
             anchors.fill: parent
             hoverEnabled: true
-            onEntered: closeIcon.source = "../img/close_active.png"
-            onExited: closeIcon.source = "../img/close_inactive.png"
+            onEntered: closeIcon.source = "qrc:///img_source/visuallayer/img/close_active.png"
+            onExited: closeIcon.source = "qrc:///img_source/visuallayer/img/close_inactive.png"
             /*the button control parameter should be changed to enum type*/
             onClicked: qmlInterface.sendCoreAction(3)
         }
@@ -94,13 +94,13 @@ Item {
             id: maxIcon
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "../img/max_inactive.png"
+            source: "qrc:///img_source/visuallayer/img/max_inactive.png"
         }
         MouseArea{
             anchors.fill: parent
             hoverEnabled: true
-            onEntered: maxIcon.source = "../img/max_active.png"
-            onExited: maxIcon.source = "../img/max_inactive.png"
+            onEntered: maxIcon.source = "qrc:///img_source/visuallayer/img/max_active.png"
+            onExited: maxIcon.source = "qrc:///img_source/visuallayer/img/max_inactive.png"
             onClicked: qmlInterface.sendCoreAction(0)
         }
     }
@@ -121,14 +121,14 @@ Item {
             id: miniIcon
             fillMode: Image.PreserveAspectFit
             anchors.fill: parent
-            source: "../img/mini_inactive.png"
+            source: "qrc:///img_source/visuallayer/img/mini_inactive.png"
         }
 
         MouseArea{
             anchors.fill: parent
             hoverEnabled: true
-            onEntered: miniIcon.source = "../img/mini_active.png"
-            onExited: miniIcon.source = "../img/mini_inactive.png"
+            onEntered: miniIcon.source = "qrc:///img_source/visuallayer/img/mini_active.png"
+            onExited: miniIcon.source = "qrc:///img_source/visuallayer/img/mini_inactive.png"
             onClicked: qmlInterface.sendCoreAction(1)
         }
     }

@@ -23,6 +23,7 @@
 ConfigHandler::ConfigHandler(CoreEngine *core) : QObject()
 {
     this->core = core;
+    this->config_file_path = QCoreApplication::applicationDirPath ()+"/"+QString(CONFIG_FILE);
     /*the config_head_line is just a comment in the config file*/
     this->config_head_line = QString("#") + QString(APP_NAME) + QString("-Config\n");
     this->config_head_line.append("#this config file is automatically generated\n#please don't edit these lines unless you know what you're doing\n");
@@ -36,7 +37,7 @@ ConfigHandler::ConfigHandler(CoreEngine *core) : QObject()
     /*on constructing the config_handler the config file has to be loaded
      *and parsed to set all config variables
      */
-    this->config_file = new QFile(CONFIG_FILE);
+    this->config_file = new QFile(this->config_file_path);
     if(!this->config_file->exists())
     {
         this->restoreConfig();
@@ -92,7 +93,7 @@ bool ConfigHandler::writeNewConfig()
         this->core->showErrorDialog(config_warning);
     }
     qint64 written_bytes = 0;
-    this->config_file = new QFile(CONFIG_FILE);
+    this->config_file = new QFile(this->config_file_path);
     this->config_file->remove();
     if(this->config_file->open(QIODevice::ReadWrite))
     {

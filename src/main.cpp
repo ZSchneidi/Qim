@@ -4,8 +4,11 @@
 #include <QLocale>
 #include <QDebug>
 
+QStringList getArguments(int argc, char *argv[]);
+
 int main(int argc, char *argv[])
 {
+    QStringList argumetn_list;
     QApplication a(argc, argv);
 
     /*implementation of the Qt translation*/
@@ -30,14 +33,32 @@ int main(int argc, char *argv[])
     after initializing the language instatiate the Core object and show
     this is only a first test of the internationalization function.
     */
-    //argv[1] = "C:\\Users\\Schneidi\\Pictures\\demo-data\\demo-1.jpg";
     CoreEngine w;
-    //qDebug() << "argv[0] = " << (QString)argv[0];
-    //qDebug() << "argv[1] = " << (QString)argv[1];
-    w.openFromArgument(argv[1]);
-    //w.getDialogBoxHandler()->showDialogBox("Qim - file",(QString)argv[1]);
-    //w.show();
-
+    argumetn_list = getArguments(argc, argv);
+    qDebug() << argumetn_list;
+    if(argumetn_list.count() > 1)
+    {
+        w.openFromArgument(argumetn_list.at(1));
+        //QMessageBox::warning(0,"debug",argumetn_list.at(1));
+    }
+    /*
+    for(int i = 0; i < argumetn_list.count(); i++)
+    {
+        QMessageBox::warning(0,"debug",QString::number(i)+". "+(QString)"parameter " + argumetn_list.at(i));
+    }
+    */
     return a.exec();
 
 }
+
+QStringList getArguments(int argc, char *argv[])
+{
+    QStringList strlist;
+    int i = 0;
+    for (i = 0; i < argc; i++)
+    {
+        strlist.append((QString)argv[i]);
+    }
+    return strlist;
+}
+

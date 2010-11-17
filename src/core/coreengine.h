@@ -152,7 +152,7 @@ public:
     ~CoreEngine();
 
     void callCoreAction(CoreAction action);
-    void openFromArgument(char *file);
+    void openFromArgument(QString file);
     void setQmlIndex(int index);
     inline int currQmlIndex() { return this->curr_qml_index; }
     inline ConfigHandler* getConfigHandler() { return this->config_handler; }

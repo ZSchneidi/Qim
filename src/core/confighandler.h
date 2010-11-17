@@ -25,6 +25,7 @@ class ConfigHandler : public QObject
     QMap<QString, QString>::Iterator *config_map_iterator;
     QMap<QString, QString>::Iterator extendConfigMap(const QString line);
     QString config_head_line;
+    QString config_file_path;
     bool config_file_rw_access;
 
     /*pointer to coreengine as parent object*/

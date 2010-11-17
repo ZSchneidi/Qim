@@ -1,5 +1,5 @@
 import Qt 4.7
-import "../models"
+//import "../models"
 
 Item {
     id: menuBar
@@ -9,7 +9,7 @@ Item {
         id:background
         color: "white"
         anchors.fill: parent
-
+/*
         MenuListItem {
             id: fileMenu
             anchors.top: parent.top
@@ -20,7 +20,7 @@ Item {
             menuColor: "lightblue"
             //menuListModel:
         }
-
+*/
         /*openAction begin*/
         Item {
             id: openAction

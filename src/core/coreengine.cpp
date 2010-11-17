@@ -99,7 +99,10 @@ void CoreEngine::setUpMainWindow()
      */
     this->context->setContextProperty("qmlInterface", this->qml_interface );
     /*set the source of the default qim layer qml file as main qml application*/
-    this->visual_qml_view->setSource(QUrl(QIMMAINUILAYERFILE));
+//    this->visual_qml_view->setSource(QUrl(QIMMAINUILAYERFILE));
+    this->visual_qml_view->setSource(QUrl("qrc:///qml_source/visuallayer/QimMainUILayer.qml"));
+
+
 
     /*set the window size to the via config defined size if maximized or fullscreen is set
      *the size will be ignored
@@ -510,16 +513,10 @@ void CoreEngine::contextMenuEvent(QContextMenuEvent *event)
 */
 
 /** this method can be used to open a file from the main() function it only converts the file parameter to QString*/
-void CoreEngine::openFromArgument(char *file)
+void CoreEngine::openFromArgument(QString filepath)
 {
-    QString filepath;
-    filepath.append((QString)file);
     filepath = filepath.replace("\\","/");
-
-    //qDebug() << "filepath = " << filepath;
-
     this->open(filepath);
-    this->dialog_box->showDialogBox(tr("Qim - file"),filepath);
 }
 
 /**
